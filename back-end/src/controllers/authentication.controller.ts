@@ -1,7 +1,10 @@
-async function login (req: any, res: any, next: any) {
-    // Call database
-    
-    res.json({message: "login success"});
-}
+import express from 'express';
 
-export {login};
+class Auth {
+
+  public async register (req: express.Request, res: express.Response) {
+    res.json({message: "login success"});
+  }
+
+}
+export {Auth};
