@@ -1,6 +1,6 @@
 import express from 'express';
 var validator = require('validator');
-const { AuthModel } = require('../models/authentication.model')
+const { AuthModel } = require('../models/authentication.model');
 class Auth {
 
   private model: any;

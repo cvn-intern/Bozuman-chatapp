@@ -1,9 +1,13 @@
-class AuthModel {
+const { Database } = require('../configs/db.config');
+
+class AuthModel extends Database {
 
   constructor() {
-    
+    super();
   }
+
   public register = () => {
+    this.conn
     return {message: "register complete"};
   }
 

@@ -16,7 +16,7 @@ app.get(
   }
 );
 
-app.use('/auth',auth);
+app.use('/api/auth',auth);
 
 
 app.listen(port, (): void => {
