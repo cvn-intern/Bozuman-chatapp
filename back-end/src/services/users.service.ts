@@ -1,3 +1,5 @@
+import { isSet } from "util/types";
+
 const Users = require('../models/users.model');
 var jwt = require('jsonwebtoken')
 const _CONF = require('../configs/auth.config')
@@ -26,6 +28,25 @@ module.exports = class UsersService{
     }
     catch (error) {
       console.log(error);
+    }  
+  }
+
+  static find = async (data: any) => {
+    if (data.userName) {
+      const userList = await Users.find({ username: data.userName }).exec();
+      return userList;
+    } else if (data.email) {
+      const userList = await Users.find({ email: data.email }).exec();
+      return userList;
+    } 
+  }
+
+  static activateAccount = async (userName: string) => {
+    try {
+      await Users.findOneAndUpdate({username: userName}, {active: true}).exec();
+      return 'Activate account success';
+    } catch (err) {
+      console.log(err);
     }
   }
   // sign in
@@ -131,5 +152,6 @@ module.exports = class UsersService{
   //   if (!refreshToken || !refreshToken.isActive) throw "Invalid token";
   //   return refreshToken;
   // }
+
 
 }

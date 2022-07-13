@@ -26,6 +26,7 @@ const UsersSchema = Schema({
     active:{
         type: Boolean,
         required: false,
+        default: false
     },
 
     birth_day:{
@@ -61,4 +62,4 @@ const UsersSchema = Schema({
 });
 
 
-module.exports = mongoose.model("Users", UsersSchema);
+module.exports = mongoose.model("user", UsersSchema);
