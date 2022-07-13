@@ -7,7 +7,6 @@ class Database {
   protected password: string = 'tiachop1';
   protected cluster: string = 'started.xqz9w53';
   protected dbname: string = 'Tester';
-
   protected conn: any;
 
   constructor() {
