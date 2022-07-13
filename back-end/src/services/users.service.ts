@@ -32,7 +32,7 @@ module.exports = class UsersService{
 
   static activateAccount = async (userName: string) => {
     try {
-      await Users.updateOne({username: userName}, {active: true});
+      await Users.findOneAndUpdate({username: userName}, {active: true}).exec();
       return 'Activate account success';
     } catch (err) {
       console.log(err);

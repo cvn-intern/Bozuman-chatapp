@@ -55,7 +55,16 @@ class Auth {
     }
   }
 
-  
+  public activateAccount = async (req: express.Request, res: express.Response) => {
+    try {
+      const activateResult = await UsersService.activateAccount(req.params.name);
+      res.json(activateResult);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+
 
 }
 module.exports = {Auth};
