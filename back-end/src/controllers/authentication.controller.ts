@@ -1,13 +1,8 @@
 import express from 'express';
+const UsersService = require('../services/users.service');
 var validator = require('validator');
-const { AuthModel } = require('../models/authentication.model');
+
 class Auth {
-
-  private model: any;
-
-  constructor() {
-    this.model = new AuthModel();
-  }
 
   public validate  = () => {
     // if (!validator.isEmail(email)) {
@@ -18,10 +13,22 @@ class Auth {
   }
 
   public register = async (req: express.Request, res: express.Response) => {
-    var {fullName, email, userName, password} = req.body; 
-    var result = this.model.register();
-    res.json(result);
-    
+    try {
+      const data = {
+        userName: req.body.userName,
+        email: req.body.email,
+        fullName: req.body.fullName,
+        password: req.body.password
+      };
+      
+
+      await UsersService.create(data);
+
+      res.json("success");
+
+   } catch (error) {
+      res.status(500).json({error: error});
+   }
   }
 
 }
