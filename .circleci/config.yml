@@ -27,7 +27,9 @@ jobs:
       - run: echo 'hello'
 
 workflows:
-  - front-end-test
+  Cd-frontend:
+    jobs:
+      - front-end-test
   # trigger-workflows:
   #   executor: node
   #   steps:
