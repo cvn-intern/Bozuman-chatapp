@@ -27,8 +27,7 @@ jobs:
       - run: 
           working_directory: ~/front-end
           name: Run front end
-          command:
-            - pwd
+          command: pwd
       - run: pwd
       - run: echo 'hello'
 
