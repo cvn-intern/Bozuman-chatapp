@@ -1,39 +1,48 @@
 version: 2.1
-parameters:
-  # This parameter is used to trigger main workflow
-  trigger:
-    type: boolean
-    default: true
+# parameters:
+#   # This parameter is used to trigger main workflow
+#   trigger:
+#     type: boolean
+#     default: true
   
-  # Parameter for back-end and front-end
-  back-end:
-    type: boolean
-    default: false
-  front-end:
-    type: boolean
-    default: false
+#   # Parameter for back-end and front-end
+#   back-end:
+#     type: boolean
+#     default: false
+#   front-end:
+#     type: boolean
+#     default: false
 
-executors:
-  node: 
-    docker:
-      - image: circleci/node
+# executors:
+#   node: 
+#     docker:
+#       - image: circleci/node
 
 jobs:
-  trigger-workflows:
-    executor: node
+  front-end-test:
+    docker:
+      - image: alpine:3.15
     steps:
-      - checkout
-      - run:
-          name: Trigger workflows
-  
-  build:
-    parameters:
-      package_name:
-        type: string
-    
-    executor: node
-    working_directory: ~/project/<< parameters.name >>
+      - run: cd front-end
+      - run: echo 'hello'
 
-    steps:
-      - checkout:
-          path: ~/project
+workflows:
+  - front-end-test
+  # trigger-workflows:
+  #   executor: node
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Trigger workflows
+  
+  # build:
+  #   parameters:
+  #     package_name:
+  #       type: string
+    
+  #   executor: node
+  #   working_directory: ~/project/<< parameters.name >>
+
+  #   steps:
+  #     - checkout:
+  #         path: ~/project
