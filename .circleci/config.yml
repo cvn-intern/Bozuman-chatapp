@@ -25,7 +25,7 @@ jobs:
     steps:
       - checkout
       - run: 
-          working_directory: ~/front-end
+          working_directory: ./front-end
           name: Run front end
           command: pwd
       - run: pwd
