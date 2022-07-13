@@ -7,7 +7,7 @@ class AuthModel extends Database {
   }
 
   public register = () => {
-    this.conn
+    
     return {message: "register complete"};
   }
 
