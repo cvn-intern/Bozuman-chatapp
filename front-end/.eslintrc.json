@@ -18,18 +18,18 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:markdown/recommended",
-    "plugin:mdx/recommended",
+    // "plugin:markdown/recommended",
+    // "plugin:mdx/recommended",
     "plugin:@next/eslint-plugin-next/recommended",
-    "plugin:import/typescript",
-    "plugin:jsx-a11y/recommended",
-    "plugin:promise/recommended",
-    "prettier",
+    // "plugin:import/typescript",
+    // "plugin:jsx-a11y/recommended",
+    // "plugin:promise/recommended",
+    // "prettier",
     "next"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "tsconfigRootDir": "__dirname",
+    // "tsconfigRootDir": "__dirname",
     "files": ["*.ts","*.tsx","*.js"],
     "project": "./tsconfig.json",
     "ecmaFeatures": {
@@ -40,8 +40,8 @@
   },
   "plugins": [
     "@typescript-eslint",
-    "promise",
-    "jsx-ally",
+    // "promise",
+    // "jsx-ally",
     "@next/eslint-plugin-next"
   ],
   "rules": {
@@ -69,5 +69,4 @@
     "no-unused-vars": "off",
     "valid-typeof": "error"
   }
-
 }
