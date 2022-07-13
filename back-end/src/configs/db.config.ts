@@ -7,10 +7,7 @@ class Database {
   protected password: string = 'tiachop1';
   protected cluster: string = 'started.xqz9w53';
   protected dbname: string = 'Tester';
-  // protected username = 'vu';
-  // protected password = 'vu';
-  // protected cluster = 'cluster0.zsjsdin';
-  // protected dbname = '';
+
   protected conn: any;
 
   constructor() {
