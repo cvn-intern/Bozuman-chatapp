@@ -2,7 +2,13 @@ import useSWR  from 'swr'
 
 // example swr hook
 
-const useSomeData = () => {
+interface DataObj {
+  data: any,
+  isLoading: boolean,
+  isError: any
+}
+
+const useSomeData = () : DataObj => {
   const { data, error } = useSWR('/api/something')
   return {
     data,
