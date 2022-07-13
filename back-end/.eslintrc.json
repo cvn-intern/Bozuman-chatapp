@@ -14,11 +14,9 @@
     }
   },
   "extends": [
-    "next/core-web-vitals",
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:@next/eslint-plugin-next/recommended",
     // "prettier",
     "next"
   ],
@@ -34,8 +32,7 @@
     "sourceType": "module"
   },
   "plugins": [
-    "@typescript-eslint",
-    "@next/eslint-plugin-next"
+    "@typescript-eslint"
   ],
   "rules": {
     "max-lines": ["error", 500],
