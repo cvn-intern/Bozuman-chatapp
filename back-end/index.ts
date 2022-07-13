@@ -1,5 +1,6 @@
 import express, { Application, Request, Response } from "express";
 const auth = require('./src/routes/authentication.route');
+const test = require('./src/routes/users.route.js')
 const app: Application = express();
 const port = 3000;
 
@@ -18,6 +19,7 @@ app.get(
 
 app.use('/api/auth',auth);
 
+app.use('/api/test',test);
 
 app.listen(port, (): void => {
   console.log(`Connected successfully on port ${port}`);
