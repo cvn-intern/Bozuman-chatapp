@@ -24,8 +24,11 @@ jobs:
       - image: alpine:3.15
     steps:
       - checkout
-      - run: pwd
-      - run: cd front-end
+      - run: 
+          working_directory: ~/front-end
+          name: Run front end
+          command:
+            - pwd
       - run: pwd
       - run: echo 'hello'
 
