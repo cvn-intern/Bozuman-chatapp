@@ -55,10 +55,7 @@ class Auth {
     }
   }
 
-  public find = async (req: express.Request, res: express.Response) => {
-    await UsersService.find(req.body.id);
-    res.json('ok');
-  }
+  
 
 }
 module.exports = {Auth};

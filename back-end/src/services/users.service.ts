@@ -30,5 +30,14 @@ module.exports = class UsersService{
     } 
   }
 
+  static activateAccount = async (userName: string) => {
+    try {
+      await Users.updateOne({username: userName}, {active: true});
+      return 'Activate account success';
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
 
 }
