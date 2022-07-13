@@ -5,5 +5,6 @@ const { Auth } = require('../controllers/authentication.controller');
 const authentication = new Auth();
 
 router.post('/register', authentication.register);
-router.get('/test', authentication.getAll);
+router.post('/sign-in', authentication.signIn);
+
 module.exports = router;

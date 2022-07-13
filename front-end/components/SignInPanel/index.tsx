@@ -11,8 +11,8 @@ function SignInPanel() {
   const schema = yup.object().shape({
     username: yup
       .string()
-      .min(8, "Username must have 8-30 character")
-      .max(30, "Username must have 8-30 character")
+      .min(8, "Username must have 8-32 character")
+      .max(32, "Username must have 8-32 character")
       .required("Username must not be empty")
       .matches(
         /^[a-zA-Z0-9_.-]*$/,
@@ -20,8 +20,8 @@ function SignInPanel() {
       ),
     password: yup
       .string()
-      .min(8, "Password must have 8-30 character")
-      .max(30, "Password must have 8-30 character")
+      .min(8, "Password must have 8-16 character")
+      .max(316, "Password must have 8-16 character")
       .required("Password must not be empty")
       .matches(
         /^[a-zA-Z0-9_.-]*$/,

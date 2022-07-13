@@ -8,7 +8,7 @@ function SignIn() {
         <h1>Img place holder</h1>
       </div>
     <div className="SignIn">
-      <SignInPanel />
+      <SignInPanel /> 
     </div>
     </div>
   )
