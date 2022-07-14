@@ -2,6 +2,7 @@ import express from "express";
 const UsersService = require("../services/users.service");
 const { Email } = require("../utils/Mail.utils");
 var validator = require("validator");
+<<<<<<< HEAD
 const Users = require("../models/users.model");
 class Auth {
   public validateSignup = async (data: any) => {
@@ -31,6 +32,12 @@ class Auth {
     }
 
     const checkUsername = await UsersService.find({ userName: data.userName });
+=======
+
+class Auth {
+  public validateSignup = async (data: any) => {
+    const checkUsername = await UsersService.find({ username: data.username });
+>>>>>>> 50c6da895f3dcfa4b48ea31bc222595e1ff7bc1c
     if (checkUsername.length > 0) {
       return { success: false, error: "Username already exist" };
     }
@@ -43,9 +50,13 @@ class Auth {
     return { success: true };
   };
 
-  public register = async (req: express.Request, res: express.Response) => {
+  public register = async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     const data = {
-      userName: req.body.userName,
+      username: req.body.username,
       email: req.body.email,
       fullName: req.body.fullName,
       password: req.body.password,
@@ -58,7 +69,6 @@ class Auth {
       } else {
         var user = await UsersService.create(data);
         const emailAgent = new Email();
-        console.log(emailAgent);
         emailAgent.sendEmail(user.email, user.username);
         res.json("Create account success");
       }
@@ -92,6 +102,7 @@ class Auth {
         password: req.body.password,
         ipAddress: req.ip,
       };
+<<<<<<< HEAD
       const response = await UsersService.authenticate(data);
       this.setTokenCookie(res, response.accessToken);
       res.json(response);
@@ -112,5 +123,15 @@ class Auth {
     };
     res.cookie("access_token", token, cookieOptions);
   };
+=======
+      // const { username, password } = req.body;
+      // const ipAddress = req.ip;
+      const response = await UsersService.authenticate(data);
+      res.json(response);
+    } catch (error) {
+      res.status(500).json({ error: "123" });
+    }
+  };
+>>>>>>> 50c6da895f3dcfa4b48ea31bc222595e1ff7bc1c
 }
 module.exports = { Auth };

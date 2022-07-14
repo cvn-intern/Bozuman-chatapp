@@ -11,10 +11,13 @@ const db = new Database();
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+<<<<<<< HEAD
 app.use(cors({
   // origin: 'http://127.0.0.1:5500', //Chan tat ca cac domain khac ngoai domain nay
   // credentials: true //Để bật cookie HTTP qua CORS
 }))
+=======
+>>>>>>> 50c6da895f3dcfa4b48ea31bc222595e1ff7bc1c
 
 app.use('/api/auth',auth);
 

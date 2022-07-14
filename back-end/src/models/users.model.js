@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const Joi = require("joi");
 
 const UsersSchema = Schema({
 
@@ -61,5 +62,28 @@ const UsersSchema = Schema({
 
 });
 
+const registerSchema = Joi.object({
+  username: Joi.string()
+    .min(8)
+    .max(32)
+    .pattern(new RegExp("^[a-zA-Z0-9_-]+$"))
+    .required(),
+  password: Joi.string()
+    .min(8)
+    .max(16)
+    .pattern(new RegExp("^[a-zA-Z0-9_-]+$"))
+    .required(),
+  fullName: Joi.string()
+    .min(8)
+    .max(50)
+    .pattern(new RegExp("^[a-zA-Z0-9_-]+$"))
+    .required(),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ["com", "net"] },
+  }),
+});
 
-module.exports = mongoose.model("user", UsersSchema);
+module.exports = {Users: mongoose.model("user", UsersSchema), registerSchema};
+
+
