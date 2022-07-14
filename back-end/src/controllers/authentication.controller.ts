@@ -70,11 +70,12 @@ class Auth {
         password: req.body.password,
         ipAddress: req.ip,
       };
+      console.log(req)
       const response = await UsersService.authenticate(data);
       console.log(response.accessToken)
       // this.setTokenCookie(res, response.accessToken);
-      res.cookie("access_token", response.accessToken, {
-        maxAge: 5 * 60,
+      res.cookie('access_token', response.accessToken, {
+        maxAge: 100000000,
         httpOnly: true,
       });
       res.status(200).json(response);

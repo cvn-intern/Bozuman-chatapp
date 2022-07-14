@@ -6,7 +6,6 @@ import axios from 'axios';
 import _CONF from 'common/config'
 
 
-require('dotenv').config();
 interface SignInForm {
   username: string;
   password: string;
@@ -53,6 +52,7 @@ function SignInPanel() {
         trigger: false,
         message: '',
       })
+      console.log(res)
     } catch (error: any) {
       setErrorMessage({trigger: true, message: error.response.data.error})
     }
