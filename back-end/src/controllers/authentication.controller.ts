@@ -71,8 +71,13 @@ class Auth {
         ipAddress: req.ip,
       };
       const response = await UsersService.authenticate(data);
-      this.setTokenCookie(res, response.accessToken);
-      res.json(response);
+      console.log(response.accessToken)
+      // this.setTokenCookie(res, response.accessToken);
+      res.cookie("access_token", response.accessToken, {
+        maxAge: 5 * 60,
+        httpOnly: true,
+      });
+      res.status(200).json(response);
     } catch (error) {
       if (error === "Username or password is incorrect") {
         res.status(403).json({ status: "403", error: error });
@@ -85,7 +90,7 @@ class Auth {
   public setTokenCookie = (res: express.Response, token: string) => {
     const cookieOptions = {
       maxAge: 5 * 60, // thời gian sống 5 phút
-      httpOnly: true, // chỉ có http mới đọc được token
+      // httpOnly: true, // chỉ có http mới đọc được token
       //secure: true; //ssl nếu có, nếu chạy localhost thì comment nó lại
     };
     res.cookie("access_token", token, cookieOptions);

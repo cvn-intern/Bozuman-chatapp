@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import { useState } from 'react';
-
+import _CONF from 'common/config'
 interface SignUpForm {
   fullName: string;
   email: string;
@@ -55,7 +55,7 @@ function SignUpPanel() {
   });
   const onSubmit: SubmitHandler<SignUpForm> = async (data) => {
     try {
-      const res = await axios.post('//localhost:3000/api/auth/register', data).then((res) => {
+      const res = await axios.post(_CONF.DOMAIN + 'api/auth/register', data).then((res) => {
         if (res.data == 'Username already exist') {
           setErr({ error: true, message: 'Username repeat' });
         } else if (res.data == 'Email already exist') {
