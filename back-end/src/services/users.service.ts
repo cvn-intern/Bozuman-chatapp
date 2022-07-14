@@ -1,6 +1,6 @@
 import { isSet } from "util/types";
 
-const Users = require('../models/users.model');
+const { Users } = require('../models/users.model');
 var jwt = require('jsonwebtoken')
 const _CONF = require('../configs/auth.config')
 const RefreshToken = require("../models/refreshToken.model.js")
@@ -18,7 +18,7 @@ module.exports = class UsersService{
   static create = async (data: any) => {
     try {
       const user = {
-        username: data.userName,
+        username: data.username,
         password: data.password,
         full_name: data.fullName,
         email: data.email
@@ -32,8 +32,9 @@ module.exports = class UsersService{
   }
 
   static find = async (data: any) => {
-    if (data.userName) {
-      const userList = await Users.find({ username: data.userName }).exec();
+    
+    if (data.username) {
+      const userList = await Users.find({ username: data.username }).exec();
       return userList;
     } else if (data.email) {
       const userList = await Users.find({ email: data.email }).exec();
@@ -53,7 +54,6 @@ module.exports = class UsersService{
   static authenticate = async (data: any) => {
     const {username, password, ipAddress} = data;
     const user = await Users.findOne({username: username}).exec();
-    console.log(user)
     if (!user || password != user.password) {
       throw "Username or password is incorrect";
     }
@@ -155,3 +155,4 @@ module.exports = class UsersService{
 
 
 }
+
