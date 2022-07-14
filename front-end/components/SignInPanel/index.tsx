@@ -2,7 +2,7 @@ import React from "react";
 import { useForm, SubmitHandler  } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-
+import axios from "axios"
 interface SignInForm {
   username: string;
   password: string;
@@ -38,9 +38,15 @@ function SignInPanel() {
   } = useForm<SignInForm>({
     resolver: yupResolver(schema),
   });
-  const onSubmit: SubmitHandler<SignInForm> = data => {
-    console.log(data);
-    reset()
+  const onSubmit: SubmitHandler<SignInForm> = async (data) => {
+    // post api here
+    try {
+      const res = await axios.post('//localhost:3000/api/auth/sign-in', data);
+      console.log(res.data);
+    } catch (error) {
+      console.log(error)
+    }
+    // reset()
   } 
   return (
     <div className="form">

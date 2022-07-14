@@ -4,20 +4,8 @@ const Schema = mongoose.Schema;
 const RefreshTokenSchema = Schema({
   user: { type: Schema.Types.ObjectId, ref: "Users" },
   token: String,
-  expires: Date,
   created: { type: Date, default: Date.now },
   createdByIp: String,
-  revoked: Date,
-  revokedByIp: String,
-  replacedByToken: String,
-});
-
-RefreshTokenSchema.virtual("isExpired").get(function () {
-  return Date.now() >= this.expires;
-});
-
-RefreshTokenSchema.virtual("isActive").get(function () {
-  return !this.revoked && !this.isExpired;
 });
 
 RefreshTokenSchema.set("toJSON", {
