@@ -1,9 +1,9 @@
 import express from 'express';
 const UsersService = require('../services/users.service');
+const { Email } = require('../utils/Mail.utils');
 var validator = require('validator');
 
 class Auth {
-
   public validateSignup = async (data: any) => {
     if (!validator.isEmail(data.email)) {
       return {success: false, error: 'Email must be in correct format'};
@@ -47,7 +47,10 @@ class Auth {
       if (!validateResult.success) {
         res.json(validateResult.error);
       } else {
-        await UsersService.create(data);
+        var user = await UsersService.create(data);
+        const emailAgent = new Email();
+        console.log(emailAgent);
+        emailAgent.sendEmail(user.email, user.username);
         res.json("Create account success");
       }
     } catch (error) {
@@ -64,7 +67,23 @@ class Auth {
     }
   }
 
+  public signIn = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    try {
+      const data = {
+        username: req.body.username,
+        password: req.body.password,
+        ipAddress: req.ip
+      }
+      // const { username, password } = req.body;
+      // const ipAddress = req.ip;
+      const response  = await UsersService.authenticate(data);
+      res.json(response);
+
+    }catch(error) {
+      res.status(500).json({ error: "123" });
+    }
+  }
 
 
 }
-module.exports = {Auth};
+module.exports = { Auth };
