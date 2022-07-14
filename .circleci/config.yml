@@ -52,16 +52,17 @@ jobs:
             vercel
 
 workflows:
-  Front-end-workflow:
+  Workflow:
     jobs:
       - front-end-eslint
+      - back-end-eslint
       # - front-end-deploy:
       #     requires:
       #       - front-end-eslint
 
-  Back-end-workflow:
-    jobs:
-      - front-end-eslint
+  # Back-end-workflow:
+  #   jobs:
+  #     - front-end-eslint
       # - front-end-deploy:
       #     requires:
       #       - front-end-eslint

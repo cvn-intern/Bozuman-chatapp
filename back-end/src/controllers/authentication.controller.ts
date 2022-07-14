@@ -1,7 +1,8 @@
 import express from "express";
+import { generateSixDigitCode } from '../utils/Helper.utils';
 const UsersService = require("../services/users.service");
 const { Email } = require("../utils/Mail.utils");
-var validator = require("validator");
+
 
 class Auth {
   public validateSignup = async (data: any) => {
@@ -81,6 +82,73 @@ class Auth {
       }
     }
   };
+
+  public getUserByEmail = async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    try {
+      const data = {
+        email: req.body.email,
+      }
+
+      const response = await UsersService.find(data);
+      //It returns an array, if response find success, user
+      //is the first elements in array
+      const user = response[0];
+      if(user) {
+        if(!user.active) {
+          res.status(404).json({
+            success: false,
+            // status: '404', 
+            error: {
+              code: 'FORGOT_PASSWORD_004',
+              message: 'Your account is not verified',
+            }
+          })
+        } else {
+          res.status(200).json({
+            success: true,
+            email: user.email,
+          })
+        }
+      }else{
+        res.status(404).json({
+            success: false,
+            // status: '404', 
+            error: {
+              code: 'FORGOT_PASSWORD_003',
+              message: 'Email is not exists',
+            }
+          })
+      }
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public createCode = async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    try {
+      const data = {
+        email: req.body.email,
+      }
+      const number = generateSixDigitCode();
+      //Write function to save code above in db by email
+      
+      
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public sendCodeToMail = async () => {
+
+  }
 
   public setTokenCookie = (res: express.Response, token: string) => {
     const cookieOptions = {
