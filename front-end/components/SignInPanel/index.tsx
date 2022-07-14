@@ -43,26 +43,30 @@ function SignInPanel() {
     reset()
   } 
   return (
-    <div className="form">
+    <div className="signin">
       <form onSubmit={handleSubmit(onSubmit)}>
         <h2>Sign in</h2>
+        <label> Username </label>
         <input
           {...register("username")}
-          placeholder="Enter your username"
+          placeholder="Type your username"
           type="text"
           required
         />
         {errors.username && <p>{errors.username.message}</p>}
-        <br />
+        <label> Password </label>
         <input
           {...register("password")}
-          placeholder="Enter your password"
+          placeholder="Type your password"
           type="password"
           required
         />
+        <label>
+          <input type="checkbox"/>
+          Remember me
+        </label>
         {errors.password && <p>{errors.password.message}</p>}
-        <br />
-        <button type="submit">Đăng nhập</button>
+        <button type="submit">Continue</button>
       </form>
     </div>
   );
