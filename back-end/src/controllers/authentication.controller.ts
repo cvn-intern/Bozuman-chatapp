@@ -70,13 +70,25 @@ class Auth {
         password: req.body.password,
         ipAddress: req.ip,
       };
-      // const { username, password } = req.body;
-      // const ipAddress = req.ip;
       const response = await UsersService.authenticate(data);
+      this.setTokenCookie(res, response.accessToken);
       res.json(response);
     } catch (error) {
-      res.status(500).json({ error: "123" });
+      if (error === "Username or password is incorrect") {
+        res.status(403).json({ status: "403", error: error });
+      } else {
+        res.status(404).json({ status: "404", error: "Invalid request" });
+      }
     }
+  };
+
+  public setTokenCookie = (res: express.Response, token: string) => {
+    const cookieOptions = {
+      maxAge: 5 * 60, // thời gian sống 5 phút
+      httpOnly: true, // chỉ có http mới đọc được token
+      //secure: true; //ssl nếu có, nếu chạy localhost thì comment nó lại
+    };
+    res.cookie("access_token", token, cookieOptions);
   };
 }
 module.exports = { Auth };
