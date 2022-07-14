@@ -9,7 +9,6 @@ const db = new Database();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 app.use('/api/auth',auth);
 
 app.listen(port, (): void => {

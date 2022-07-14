@@ -5,31 +5,6 @@ var validator = require("validator");
 
 class Auth {
   public validateSignup = async (data: any) => {
-    if (!validator.isEmail(data.email)) {
-      return { success: false, error: "Email must be in correct format" };
-    } else if (!validator.isLength(data.username, { min: 8, max: 32 })) {
-      return { success: false, error: "Username must have 8-32 character" };
-    } else if (!validator.isLength(data.fullName, { min: 8, max: 50 })) {
-      return { success: false, error: "Full name must have 8-50 character" };
-    } else if (!validator.isLength(data.password, { min: 8, max: 16 })) {
-      return { success: false, error: "Password must have 8-16 character" };
-    } else if (!/^[a-zA-Z0-9_-]+$/.test(data.username)) {
-      return {
-        success: false,
-        error: "Username can not contain special character",
-      };
-    } else if (!/^[a-zA-Z0-9_-]+$/.test(data.fullName)) {
-      return {
-        success: false,
-        error: "Full name can not contain special character",
-      };
-    } else if (!/^[a-zA-Z0-9_-]+$/.test(data.password)) {
-      return {
-        success: false,
-        error: "Password can not contain special character",
-      };
-    }
-
     const checkUsername = await UsersService.find({ username: data.username });
     if (checkUsername.length > 0) {
       return { success: false, error: "Username already exist" };
@@ -43,7 +18,11 @@ class Auth {
     return { success: true };
   };
 
-  public register = async (req: express.Request, res: express.Response) => {
+  public register = async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     const data = {
       username: req.body.username,
       email: req.body.email,
@@ -58,7 +37,6 @@ class Auth {
       } else {
         var user = await UsersService.create(data);
         const emailAgent = new Email();
-        console.log(emailAgent);
         emailAgent.sendEmail(user.email, user.username);
         res.json("Create account success");
       }
