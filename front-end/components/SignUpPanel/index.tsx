@@ -1,44 +1,48 @@
-import React from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
+import React from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import axios from 'axios';
+import { useState } from 'react';
 
 interface SignUpForm {
-  fullname: string;
+  fullName: string;
   email: string;
   username: string;
   password: string;
 }
 
 function SignUpPanel() {
+  const [err, setErr] = useState({ error: false, message: ''});
+
   const schema = yup.object().shape({
-    fullname: yup
+    fullName: yup
       .string()
-      .min(8, "Full name must have 8-50 character")
-      .max(50, "Full name must have 8-50 character")
-      .required("Full name must not be empty")
+      .min(8, 'Full name must have 8-50 character')
+      .max(50, 'Full name must have 8-50 character')
+      .required('Full name must not be empty')
       .matches(
         /^[a-zA-Z0-9_.-]*$/,
-        "Username must not contain special character like @#$^..."
+        'Username must not contain special character like @#$^...'
       ),
-    email: yup.string().email("Email must be in correct format"),
+    email: yup.string().email('Email must be in correct format'),
     username: yup
       .string()
-      .min(8, "Username must have 8-32 character")
-      .max(32, "Username must have 8-32 character")
-      .required("Username must not be empty")
+      .min(8, 'Username must have 8-32 character')
+      .max(32, 'Username must have 8-32 character')
+      .required('Username must not be empty')
       .matches(
         /^[a-zA-Z0-9_.-]*$/,
-        "Username must not contain special character like @#$^..."
+        'Username must not contain special character like @#$^...'
       ),
     password: yup
       .string()
-      .min(8, "Password must have 8-16 character")
-      .max(316, "Password must have 8-16 character")
-      .required("Password must not be empty")
+      .min(8, 'Password must have 8-16 character')
+      .max(316, 'Password must have 8-16 character')
+      .required('Password must not be empty')
       .matches(
         /^[a-zA-Z0-9_.-]*$/,
-        "Password must not contain special character like @#$^..."
+        'Password must not contain special character like @#$^...'
       ),
   });
   const {
@@ -49,21 +53,34 @@ function SignUpPanel() {
   } = useForm<SignUpForm>({
     resolver: yupResolver(schema),
   });
-  const onSubmit: SubmitHandler<SignUpForm> = (data) => {
-    console.log(data);
-    reset();
+  const onSubmit: SubmitHandler<SignUpForm> = async (data) => {
+    try {
+      const res = await axios.post('//localhost:3000/api/auth/register', data).then((res) => {
+        if (res.data == 'Username already exist') {
+          setErr({ error: true, message: 'Username repeat' });
+        } else if (res.data == 'Email already exist') {
+          setErr({ error: true, message: 'Email repeat' });
+        } else if (res.data == 'Create account success') {
+          setErr({ error: false, message: 'Create account success' });
+        }
+      }
+      )
+      console.log(err);
+    } catch (error) {
+      console.log(error)
+    }
   };
   return (
     <div className="form">
       <form onSubmit={handleSubmit(onSubmit)}>
         <h2>Register</h2>
         <input
-          {...register("fullname")}
+          {...register("fullName")}
           placeholder="Enter your full name"
           type="text"
           required
         />
-        {errors.fullname && <p>{errors.fullname.message}</p>}
+        {errors.fullName && <p>{errors.fullName.message}</p>}
         <br />
         <input
           {...register("email")}
@@ -89,6 +106,7 @@ function SignUpPanel() {
         />
         {errors.password && <p>{errors.password.message}</p>}
         <br />
+        {!err.error ? <></> : <><p>{err.message}</p><br /></>}
         <button type="submit">CREATE ACCOUNT</button>
       </form>
     </div>
