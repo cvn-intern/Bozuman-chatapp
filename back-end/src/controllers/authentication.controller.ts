@@ -2,42 +2,10 @@ import express from "express";
 const UsersService = require("../services/users.service");
 const { Email } = require("../utils/Mail.utils");
 var validator = require("validator");
-<<<<<<< HEAD
-const Users = require("../models/users.model");
-class Auth {
-  public validateSignup = async (data: any) => {
-    if (!validator.isEmail(data.email)) {
-      return { success: false, error: "Email must be in correct format" };
-    } else if (!validator.isLength(data.userName, { min: 8, max: 32 })) {
-      return { success: false, error: "Username must have 8-32 character" };
-    } else if (!validator.isLength(data.fullName, { min: 8, max: 50 })) {
-      return { success: false, error: "Full name must have 8-50 character" };
-    } else if (!validator.isLength(data.password, { min: 8, max: 16 })) {
-      return { success: false, error: "Password must have 8-16 character" };
-    } else if (!/^[a-zA-Z0-9_-]+$/.test(data.userName)) {
-      return {
-        success: false,
-        error: "Username can not contain special character",
-      };
-    } else if (!/^[a-zA-Z0-9_-]+$/.test(data.fullName)) {
-      return {
-        success: false,
-        error: "Full name can not contain special character",
-      };
-    } else if (!/^[a-zA-Z0-9_-]+$/.test(data.password)) {
-      return {
-        success: false,
-        error: "Password can not contain special character",
-      };
-    }
-
-    const checkUsername = await UsersService.find({ userName: data.userName });
-=======
 
 class Auth {
   public validateSignup = async (data: any) => {
     const checkUsername = await UsersService.find({ username: data.username });
->>>>>>> 50c6da895f3dcfa4b48ea31bc222595e1ff7bc1c
     if (checkUsername.length > 0) {
       return { success: false, error: "Username already exist" };
     }
@@ -102,7 +70,6 @@ class Auth {
         password: req.body.password,
         ipAddress: req.ip,
       };
-<<<<<<< HEAD
       const response = await UsersService.authenticate(data);
       this.setTokenCookie(res, response.accessToken);
       res.json(response);
@@ -123,15 +90,5 @@ class Auth {
     };
     res.cookie("access_token", token, cookieOptions);
   };
-=======
-      // const { username, password } = req.body;
-      // const ipAddress = req.ip;
-      const response = await UsersService.authenticate(data);
-      res.json(response);
-    } catch (error) {
-      res.status(500).json({ error: "123" });
-    }
-  };
->>>>>>> 50c6da895f3dcfa4b48ea31bc222595e1ff7bc1c
 }
 module.exports = { Auth };
