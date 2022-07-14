@@ -32,8 +32,8 @@ module.exports = class UsersService{
   }
 
   static find = async (data: any) => {
-    if (data.userName) {
-      const userList = await Users.find({ username: data.userName }).exec();
+    if (data.username) {
+      const userList = await Users.find({ username: data.username }).exec();
       return userList;
     } else if (data.email) {
       const userList = await Users.find({ email: data.email }).exec();
