@@ -6,7 +6,7 @@ const validator = require("express-joi-validation").createValidator({
 });
 import { ContainerTypes } from "express-joi-validation";
 const { Auth } = require("../controllers/authentication.controller");
-const { registerSchema } = require('../models/users.model');
+const { registerSchema } = require("../models/users.model");
 const authentication = new Auth();
 
 router.post(
