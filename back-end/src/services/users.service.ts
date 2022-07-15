@@ -54,8 +54,13 @@ module.exports = class UsersService{
   static authenticate = async (data: any) => {
     const {username, password, ipAddress} = data;
     const user = await Users.findOne({username: username}).exec();
+    console.log(user)
     if (!user || password != user.password) {
       throw "Username or password is incorrect";
+    }
+    console.log(user)
+    if (!user.active) {
+      throw "Your account is inactive";
     }
     const accessToken = this.generateAccessToken(user);
     const refreshToken = this.generateRefreshToken(user, ipAddress);

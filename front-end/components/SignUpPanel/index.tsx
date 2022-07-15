@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import { useState } from 'react';
-import _CONF from 'common/config'
+import _CONF from 'config/config'
 interface SignUpForm {
   fullName: string;
   email: string;

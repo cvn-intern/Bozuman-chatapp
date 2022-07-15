@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
+import Image from "next/image";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
-import _CONF from "common/config";
-import { useRouter } from 'next/router';
+import _CONF from "config/config";
+import { useRouter } from "next/router";
 // import cookieCutter from 'cookie-cutter' // I dont know why it doesn't work
 const cookie = require("cookie-cutter");
 
@@ -54,35 +55,59 @@ function SignInPanel() {
         trigger: false,
         message: "",
       });
-      cookie.set('access_token', res.data.accessToken)
-      router.push(router.asPath)
+      cookie.set("access_token", res.data.accessToken);
+      window.localStorage.setItem("refresh_token", res.data.refreshToken);
+      router.push("/");
     } catch (error: any) {
       setErrorMessage({ trigger: true, message: error.response.data.error });
     }
     // reset()
   };
   return (
-    <div className="form">
+    <div className="signin">
       <form onSubmit={handleSubmit(onSubmit)}>
         <h2>Sign in</h2>
+        <label className="info"> Username </label>
         <input
           {...register("username")}
-          placeholder="Enter your username"
+          placeholder="Type your username"
           type="text"
           required
         />
         {errors.username && <p>{errors.username.message}</p>}
-        <br />
+        <label className="info"> Password </label>
         <input
           {...register("password")}
-          placeholder="Enter your password"
+          placeholder="Type your password"
           type="password"
           required
         />
         {errors.password && <p>{errors.password.message}</p>}
         <br />
         {errorMessage.trigger && <p>{errorMessage.message}</p>}
-        <button type="submit">Sign in</button>
+        <div>
+          <label className="remember-me">
+            <input type="checkbox" />
+            <span>Remember me</span>
+          </label>
+          <a>Forgot password?</a>
+        </div>
+        <button type="submit" className="button__signin">
+          Continue
+        </button>
+        <p className="mt-4 mb-0">Sign in with Google</p>
+        <a href="" className="mt-2  ">
+          <Image
+            src={"/icon-google.png"}
+            alt="google icon"
+            width={20}
+            height={20}
+          />
+        </a>
+        <div>
+          <p>Dont't have an account?</p>
+          <button className="button__signup">Create new</button>
+        </div>
       </form>
     </div>
   );
