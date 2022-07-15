@@ -48,8 +48,25 @@ jobs:
           command: npm install
       - run:
           working_directory: ./front-end
-          command: ./node_modules/vercel/dist/index.js --token ${VERCEL_TOKEN} --cwd . --confirm --target staging
+          command: echo "{"projectId":"prj_EbYfeF4gs5qXuWjESLHDGzQbEfjI","orgId":"sIpHFARbgZn3tMzH4k0WM3Tl"}" > .vercel/project.json
+      - run:
+          working_directory: ./front-end
+          command: ./node_modules/vercel/dist/index.js --token ${VERCEL_TOKEN} --cwd . --confirm
 
+  front-end-deploy-staging:
+    docker:
+      - image: cimg/node:16.16.0
+    steps: 
+      - checkout
+      - run: 
+          working_directory: ./front-end
+          command: npm install
+      - run:
+          working_directory: ./front-end
+          command: echo "{"projectId":"prj_bcNxQUlZG59972eilV1bYhfOyJJY","orgId":"sIpHFARbgZn3tMzH4k0WM3Tl"}" > .vercel/project.json
+      - run:
+          working_directory: ./front-end
+          command: ./node_modules/vercel/dist/index.js --token ${VERCEL_TOKEN} --cwd . --confirm --target staging
           
         
 
@@ -68,7 +85,16 @@ jobs:
 workflows:
   Front-end-workflow:
     jobs:
-      - front-end-deploy
+      - front-end-deploy:
+          filters:
+            branches:
+              only:
+                - Config-CircleCI-master
+      - front-end-deploy-staging:
+          filters:
+            branches:
+              only:
+                - Config-CircleCI
   # Front-end-workflow:
   #   jobs:
       # - front-end-eslint
