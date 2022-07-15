@@ -25,9 +25,8 @@ class Email {
       html: '<p>Click <a href="http://localhost:3000/api/auth/activate_account/' + token + '">here</a> to activate your account</p>'
     };
 
-    if (type === process.env.ACTIVATE_ACCOUNT){
-      mailOptions.html = '<p>Click <a href="http://localhost:3000/api/auth/activate_account/' + token + '">here</a> to activate your account</p>';
-    }else if (type === process.env.FORGOT_PASSWORD){
+    if (type === process.env.FORGOT_PASSWORD){
+      mailOptions.subject = 'Reset password';
       mailOptions.html = `<h1>Your code is <strong>${token}</strong></h1>`;
     }
 
@@ -38,10 +37,6 @@ class Email {
         console.log('Email sent: ' + info.response);
       }
     });
-  }
-
-  public sendForgotPasswordCode = (emailAddress: any, code: any) => {
-
   }
 }
 

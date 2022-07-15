@@ -16,8 +16,11 @@ router.post(
 );
 router.get("/activate_account/:name", authentication.activateAccount);
 router.post("/sign-in", authentication.signIn);
-router.post('/forgot-password', authentication.getUserByEmail)
+//The following apis are used for forgot password
+router.post('/forgot-password', authentication.getUserByEmail);
 router.post('/create-code', authentication.createCodeExpire);
+router.post('/check-code', authentication.checkForgotPasswordCode);
+router.post('/reset-password', authentication.resetPassword);
 
 router.use((err: any, req: any, res: any, next: any) => {
   if (err && err.error && err.error.isJoi) {

@@ -66,7 +66,7 @@ module.exports = class UsersService{
       refreshToken: refreshToken.token,
     };
   }
-
+  //All function 
   //add forgot-password code to database
   static addCode = async (data: any, code: number) => {
     const userEmail = data.email;
@@ -78,13 +78,20 @@ module.exports = class UsersService{
     return doc;
   }
 
-  static deleteCode = async (data: any, code: any) => {
+  static deleteCode = async (data: any) => {
     const userEmail = data.email;
     const user = await Users.findOne({email: userEmail});
-    if(user.code == code) {
-      user.code = undefined;
-      user.save();
-    }
+    user.code = undefined;
+    return user.save();
+  }
+
+  static checkCode = async (data: any) => {
+    const email = data.email;
+    const code = data.code;
+    const user = await Users.findOne({
+      email: email,
+      code: code,
+    })
     return user;
   }
 

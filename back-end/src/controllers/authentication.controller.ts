@@ -37,6 +37,7 @@ class Auth {
         res.json(validateResult.error);
       } else {
         var user = await UsersService.create(data);
+        //Sil wrote a function sendCodeToMail for send email, we can change this
         const emailAgent = new Email();
         emailAgent.sendEmail(user.email, user.username);
         res.json("Create account success");
@@ -141,7 +142,10 @@ class Auth {
       const response = await UsersService.addCode(data, code);
       if(response){
         this.sendCodeToMail(data.email, code, process.env.FORGOT_PASSWORD);
-        this.deleteCode(data, code);
+        //Code auto delete after 60s
+        setTimeout(() => {
+          UsersService.deleteCode(data);
+        }, 60 * 1000)
         res.status(200).json({
           success: true,
         })
@@ -154,13 +158,32 @@ class Auth {
 
   public sendCodeToMail = async (email: any, token: any, type: any) => {
     const emailAgent = new Email();
-    emailAgent.sendEmail(email, token, process.env.FORGOT_PASSWORD);
+    emailAgent.sendEmail(email, token, type);
   }
 
-  public deleteCode = async (data: any, code: any) => {
-    setTimeout(() => {
-      UsersService.deleteCode(data, code);
-    }, 60 * 1000);
+  public checkForgotPasswordCode = async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    const data = {
+      email: req.body.email,
+      code: req.body.code,
+    };
+
+    try {
+      const response = UsersService.checkCode
+    } catch(error) {
+      next(error);
+    }
+  }
+
+  public resetPassword = async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+
   }
 
   public setTokenCookie = (res: express.Response, token: string) => {
