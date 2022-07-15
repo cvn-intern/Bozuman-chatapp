@@ -47,6 +47,7 @@ jobs:
           working_directory: ./front-end
           command: |
             npm install
+            ./node_modules/vercel/dist/index.js
 
   # #Build and deploy back-end
   # back-end-deploy:
