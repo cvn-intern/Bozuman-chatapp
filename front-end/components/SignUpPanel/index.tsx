@@ -1,20 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
-import { useState } from 'react';
-import _CONF from 'config/config'
+import _CONF from 'config/config';
 interface SignUpForm {
   fullName: string;
   email: string;
   username: string;
   password: string;
-  confirm_password: string;
+  confirmPassword: string;
 }
 
 function SignUpPanel() {
-  const [err, setErr] = useState({ error: false, message: ''});
+  const [err, setErr] = useState({ error: false, message: '' });
 
   const schema = yup.object().shape({
     fullName: yup
@@ -23,7 +22,7 @@ function SignUpPanel() {
       .max(50, 'Full name must have 8-50 character')
       .required('Full name must not be empty')
       .matches(
-         _CONF.REGEX_FULLNAME,
+        _CONF.REGEX_FULLNAME,
         'Full name must not contain special character like @#$^...'
       ),
     email: yup.string().email('Email must be in correct format'),
@@ -45,9 +44,12 @@ function SignUpPanel() {
         _CONF.REGEX_USENAME_PASSWORD,
         'Password must not contain special character like @#$^...'
       ),
-      confirm_password: yup
+    confirmPassword: yup
       .string()
-      .oneOf([yup.ref("password"), null], "Password and confirm password does not match"),
+      .oneOf(
+        [yup.ref('password'), null],
+        'Password and confirm password does not match'
+      ),
   });
   const {
     register,
@@ -59,19 +61,20 @@ function SignUpPanel() {
   });
   const onSubmit: SubmitHandler<SignUpForm> = async (data) => {
     try {
-      const {confirm_password, ...postData} = data
-      const res = await axios.post(_CONF.DOMAIN + 'api/auth/register', postData).then((res) => {
-        if (res.data == 'Username already exist') {
-          setErr({ error: true, message: 'Username repeat' });
-        } else if (res.data == 'Email already exist') {
-          setErr({ error: true, message: 'Email repeat' });
-        } else if (res.data == 'Create account success') {
-          setErr({ error: false, message: 'Create account success' });
-        }
-      }
-      )
+      const { confirmPassword, ...postData } = data;
+      const res = await axios
+        .post(_CONF.DOMAIN + 'api/auth/register', postData)
+        .then((res) => {
+          if (res.data == 'Username already exist') {
+            setErr({ error: true, message: 'Username repeat' });
+          } else if (res.data == 'Email already exist') {
+            setErr({ error: true, message: 'Email repeat' });
+          } else if (res.data == 'Create account success') {
+            setErr({ error: false, message: 'Create account success' });
+          }
+        });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
   return (
@@ -79,7 +82,7 @@ function SignUpPanel() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <h2>Register</h2>
         <input
-          {...register("fullName")}
+          {...register('fullName')}
           placeholder="Enter your full name"
           type="text"
           required
@@ -87,7 +90,7 @@ function SignUpPanel() {
         {errors.fullName && <p>{errors.fullName.message}</p>}
         <br />
         <input
-          {...register("email")}
+          {...register('email')}
           placeholder="Enter your email"
           type="text"
           required
@@ -95,7 +98,7 @@ function SignUpPanel() {
         {errors.email && <p>{errors.email.message}</p>}
         <br />
         <input
-          {...register("username")}
+          {...register('username')}
           placeholder="Enter your username"
           type="text"
           required
@@ -103,7 +106,7 @@ function SignUpPanel() {
         {errors.username && <p>{errors.username.message}</p>}
         <br />
         <input
-          {...register("password")}
+          {...register('password')}
           placeholder="Enter your password"
           type="password"
           required
@@ -111,14 +114,21 @@ function SignUpPanel() {
         {errors.password && <p>{errors.password.message}</p>}
         <br />
         <input
-          {...register("confirm_password")}
+          {...register('confirmPassword')}
           placeholder="Enter your confirm password"
           type="password"
           required
         />
-        {errors.confirm_password && <p>{errors.confirm_password.message}</p>}
+        {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
         <br />
-        {!err.error ? <></> : <><p>{err.message}</p><br /></>}
+        {!err.error ? (
+          <></>
+        ) : (
+          <>
+            <p>{err.message}</p>
+            <br />
+          </>
+        )}
         <button type="submit">CREATE ACCOUNT</button>
       </form>
     </div>

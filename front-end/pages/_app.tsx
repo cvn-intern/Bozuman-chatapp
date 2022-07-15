@@ -6,7 +6,9 @@ import { useEffect } from 'react';
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   useEffect(() => {
-    if (router.pathname === '/_error') router.push('/404');
+    if (router.pathname === '/_error') {
+      router.push('/404');
+    }
   }, []);
   return <Component {...pageProps} />;
 }

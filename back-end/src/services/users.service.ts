@@ -67,6 +67,7 @@ module.exports = class UsersService{
     await refreshToken.save();
     return {
       ...this.basicDetails(user),
+      success: 'true',
       accessToken,
       refreshToken: refreshToken.token,
     };

@@ -1,6 +1,6 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Hello from 'components/SignInPanel/hello'
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import Hello from 'components/SignInPanel/hello';
 
 const Home: NextPage = () => {
   return (
@@ -11,14 +11,13 @@ const Home: NextPage = () => {
       </Head>
       <div className="container">
         <h1>Bozuman chat app home page</h1>
-    <Hello/>
-        <input type="user" name='user' />
-        
-        <input type="submit" name="submit" value="Continue"/>
+        <Hello />
+        <input type="user" name="user" />
+
+        <input type="submit" name="submit" value="Continue" />
       </div>
-
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

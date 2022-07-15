@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import Hello from "../../components/SignInPanel/hello";
+import React from 'react';
+import Hello from '../../components/SignInPanel/hello';
 
-function T() {
+function T(){
   return <Hello />;
 }
 
