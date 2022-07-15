@@ -1,47 +1,5 @@
 version: 2.1
 
-orbs: 
-  heroku: circleci/heroku@1.2.6
-
-parameters:
-  api-key:
-    default: HEROKU_API_KEY
-    description: The name of the environment variable containing your Heroku API Key.
-    type: env_var_name
-  app-name:
-    default: $bozuman-chatapp
-    description: >-
-      The name of your Heroku App. For backwards compatibility the literal value
-      `$HEROKU_APP_NAME` is the default, so you can easily use this command by
-      setting an environment variable called HEROKU_APP_NAME
-    type: string
-  branch:
-    default: $Config-CircleCI
-    description: Deploy the given branch. The default value is your current branch.
-    type: string
-  force:
-    default: false
-    description: >-
-      Whether or not to force the git push (i.e. `git push -f`). Defaults to
-      false.
-    type: boolean
-  maintenance-mode:
-    default: false
-    description: >-
-      Use this to automatically enable maintenance mode before pre-deploy steps
-      and have it disabled after post-deploy steps have been run.
-    type: boolean
-  no_output_timeout:
-    default: 10m
-    description: >-
-      Allows you to specify the no_output_timeout for the `git push` to heroku.
-      Defaults to 10m.
-    type: string
-  tag:
-    default: $CIRCLE_TAG
-    description: Deploy the given tag. The default value is your current tag.
-    type: string
-
 jobs:
   # ESLint in front-end
   front-end-eslint:
@@ -83,34 +41,12 @@ jobs:
   front-end-deploy:
     docker:
       - image: cimg/node:16.16.0
-    executor: heroku/default
     steps: 
       - checkout
       - run: 
           working_directory: ./front-end
           command: |
             npm install
-            if [[ $(command -v heroku) == "" ]]; then
-              curl https://cli-assets.heroku.com/install.sh | sh
-            else
-              echo "Heroku is already installed. No operation was performed."
-            fi
-
-            if << parameters.force >>;then
-              force="-f"
-            fi
-
-            heroku_url="https://heroku:$<< parameters.api-key >>@git.heroku.com/<<
-            parameters.app-name >>.git"
-
-            if [ -n "<< parameters.branch >>" ]; then
-              git push $force $heroku_url << parameters.branch >>:main
-            elif [ -n "<< parameters.tag >>" ]; then
-              git push $force $heroku_url << parameters.tag >>^{}:main
-            else
-              echo "No branch or tag found."
-              exit 1
-            fi
 
   # #Build and deploy back-end
   # back-end-deploy:
