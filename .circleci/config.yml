@@ -4,7 +4,7 @@ orbs:
   heroku: circleci/heroku@1.2.6
 
 parameters:
-api-key:
+  api-key:
     default: HEROKU_API_KEY
     description: The name of the environment variable containing your Heroku API Key.
     type: env_var_name
