@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm, SubmitHandler  } from "react-hook-form";
 import * as yup from "yup";
+import Image from 'next/image';
 import { yupResolver } from "@hookform/resolvers/yup";
 
 interface SignInForm {
@@ -46,7 +47,7 @@ function SignInPanel() {
     <div className="signin">
       <form onSubmit={handleSubmit(onSubmit)}>
         <h2>Sign in</h2>
-        <label> Username </label>
+        <label className='info'> Username </label>
         <input
           {...register("username")}
           placeholder="Type your username"
@@ -54,19 +55,35 @@ function SignInPanel() {
           required
         />
         {errors.username && <p>{errors.username.message}</p>}
-        <label> Password </label>
+        <label className='info'> Password </label>
         <input
           {...register("password")}
           placeholder="Type your password"
           type="password"
           required
         />
-        <label>
-          <input type="checkbox"/>
-          Remember me
-        </label>
         {errors.password && <p>{errors.password.message}</p>}
-        <button type="submit">Continue</button>
+        <div>
+          <label className="remember-me">
+            <input type="checkbox"/>
+            <span>Remember me</span>
+          </label>
+          <a>Forgot password?</a>
+        </div>
+        <button type="submit" className="button__signin">Continue</button>
+        <p className="mt-4 mb-0">Sign in with Google</p> 
+        <a href="" className="mt-2  ">
+          <Image
+            src={'/icon-google.png'}
+            alt="google icon"
+            width={20}
+            height={20}
+          />
+        </a>
+        <div>
+          <p>Dont't have an account?</p>
+          <button type="submit" className="button__signup">Create new</button>
+        </div>
       </form>
     </div>
   );
