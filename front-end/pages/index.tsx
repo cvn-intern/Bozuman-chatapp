@@ -14,6 +14,8 @@ const Home: NextPage = () => {
         <input type="user" name='user' />
         
         <input type="submit" name="submit" value="Continue"/>
+
+        
       </div>
 
     </div>
