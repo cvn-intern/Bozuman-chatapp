@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs: 
+  heroku: circleci/heroku@1.2.6
+
 jobs:
   # ESLint in front-end
   front-end-eslint:
@@ -26,42 +29,55 @@ jobs:
             npm run lint
 
   #Build and deploy front-end
+  # front-end-deploy:
+  #   docker:
+  #     - image: cimg/node:16.16.0
+  #   steps:
+  #     - checkout
+  #     - run: 
+  #         working_directory: ./front-end
+  #         command: |
+  #           npm install
+  #           npm i vercel
+  #           DEPLOYMENT_URL=$(vercel --name $CI_PROJECT_NAME --confirm -t $VERCEL_TOKEN)
+  #           vercel
   front-end-deploy:
-    docker:
-      - image: cimg/node:16.16.0
-    steps:
+    executor: heroku/default
+    steps: 
       - checkout
       - run: 
           working_directory: ./front-end
           command: |
             npm install
-            npm i vercel
-            DEPLOYMENT_URL=$(vercel --name $CI_PROJECT_NAME --confirm -t $VERCEL_TOKEN)
-            vercel
+            heroku/install
+            heroku/deploy-via-git
 
-  #Build and deploy back-end
-  back-end-deploy:
-    docker:
-      - image: cimg/node:16.16.0
-    steps:
-      - checkout
-      - run: 
-          working_directory: ./back-end
-          command: |
-            npm install
-            vercel
+  # #Build and deploy back-end
+  # back-end-deploy:
+  #   docker:
+  #     - image: cimg/node:16.16.0
+  #   steps:
+  #     - checkout
+  #     - run: 
+  #         working_directory: ./back-end
+  #         command: |
+  #           npm install
+  #           vercel
 
 workflows:
   Front-end-workflow:
     jobs:
-      - front-end-eslint
+      - front-end-deploy
+  # Front-end-workflow:
+  #   jobs:
+      # - front-end-eslint
       # - front-end-deploy:
       #     requires:
       #       - front-end-eslint
 
-  Back-end-workflow:
-    jobs:
-      - front-end-eslint
+  # Back-end-workflow:
+  #   jobs:
+  #     - front-end-eslint
       # - front-end-deploy:
       #     requires:
       #       - front-end-eslint
