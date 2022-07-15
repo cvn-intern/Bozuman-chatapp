@@ -16,8 +16,8 @@
   "extends": [
     "next/core-web-vitals",
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    // "plugin:@typescript-eslint/recommended",
+    // "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:@next/eslint-plugin-next/recommended",
     // "prettier",
     "next"
@@ -34,7 +34,7 @@
     "sourceType": "module"
   },
   "plugins": [
-    "@typescript-eslint",
+    // "@typescript-eslint",
     "@next/eslint-plugin-next"
   ],
   "rules": {

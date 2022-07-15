@@ -1,35 +1,36 @@
-import React from "react";
-import { useForm, SubmitHandler  } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import axios from "axios"
+import React from 'react';
+import { useForm, SubmitHandler  } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import axios from 'axios'
 interface SignInForm {
   username: string;
   password: string;
 }
 
-function SignInPanel() {
+function SignInPanel () {
 
   const schema = yup.object().shape({
     username: yup
       .string()
-      .min(8, "Username must have 8-32 character")
-      .max(32, "Username must have 8-32 character")
-      .required("Username must not be empty")
+      .min(8, 'Username must have 8-32 character')
+      .max(32, 'Username must have 8-32 character')
+      .required('Username must not be empty')
       .matches(
         /^[a-zA-Z0-9_.-]*$/,
-        "Username must not contain special character like @#$^..."
+        'Username must not contain special character like @#$^...'
       ),
     password: yup
       .string()
-      .min(8, "Password must have 8-16 character")
-      .max(316, "Password must have 8-16 character")
-      .required("Password must not be empty")
+      .min(8, 'Password must have 8-16 character')
+      .max(316, 'Password must have 8-16 character')
+      .required('Password must not be empty')
       .matches(
         /^[a-zA-Z0-9_.-]*$/,
-        "Password must not contain special character like @#$^..."
+        'Password must not contain special character like @#$^...'
       ),
   });
+
   const {
     register,
     handleSubmit,
@@ -38,6 +39,7 @@ function SignInPanel() {
   } = useForm<SignInForm>({
     resolver: yupResolver(schema),
   });
+
   const onSubmit: SubmitHandler<SignInForm> = async (data) => {
     // post api here
     try {
@@ -53,7 +55,7 @@ function SignInPanel() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <h2>Sign in</h2>
         <input
-          {...register("username")}
+          {...register('username')}
           placeholder="Enter your username"
           type="text"
           required
@@ -61,7 +63,7 @@ function SignInPanel() {
         {errors.username && <p>{errors.username.message}</p>}
         <br />
         <input
-          {...register("password")}
+          {...register('password')}
           placeholder="Enter your password"
           type="password"
           required
