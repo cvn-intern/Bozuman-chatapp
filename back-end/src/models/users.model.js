@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Joi = require("joi");
+const _CONF = require("../configs/auth.config");
 
 const UsersSchema = Schema({
 
@@ -66,17 +67,17 @@ const registerSchema = Joi.object({
   username: Joi.string()
     .min(8)
     .max(32)
-    .pattern(new RegExp("^[a-zA-Z0-9_-]+$"))
+    .pattern(new RegExp(_CONF.REGEX_USENAME_PASSWORD))
     .required(),
   password: Joi.string()
     .min(8)
     .max(16)
-    .pattern(new RegExp("^[a-zA-Z0-9_-]+$"))
+    .pattern(new RegExp(_CONF.REGEX_USENAME_PASSWORD))
     .required(),
   fullName: Joi.string()
     .min(8)
     .max(50)
-    .pattern(new RegExp("^[a-zA-Z0-9_-]+$"))
+    .pattern(new RegExp(_CONF.REGEX_FULLNAME))
     .required(),
   email: Joi.string().email({
     minDomainSegments: 2,
@@ -84,6 +85,19 @@ const registerSchema = Joi.object({
   }),
 });
 
-module.exports = {Users: mongoose.model("user", UsersSchema), registerSchema};
+const signInSchema = Joi.object({
+    username: Joi.string()
+      .min(8)
+      .max(32)
+      .pattern(new RegExp(_CONF.REGEX_USENAME_PASSWORD))
+      .required(),
+    password: Joi.string()
+      .min(8)
+      .max(16)
+      .pattern(new RegExp(_CONF.REGEX_USENAME_PASSWORD))
+      .required(),
+  });
+
+module.exports = {Users: mongoose.model("user", UsersSchema), registerSchema, signInSchema};
 
 

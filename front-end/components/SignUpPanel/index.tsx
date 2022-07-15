@@ -10,6 +10,7 @@ interface SignUpForm {
   email: string;
   username: string;
   password: string;
+  confirm_password: string;
 }
 
 function SignUpPanel() {
@@ -22,8 +23,8 @@ function SignUpPanel() {
       .max(50, 'Full name must have 8-50 character')
       .required('Full name must not be empty')
       .matches(
-        /^[a-zA-Z0-9_.-]*$/,
-        'Username must not contain special character like @#$^...'
+         _CONF.REGEX_FULLNAME,
+        'Full name must not contain special character like @#$^...'
       ),
     email: yup.string().email('Email must be in correct format'),
     username: yup
@@ -32,7 +33,7 @@ function SignUpPanel() {
       .max(32, 'Username must have 8-32 character')
       .required('Username must not be empty')
       .matches(
-        /^[a-zA-Z0-9_.-]*$/,
+        _CONF.REGEX_USENAME_PASSWORD,
         'Username must not contain special character like @#$^...'
       ),
     password: yup
@@ -41,9 +42,12 @@ function SignUpPanel() {
       .max(316, 'Password must have 8-16 character')
       .required('Password must not be empty')
       .matches(
-        /^[a-zA-Z0-9_.-]*$/,
+        _CONF.REGEX_USENAME_PASSWORD,
         'Password must not contain special character like @#$^...'
       ),
+      confirm_password: yup
+      .string()
+      .oneOf([yup.ref("password"), null], "Password and confirm password does not match"),
   });
   const {
     register,
@@ -55,7 +59,8 @@ function SignUpPanel() {
   });
   const onSubmit: SubmitHandler<SignUpForm> = async (data) => {
     try {
-      const res = await axios.post(_CONF.DOMAIN + 'api/auth/register', data).then((res) => {
+      const {confirm_password, ...postData} = data
+      const res = await axios.post(_CONF.DOMAIN + 'api/auth/register', postData).then((res) => {
         if (res.data == 'Username already exist') {
           setErr({ error: true, message: 'Username repeat' });
         } else if (res.data == 'Email already exist') {
@@ -65,7 +70,6 @@ function SignUpPanel() {
         }
       }
       )
-      console.log(err);
     } catch (error) {
       console.log(error)
     }
@@ -105,6 +109,14 @@ function SignUpPanel() {
           required
         />
         {errors.password && <p>{errors.password.message}</p>}
+        <br />
+        <input
+          {...register("confirm_password")}
+          placeholder="Enter your confirm password"
+          type="password"
+          required
+        />
+        {errors.confirm_password && <p>{errors.confirm_password.message}</p>}
         <br />
         {!err.error ? <></> : <><p>{err.message}</p><br /></>}
         <button type="submit">CREATE ACCOUNT</button>
