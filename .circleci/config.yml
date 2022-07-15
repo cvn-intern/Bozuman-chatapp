@@ -45,9 +45,12 @@ jobs:
       - checkout
       - run: 
           working_directory: ./front-end
-          command: |
-            npm install
-            ./node_modules/vercel/dist/index.js
+          command: npm install
+      - run:
+          working_directory: ./front-end
+          command: ./node_modules/vercel/dist/index.js --token miRdrToTCCTnxZJel9uNxvP1
+            
+        
 
   # #Build and deploy back-end
   # back-end-deploy:
