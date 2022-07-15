@@ -32,7 +32,7 @@ module.exports = class UsersService{
   }
 
   static find = async (data: any) => {
-    
+    //It will return one element so we should return an object instead of array,
     if (data.username) {
       const userList = await Users.find({ username: data.username }).exec();
       return userList;
@@ -65,6 +65,17 @@ module.exports = class UsersService{
       accessToken,
       refreshToken: refreshToken.token,
     };
+  }
+
+  //add forgot-password code to database
+  static addCode = async (data: any, code: number) => {
+    const userEmail = data.email;
+    const doc = await Users.findOneAndUpdate(
+      { email: userEmail },
+      { code: code },
+      { new: true}
+    );
+    return doc;
   }
 
   static generateAccessToken = (user : any) => {

@@ -137,10 +137,11 @@ class Auth {
       const data = {
         email: req.body.email,
       }
-      const number = generateSixDigitCode();
+      const code = generateSixDigitCode();
+      const response = await UsersService.addCode(data, code);
+      console.log(response);
+      
       //Write function to save code above in db by email
-      
-      
     } catch (error) {
       next(error);
     }

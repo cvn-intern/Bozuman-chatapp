@@ -17,7 +17,7 @@ router.post(
 router.get("/activate_account/:name", authentication.activateAccount);
 router.post("/sign-in", authentication.signIn);
 router.post('/forgot-password', authentication.getUserByEmail)
-router.post('create-code', authentication.createCode);
+router.post('/create-code', authentication.createCode);
 
 router.use((err: any, req: any, res: any, next: any) => {
   if (err && err.error && err.error.isJoi) {
