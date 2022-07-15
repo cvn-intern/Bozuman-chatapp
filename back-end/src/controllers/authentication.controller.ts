@@ -2,7 +2,7 @@ import express from "express";
 import { generateSixDigitCode } from '../utils/Helper.utils';
 const UsersService = require("../services/users.service");
 const { Email } = require("../utils/Mail.utils");
-
+require('dotenv').config();
 
 class Auth {
   public validateSignup = async (data: any) => {
@@ -128,7 +128,7 @@ class Auth {
     }
   };
 
-  public createCode = async (
+  public createCodeExpire = async (
     req: express.Request,
     res: express.Response,
     next: express.NextFunction
@@ -139,16 +139,28 @@ class Auth {
       }
       const code = generateSixDigitCode();
       const response = await UsersService.addCode(data, code);
-      console.log(response);
-      
+      if(response){
+        this.sendCodeToMail(data.email, code, process.env.FORGOT_PASSWORD);
+        this.deleteCode(data, code);
+        res.status(200).json({
+          success: true,
+        })
+      }
       //Write function to save code above in db by email
     } catch (error) {
       next(error);
     }
   }
 
-  public sendCodeToMail = async () => {
+  public sendCodeToMail = async (email: any, token: any, type: any) => {
+    const emailAgent = new Email();
+    emailAgent.sendEmail(email, token, process.env.FORGOT_PASSWORD);
+  }
 
+  public deleteCode = async (data: any, code: any) => {
+    setTimeout(() => {
+      UsersService.deleteCode(data, code);
+    }, 60 * 1000);
   }
 
   public setTokenCookie = (res: express.Response, token: string) => {

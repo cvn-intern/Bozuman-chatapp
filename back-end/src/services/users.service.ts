@@ -78,6 +78,16 @@ module.exports = class UsersService{
     return doc;
   }
 
+  static deleteCode = async (data: any, code: any) => {
+    const userEmail = data.email;
+    const user = await Users.findOne({email: userEmail});
+    if(user.code == code) {
+      user.code = undefined;
+      user.save();
+    }
+    return user;
+  }
+
   static generateAccessToken = (user : any) => {
     return jwt.sign({ username: user.username, id: user._id }, _CONF.SECRET, {
       expiresIn: _CONF.tokenLife,

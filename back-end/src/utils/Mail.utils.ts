@@ -27,7 +27,9 @@ class Email {
 
     if (type === process.env.ACTIVATE_ACCOUNT){
       mailOptions.html = '<p>Click <a href="http://localhost:3000/api/auth/activate_account/' + token + '">here</a> to activate your account</p>';
-    }else if (type === process.env.ACTIVATE_ACCOUNT)
+    }else if (type === process.env.FORGOT_PASSWORD){
+      mailOptions.html = `<h1>Your code is <strong>${token}</strong></h1>`;
+    }
 
     this.transporter.sendMail(mailOptions, function(error: any, info: any){
       if (error) {
