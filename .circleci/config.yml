@@ -48,8 +48,8 @@ jobs:
           command: npm install
       - run:
           working_directory: ./front-end
-          command: ./node_modules/vercel/dist/index.js --token miRdrToTCCTnxZJel9uNxvP1
-            
+          command: ./node_modules/vercel/dist/index.js --token miRdrToTCCTnxZJel9uNxvP1 --cwd . --confirm
+          
         
 
   # #Build and deploy back-end
