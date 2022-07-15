@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import useSWR, { Key, Fetcher } from 'swr';
 import _CONF from 'config/config';
 import axios from 'axios';
+import {} from 'helper/axiosCliend'
 const cookie = require('cookie-cutter');
 const fetcher = async (
   input: RequestInfo,
@@ -15,9 +16,11 @@ function Hello() {
   // const { data, error } = useSWR('//localhost:3000/api/auth/get', fetcher)
   const [response, setResponse] = useState('');
   const fetchdata = async () => {
+   
     const res = await axios.get('//localhost:3000/api/auth/get', {
       headers: {
-        'x-access-token': cookie.get('access_token')
+        'x-access-token': await cookie.get('access_token'),
+        withCredentials : true
       }
     });
     console.log(res);
