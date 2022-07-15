@@ -1,7 +1,6 @@
 import express from 'express';
 const UsersService = require('../services/users.service');
 const { Email } = require('../utils/Mail.utils');
-var validator = require('validator');
 
 class Auth {
   public validateSignup = async (data: any) => {
@@ -73,7 +72,7 @@ class Auth {
       const response = await UsersService.authenticate(data);
       res.status(200).json(response);
     } catch (error) {
-        res.status(403).json({ status: '403', error: error });
+        res.status(403).json({ success: false, error: {message: error} });
     }
   };
 

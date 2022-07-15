@@ -23,7 +23,6 @@ module.exports = (
           .status(401)
           .json({ error: true, message: 'Unauthorized access.', err });
       }
-      console.log(`decoded>>${decoded}`);
       req.decoded = decoded;
       next();
     });

@@ -7,7 +7,7 @@ import axios from 'axios';
 import _CONF from 'config/config';
 import { useRouter } from 'next/router';
 // import cookieCutter from 'cookie-cutter' // I dont know why it doesn't work
-const cookie = require('cookie-cutter');
+import { setCookie } from 'cookies-next';
 
 interface SignInForm {
   username: string;
@@ -55,11 +55,11 @@ function SignInPanel() {
         trigger: false,
         message: '',
       });
-      cookie.set('access_token', res.data.accessToken);
+      setCookie('access_token', res.data.accessToken)
       window.localStorage.setItem('refresh_token', res.data.refreshToken);
       router.push('/');
     } catch (error: any) {
-      setErrorMessage({ trigger: true, message: error.response.data.error });
+      setErrorMessage({ trigger: true, message: error.response.data.error.message });
     }
     // reset()
   };
