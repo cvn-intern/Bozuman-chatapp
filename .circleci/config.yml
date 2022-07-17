@@ -66,7 +66,7 @@ jobs:
           working_directory: ./front-end
           command: ./node_modules/vercel/dist/index.js --token ${VERCEL_TOKEN} --cwd . --confirm --target staging
           
-  back-end-deploy-statging:
+  back-end-deploy-staging:
     docker: 
       - image: cimg/node:16.16.0
     steps:
