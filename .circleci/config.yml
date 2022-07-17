@@ -83,7 +83,7 @@ jobs:
           working_directory: ./back-end/.vercel
           command: cat > project.json
       - run:
-          working_directory: ./front-end/.vercel
+          working_directory: ./back-end/.vercel
           command: echo '{"projectId":"prj_ZjVVykfK980IYr31aKEAn1hcsCsI","orgId":"TJGpH5dxctiVPEdvJovVIi5K"}' > project.json
       # - run:
       #     working_directory: ./back-end/.vercel
