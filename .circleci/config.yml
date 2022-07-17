@@ -119,7 +119,7 @@ workflows:
 
   Back-end-workflow:
     jobs:
-      - back-end-deploy:
+      - back-end-deploy-staging:
           filters:
             branches:
               only:
