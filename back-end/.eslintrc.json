@@ -49,7 +49,7 @@
       }
     ],
     "no-var": "error",
-    "space-before-function-paren": ["error", "always"],
+    "space-before-function-paren": ["off", "always"],
     "no-inline-comments": "error",
     "no-dupe-keys": "error",
     "no-dupe-else-if": "error",
