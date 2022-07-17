@@ -73,7 +73,9 @@ jobs:
       - checkout
       - run:
           working_directory: ./back-end
-          command: npm install
+          command: |
+            npm install
+            npm install vercel
       - run:
           working_directory: ./back-end
           command: mkdir .vercel
