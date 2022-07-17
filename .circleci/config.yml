@@ -25,19 +25,8 @@ jobs:
             npm install
             npm run lint
 
-  #Build and deploy front-end
-  # front-end-deploy:
-  #   docker:
-  #     - image: cimg/node:16.16.0
-  #   steps:
-  #     - checkout
-  #     - run: 
-  #         working_directory: ./front-end
-  #         command: |
-  #           npm install
-  #           npm i vercel
-  #           DEPLOYMENT_URL=$(vercel --name $CI_PROJECT_NAME --confirm -t $VERCEL_TOKEN)
-  #           vercel
+  # DEPLOYMENT_URL=$(vercel --name $CI_PROJECT_NAME --confirm -t $VERCEL_TOKEN)
+  
   front-end-deploy:
     docker:
       - image: cimg/node:16.16.0
@@ -48,7 +37,7 @@ jobs:
           command: npm install
       - run:
           working_directory: ./front-end
-          command: echo "{"projectId":"prj_EbYfeF4gs5qXuWjESLHDGzQbEfjI","orgId":"sIpHFARbgZn3tMzH4k0WM3Tl"}" >> .vercel/project.json
+          command: echo "{"projectId":"prj_EbYfeF4gs5qXuWjESLHDGzQbEfjI","orgId":"sIpHFARbgZn3tMzH4k0WM3Tl"}" > .vercel/project.json
       - run:
           working_directory: ./front-end
           command: ./node_modules/vercel/dist/index.js --token ${VERCEL_TOKEN} --cwd . --confirm
@@ -70,14 +59,37 @@ jobs:
       - run:
           working_directory: ./front-end/.vercel
           command: echo '{"projectId":"prj_bcNxQUlZG59972eilV1bYhfOyJJY","orgId":"TJGpH5dxctiVPEdvJovVIi5K"}' > project.json
-      - run:
-          working_directory: ./front-end/.vercel
-          command: cat project.json
+      # - run:
+      #     working_directory: ./front-end/.vercel
+      #     command: cat project.json
       - run:
           working_directory: ./front-end
           command: ./node_modules/vercel/dist/index.js --token ${VERCEL_TOKEN} --cwd . --confirm --target staging
           
-        
+  back-end-deploy-statging:
+    docker: 
+      - image: cimg/node:16.16.0
+    steps:
+      - checkout
+      - run:
+          working_directory: ./back-end
+          command: npm install
+      - run:
+          working_directory: ./back-end
+          command: mkdir .vercel
+      - run:
+          working_directory: ./back-end/.vercel
+          command: cat > project.json
+      # - run:
+      #     working_directory: ./front-end/.vercel
+      #     command: echo '{"projectId":"prj_bcNxQUlZG59972eilV1bYhfOyJJY","orgId":"TJGpH5dxctiVPEdvJovVIi5K"}' > project.json
+      # - run:
+      #     working_directory: ./back-end/.vercel
+      #     command: cat project.json
+      - run:
+          working_directory: ./back-end
+          command: ./node_modules/vercel/dist/index.js --token ${VERCEL_TOKEN} --cwd . --confirm --target staging
+
 
   # #Build and deploy back-end
   # back-end-deploy:
@@ -92,18 +104,27 @@ jobs:
   #           vercel
 
 workflows:
-  Front-end-workflow:
+  # Front-end-workflow:
+  #   jobs:
+  #     - front-end-deploy:
+  #         filters:
+  #           branches:
+  #             only:
+  #               - Config-CircleCI-master
+  #     - front-end-deploy-staging:
+  #         filters:
+  #           branches:
+  #             only:
+  #               - Config-CircleCI
+
+  Back-end-workflow:
     jobs:
-      - front-end-deploy:
-          filters:
-            branches:
-              only:
-                - Config-CircleCI-master
-      - front-end-deploy-staging:
+      - back-end-deploy:
           filters:
             branches:
               only:
                 - Config-CircleCI
+
   # Front-end-workflow:
   #   jobs:
       # - front-end-eslint
