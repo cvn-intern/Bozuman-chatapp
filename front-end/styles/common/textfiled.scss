@@ -19,7 +19,8 @@ input[type="text"]{
     cursor:context-menu;
 }
 
-input[type="password"]{
+input[type="password"],
+input[type="email"]{
     background-color: $while; 
 
     font-weight: 500;
