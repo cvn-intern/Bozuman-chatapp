@@ -65,7 +65,7 @@ function SignUpPanel() {
     try {
       const { confirmPassword, ...postData } = data;
       const res = await axios
-        .post(_CONF.DOMAIN + 'api/auth/register', postData)
+        .post(process.env.NEXT_PUBLIC_DOMAIN + '/api/auth/register', postData)
         .then((res) => {
           if (res.data == 'Username already exist') {
             setErr({ error: true, message: 'Username repeat' });

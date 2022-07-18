@@ -49,10 +49,10 @@ function SignInPanel() {
   } = useForm<SignInForm>({
     resolver: yupResolver(schema),
   });
-
   const onSubmit: SubmitHandler<SignInForm> = async (data) => {
     try {
-      const res = await axios.post(_CONF.DOMAIN + 'api/auth/sign-in', data);
+      console.log(process.env.NEXT_PUBLIC_DOMAIN)
+      const res = await axios.post(process.env.NEXT_PUBLIC_DOMAIN + '/api/auth/sign-in', data);
       setErrorMessage({
         trigger: false,
         message: '',

@@ -19,13 +19,13 @@ function Hello() {
   const [response, setResponse] = useState('');
   const fetchdata = async () => {
    
-    const res = await axiosClient.get('//localhost:3000/api/auth/get');
+    const res = await axiosClient.get(process.env.NEXT_PUBLIC_DOMAIN + '/api/auth/get');
     console.log(res);
   };
   fetchdata();
   const testToken = async () => {
    
-    const res = await axiosClient.get('//localhost:3000/');
+    const res = await axiosClient.get(process.env.NEXT_PUBLIC_DOMAIN);
     console.log(res);
   };
   testToken();

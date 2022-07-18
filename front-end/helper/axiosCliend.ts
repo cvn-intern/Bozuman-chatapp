@@ -3,7 +3,7 @@ import _CONF from "config/config";
 import { getCookie, setCookie } from "cookies-next";
 
 const axiosClient = axios.create({
-  baseURL: _CONF.DOMAIN,
+  baseURL: process.env.NEXT_PUBLIC_DOMAIN,
   withCredentials: true,
 });
 // Đính kèm token cho mọi tương tác api (API chưa được gửi)
@@ -44,7 +44,7 @@ axiosClient.interceptors.response.use(
 const newToken = async () => {
   const token = getCookie("refresh_token");
   if (token) {
-    const res = axios.get(_CONF.DOMAIN + "api/token", {
+    const res = axios.get(process.env.NEXT_PUBLIC_DOMAIN + "/api/token", {
       headers: {
         "x-refresh-token": token,
       },
