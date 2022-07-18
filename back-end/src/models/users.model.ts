@@ -1,6 +1,4 @@
-// const mongoose = require("mongoose");
-// const Schema = mongoose.Schema;
-// const Joi = require("joi");
+/* eslint-disable */
 import mongoose from 'mongoose';
 import { Schema } from 'mongoose';
 import Joi from 'joi';

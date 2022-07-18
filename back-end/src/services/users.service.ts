@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { isSet } from 'util/types';
 
 const { Users } = require('../models/users.model');

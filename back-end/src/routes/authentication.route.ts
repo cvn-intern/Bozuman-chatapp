@@ -1,10 +1,11 @@
+/* eslint-disable */
 const Joi = require('joi');
 import express from 'express';
 const router = express.Router();
 const validator = require('express-joi-validation').createValidator({
   passError: true,
 });
-import { ContainerTypes } from 'express-joi-validation';
+
 const { Auth } = require('../controllers/authentication.controller');
 const { registerSchema } = require('../models/users.model');
 const authentication = new Auth();
@@ -30,4 +31,4 @@ router.use((err: any, req: any, res: any, next: any) => {
   }
 });
 
-module.exports = router;
+export default router;

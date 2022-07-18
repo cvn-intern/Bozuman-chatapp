@@ -1,3 +1,4 @@
+/* eslint-disable */
 const jwt = require('jsonwebtoken');
 const _CONF = require('../config/');
 // import jwt from "jsonwebtoken"

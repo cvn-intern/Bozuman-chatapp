@@ -1,9 +1,10 @@
+/* eslint-disable */
 import express from 'express';
 const UsersService = require('../services/users.service');
 const { Email } = require('../utils/Mail.utils');
 const validator = require('validator');
 
-class Auth {
+export class Auth {
   public validateSignup = async (data: any) => {
     const checkUsername = await UsersService.find({ username: data.username });
     if (checkUsername.length > 0) {
@@ -91,4 +92,3 @@ class Auth {
     res.cookie('access_token', token, cookieOptions);
   };
 }
-module.exports = { Auth };

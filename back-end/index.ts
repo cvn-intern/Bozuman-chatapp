@@ -1,12 +1,12 @@
 const PORT = 3000;
-import express, { Application, Request, Response } from 'express';
-const auth = require('./src/routes/authentication.route');
-const cookieParser = require('cookie-parser');
-const cors = require('cors')
-const app: Application = express();
-const { Database } = require('./src/configs/db.config');
 
-const db = new Database();
+import express, { Application } from 'express';
+import auth from './src/routes/authentication.route';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+
+const app: Application = express();
+
 // Body parsing Middleware
 app.use(express.json());
 app.use(cookieParser());
@@ -19,10 +19,13 @@ app.use(cors({
 app.use('/api/auth',auth);
 app.use('/',(req,res) => {
   res.json({
-    success: 'hello'
+    success: 'Success'
   })
 });
+
 const port = process.env.PORT || PORT;
+
 app.listen(port, (): void => {
+  /* eslint-disable no-debugger, no-console */
   console.log(`Connected successfully on port ${PORT}`);
 });
