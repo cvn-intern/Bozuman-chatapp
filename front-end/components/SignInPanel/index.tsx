@@ -49,7 +49,7 @@ function SignInPanel() {
   const onSubmit: SubmitHandler<SignInForm> = async (data) => {
     // post api here
     try {
-      const res = await axios.post(_CONF.DOMAIN + 'api/auth/sign-in', data);
+      await axios.post(_CONF.DOMAIN + 'api/auth/sign-in', data);
       setErrorMessage({
         trigger: false,
         message: '',
