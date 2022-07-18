@@ -6,8 +6,8 @@ const validator = require('express-joi-validation').createValidator({
   passError: true,
 });
 
-const { Auth } = require('../controllers/authentication.controller');
-const { registerSchema } = require('../models/users.model');
+const { Auth } = require("../controllers/authentication.controller");
+const { registerSchema } = require("../models/users.model");
 const authentication = new Auth();
 
 router.post(

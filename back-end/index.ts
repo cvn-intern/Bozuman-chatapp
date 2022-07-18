@@ -13,7 +13,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
   // origin: 'http://127.0.0.1:5500', //Chan tat ca cac domain khac ngoai domain nay
-  // credentials: true //Để bật cookie HTTP qua CORS
+  credentials: true //Để bật cookie HTTP qua CORS
 }))
 
 app.use('/api/auth',auth);
