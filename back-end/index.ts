@@ -1,15 +1,13 @@
 /* eslint-disable */
 
 const expiredAccessTokenHandler = require('./src/middlewares/expiredAccessTokenHandler')
-const port = 3000;
 const { Database } = require('./src/configs/db.config');
-
 
 import express, { Application } from 'express';
 import auth from './src/routes/authentication.route';
 import cors from 'cors';
 const db = new Database();
-const PORT = 3000;const app: Application = express();
+const app: Application = express();
 
 // Body parsing Middleware
 app.use(express.json());
@@ -30,7 +28,8 @@ app.use(require('./src/middlewares/checkAccessToken'))
 app.use('/', (req, res)=>{
   res.json({success:'ok'})
 })
+const port = process.env.PORT || 5000;
 app.listen(port, (): void => {
   /* eslint-disable no-debugger, no-console */
-  console.log(`Connected successfully on port ${PORT}`);
+  console.log(`Connected successfully on port ${port}`);
 });
