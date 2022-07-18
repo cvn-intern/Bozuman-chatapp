@@ -17,6 +17,11 @@ app.use(cors({
 }))
 
 app.use('/api/auth',auth);
+app.use('/',(req,res) => {
+  res.json({
+    success: 'hello'
+  })
+});
 
 app.listen(port, (): void => {
   console.log(`Connected successfully on port ${port}`);
