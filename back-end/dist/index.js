@@ -14,13 +14,14 @@ app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cors_1.default)({
-// origin: 'http://127.0.0.1:5500', //Chan tat ca cac domain khac ngoai domain nay
-// credentials: true //Để bật cookie HTTP qua CORS
+    // origin: 'http://127.0.0.1:5500', //Chan tat ca cac domain khac ngoai domain nay
+    //Để bật cookie HTTP qua CORS
+    credentials: true
 }));
 app.use('/api/auth', authentication_route_1.default);
 app.use('/', (req, res) => {
     res.json({
-        success: 'hello'
+        success: 'Success'
     });
 });
 const port = process.env.PORT || PORT;

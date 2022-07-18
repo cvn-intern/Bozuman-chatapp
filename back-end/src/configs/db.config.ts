@@ -1,8 +1,8 @@
+/* eslint-disable */
 require('dotenv').config();
-import express from "express";
 const mongoose = require("mongoose");
 
-class Database {
+export class Database {
   protected username: any = process.env.DB_USERNAME;
   protected password: any = process.env.DB_PASSWORD;
   protected cluster: any = process.env.DB_CLUSTER;
@@ -12,13 +12,15 @@ class Database {
   constructor() {
     mongoose.connect(
       `mongodb+srv://${this.username}:${this.password}@${this.cluster}.mongodb.net/${this.dbname}?retryWrites=true&w=majority`
-    );
+    )
+      .then((error : any)=>{
+        /* eslint-disable no-debugger, no-console */
+        console.log(error);
+      });
     this.conn = mongoose.connection;
-    this.conn.on("error", console.error.bind(console, "connection error: "));
-    this.conn.once("open", function () {
-      console.log("Connected successfully");
+    this.conn.on('error', console.error.bind(console, 'connection error: '));
+    this.conn.once('open', function () {
+      console.log('Connected successfully');
     });
   }
 }
-
-module.exports = { Database };

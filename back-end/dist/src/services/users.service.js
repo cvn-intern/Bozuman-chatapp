@@ -33,6 +33,7 @@ module.exports = (_a = class UsersService {
         }
     }),
     _a.find = (data) => __awaiter(void 0, void 0, void 0, function* () {
+        //It will return one element so we should return an object instead of array,
         if (data.username) {
             const userList = yield Users.find({ username: data.username }).exec();
             return userList;
@@ -62,6 +63,28 @@ module.exports = (_a = class UsersService {
         const refreshToken = _a.generateRefreshToken(user, ipAddress);
         yield refreshToken.save();
         return Object.assign(Object.assign({}, _a.basicDetails(user)), { accessToken, refreshToken: refreshToken.token });
+    }),
+    //All function 
+    //add forgot-password code to database
+    _a.addCode = (data, code) => __awaiter(void 0, void 0, void 0, function* () {
+        const userEmail = data.email;
+        const doc = yield Users.findOneAndUpdate({ email: userEmail }, { code: code }, { new: true });
+        return doc;
+    }),
+    _a.deleteCode = (data) => __awaiter(void 0, void 0, void 0, function* () {
+        const userEmail = data.email;
+        const user = yield Users.findOne({ email: userEmail });
+        user.code = undefined;
+        return user.save();
+    }),
+    _a.checkCode = (data) => __awaiter(void 0, void 0, void 0, function* () {
+        const email = data.email;
+        const code = data.code;
+        const user = yield Users.findOne({
+            email: email,
+            code: code,
+        });
+        return user;
     }),
     _a.generateAccessToken = (user) => {
         return jwt.sign({ username: user.username, id: user._id }, _CONF.SECRET, {

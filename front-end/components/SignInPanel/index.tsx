@@ -37,18 +37,19 @@ function SignInPanel() {
         'Password must not contain special character like @#$^...'
       ),
   });
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm<SignInForm>({
     resolver: yupResolver(schema),
   });
+
   const onSubmit: SubmitHandler<SignInForm> = async (data) => {
     // post api here
     try {
-      const res = await axios.post(_CONF.DOMAIN + 'api/auth/sign-in', data);
+      await axios.post(_CONF.DOMAIN + 'api/auth/sign-in', data);
       setErrorMessage({
         trigger: false,
         message: '',

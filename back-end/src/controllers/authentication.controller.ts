@@ -1,13 +1,9 @@
 import express from "express";
-import { 
-  FORGOT_PASSWORD,
-  generateSixDigitCode
-} from '../utils/Helper.utils';
+import { FORGOT_PASSWORD, generateSixDigitCode } from "../utils/Helper.utils";
 const UsersService = require("../services/users.service");
 const { Email } = require("../utils/Mail.utils");
 
-
-class Auth {
+export class Auth {
   public validateSignup = async (data: any) => {
     const checkUsername = await UsersService.find({ username: data.username });
     if (checkUsername.length > 0) {
@@ -39,8 +35,7 @@ class Auth {
       if (!validateResult.success) {
         res.json(validateResult.error);
       } else {
-        var user = await UsersService.create(data);
-        //Sil wrote a function sendCodeToMail for send email, we can change this
+        const user = await UsersService.create(data);
         const emailAgent = new Email();
         emailAgent.sendEmail(user.email, user.username);
         res.json("Create account success");
@@ -75,8 +70,10 @@ class Auth {
         password: req.body.password,
         ipAddress: req.ip,
       };
+
       const response = await UsersService.authenticate(data);
-      console.log(response.accessToken)
+      console.log(response);
+      console.log(response.accessToken);
       // this.setTokenCookie(res, response.accessToken);
       res.cookie("access_token", response.accessToken, {
         maxAge: 5 * 60,
@@ -100,37 +97,39 @@ class Auth {
     try {
       const data = {
         email: req.body.email,
-      }
+      };
+
+      console.log(data);
 
       const response = await UsersService.find(data);
       //It returns an array, if response find success, user
       //is the first elements in array
       const user = response[0];
-      if(user) {
-        if(!user.active) {
-          res.status(404).json({
+      if (user) {
+        if (!user.active) {
+          res.status(400).json({
             success: false,
-            // status: '404', 
+            // status: '404',
             error: {
-              code: 'FORGOT_PASSWORD_004',
-              message: 'Your account is not verified',
-            }
-          })
+              code: "FORGOT_PASSWORD_004",
+              message: "Your account is not verified",
+            },
+          });
         } else {
           res.status(200).json({
             success: true,
             email: user.email,
-          })
+          });
         }
-      }else{
-        res.status(404).json({
-            success: false,
-            // status: '404', 
-            error: {
-              code: 'FORGOT_PASSWORD_003',
-              message: 'Email is not exists',
-            }
-          })
+      } else {
+        res.status(400).json({
+          success: false,
+          // status: '404',
+          error: {
+            code: "FORGOT_PASSWORD_003",
+            message: "Email is not exists",
+          },
+        });
       }
     } catch (error) {
       next(error);
@@ -145,29 +144,29 @@ class Auth {
     try {
       const data = {
         email: req.body.email,
-      }
+      };
       const code = generateSixDigitCode();
       const response = await UsersService.addCode(data, code);
-      if(response){
+      if (response) {
         this.sendCodeToMail(data.email, code, FORGOT_PASSWORD);
         //Code auto delete after 60s
         setTimeout(() => {
           UsersService.deleteCode(data);
-        }, 60 * 1000)
+        }, 60 * 1000);
         res.status(200).json({
           success: true,
-        })
+        });
       }
       //Write function to save code above in db by email
     } catch (error) {
       next(error);
     }
-  }
+  };
 
   public sendCodeToMail = async (email: any, token: any, type: any) => {
     const emailAgent = new Email();
     emailAgent.sendEmail(email, token, type);
-  }
+  };
 
   public checkForgotPasswordCode = async (
     req: express.Request,
@@ -179,24 +178,31 @@ class Auth {
       code: req.body.code,
     };
 
-    const response = UsersService.checkCode(data);
-    console.log(response);
-    res.status(200);
-
     try {
-      const response = UsersService.checkCode
-    } catch(error) {
+      const response = UsersService.checkCode(data);
+      if (response) {
+        res.status(200).json({
+          success: true
+        })
+      } else {
+        res.status(400).json({
+          success: false,
+          error: {
+            code: 'FORGOT_PASSOWRD_005',
+            message: 'The code is incorrect'
+          }
+        })
+      }
+    } catch (error) {
       next(error);
     }
-  }
+  };
 
   public resetPassword = async (
     req: express.Request,
     res: express.Response,
     next: express.NextFunction
-  ) => {
-
-  }
+  ) => {};
 
   public setTokenCookie = (res: express.Response, token: string) => {
     const cookieOptions = {
@@ -207,4 +213,3 @@ class Auth {
     res.cookie("access_token", token, cookieOptions);
   };
 }
-module.exports = { Auth };

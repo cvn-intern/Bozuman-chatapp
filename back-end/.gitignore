@@ -1,0 +1,4 @@
+dist
+/src/**/*.js
+index.js
+.env

@@ -16,13 +16,10 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    // "prettier",
-    "next"
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    // "tsconfigRootDir": "__dirname",
     "files": ["*.ts","*.tsx","*.js"],
     "project": "./tsconfig.json",
     "ecmaFeatures": {
@@ -32,7 +29,8 @@
     "sourceType": "module"
   },
   "plugins": [
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "@typescript-eslint/eslint-plugin"
   ],
   "rules": {
     "max-lines": ["error", 500],
@@ -55,7 +53,7 @@
     "no-duplicate-imports": "error",
     "no-duplicate-case": "error",
     "no-undef": "error",
-    "no-unused-vars": "off",
+    "no-unused-vars": "error",
     "valid-typeof": "error"
   }
 }
