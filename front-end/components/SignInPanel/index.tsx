@@ -55,8 +55,8 @@ function SignInPanel() {
         trigger: false,
         message: '',
       });
-      setCookie('access_token', res.data.accessToken)
-      window.localStorage.setItem('refresh_token', res.data.refreshToken);
+      setCookie("access_token", res.data.accessToken);
+      setCookie("refresh_token", res.data.refreshToken);
       router.push('/');
     } catch (error: any) {
       setErrorMessage({ trigger: true, message: error.response.data.error.message });
