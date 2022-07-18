@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
-import { useState } from 'react';
-import _CONF from 'common/config'
+import _CONF from 'common/config';
+
 interface SignUpForm {
   fullName: string;
   email: string;
@@ -75,39 +75,39 @@ function SignUpPanel() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <h2>Register</h2>
         <input
-          {...register("fullName")}
-          placeholder="Enter your full name"
-          type="text"
+          {...register('fullName')}
+          placeholder='Enter your full name'
+          type='text'
           required
         />
         {errors.fullName && <p>{errors.fullName.message}</p>}
         <br />
         <input
-          {...register("email")}
-          placeholder="Enter your email"
-          type="text"
+          {...register('email')}
+          placeholder='Enter your email'
+          type='text'
           required
         />
         {errors.email && <p>{errors.email.message}</p>}
         <br />
         <input
-          {...register("username")}
-          placeholder="Enter your username"
-          type="text"
+          {...register('username')}
+          placeholder='Enter your username'
+          type='text'
           required
         />
         {errors.username && <p>{errors.username.message}</p>}
         <br />
         <input
-          {...register("password")}
-          placeholder="Enter your password"
-          type="password"
+          {...register('password')}
+          placeholder='Enter your password'
+          type='password'
           required
         />
         {errors.password && <p>{errors.password.message}</p>}
         <br />
         {!err.error ? <></> : <><p>{err.message}</p><br /></>}
-        <button type="submit">CREATE ACCOUNT</button>
+        <button type='submit'>CREATE ACCOUNT</button>
       </form>
     </div>
   );
