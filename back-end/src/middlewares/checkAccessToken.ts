@@ -1,6 +1,6 @@
 /* eslint-disable */
 const jwt = require('jsonwebtoken');
-const _CONF = require('../config/');
+const _CONF = require('../configs/auth.config');
 // import jwt from "jsonwebtoken"
 import express from 'express';
 
@@ -13,19 +13,15 @@ module.exports = (
   res: express.Response,
   next: express.NextFunction
 ) => {
-  // const token =
-  //   req.body.token || req.query.token || req.headers["x-access-token"];
-  const token = req.cookies.access_token;
+  const token = req.headers['x-access-token'];
   // decode token
   if (token) {
     jwt.verify(token, _CONF.SECRET, function (err: any, decoded: any) {
       if (err) {
-        console.error(err.toString());
         return res
           .status(401)
           .json({ error: true, message: 'Unauthorized access.', err });
       }
-      console.log(`decoded>>${decoded}`);
       req.decoded = decoded;
       next();
     });

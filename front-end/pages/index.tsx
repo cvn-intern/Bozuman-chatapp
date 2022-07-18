@@ -10,14 +10,10 @@ const Home: NextPage = () => {
       </Head>
       <div className="container">
         <h1>Bozuman chat app home pageeeeeeeeeeeeeeeeeeeeeeeee</h1>
+        <input type="user" name="user" />
 
-        <input type="user" name='user' />
-        
-        <input type="submit" name="submit" value="Continue"/>
-
-        
+        <input type="submit" name="submit" value="Continue" />
       </div>
-
     </div>
   )
 }

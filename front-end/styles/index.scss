@@ -1,4 +1,12 @@
+@import 'bootstrap/dist/css/bootstrap.css';
+@import './base/variable';
+@import './base/normalized.scss';
+
 @import './common/button.scss';
 @import './common/textfiled.scss';
+@import './common/link.scss';
+@import './common/label.scss';
 
-@import './base/normalized.scss'
+@import './component/signin.scss';
+
+@import './pages/homepage.scss'

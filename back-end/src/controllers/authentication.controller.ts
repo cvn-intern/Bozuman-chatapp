@@ -1,7 +1,8 @@
-import express from "express";
+/* eslint-disable */
 import { FORGOT_PASSWORD, generateSixDigitCode } from "../utils/Helper.utils";
-const UsersService = require("../services/users.service");
-const { Email } = require("../utils/Mail.utils");
+import express from 'express';
+const UsersService = require('../services/users.service');
+const { Email } = require('../utils/Mail.utils');
 
 export class Auth {
   public validateSignup = async (data: any) => {
@@ -68,7 +69,6 @@ export class Auth {
       const data = {
         username: req.body.username,
         password: req.body.password,
-        ipAddress: req.ip,
       };
 
       const response = await UsersService.authenticate(data);
@@ -226,13 +226,5 @@ export class Auth {
       next(error);
     }
   };
-
-  public setTokenCookie = (res: express.Response, token: string) => {
-    const cookieOptions = {
-      maxAge: 5 * 60, // thời gian sống 5 phút
-      // httpOnly: true, // chỉ có http mới đọc được token
-      //secure: true; //ssl nếu có, nếu chạy localhost thì comment nó lại
-    };
-    res.cookie("access_token", token, cookieOptions);
-  };
 }
+
