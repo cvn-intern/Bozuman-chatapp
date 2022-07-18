@@ -1,0 +1,15 @@
+@import './variable';
+
+@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+
+*{    
+    font-size: 14px;
+    font-family: 'Quicksand', sans-serif;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}   
+
+body{
+    background: linear-gradient(0deg,rgba(255,205,178,1)0%,rgba(255,180,162,1)100%);
+}

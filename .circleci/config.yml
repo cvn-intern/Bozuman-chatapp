@@ -1,0 +1,83 @@
+version: 2.1
+
+jobs:
+  # ESLint in front-end
+  front-end-eslint:
+    docker: 
+      - image: cimg/node:16.16.0
+    steps:
+      - checkout
+      - run:
+          working_directory: ./front-end
+          command: |
+            npm install
+            npm run lint
+
+  #ESLint in back-end
+  back-end-eslint:
+    docker:
+      - image: cimg/node:16.16.0
+    steps:
+      - checkout
+      - run:
+          working_directory: ./back-end
+          command: |
+            npm install
+            npm run lint
+  
+  front-end-deploy:
+    docker:
+      - image: cimg/node:16.16.0
+    steps: 
+      - checkout
+      - run: 
+          working_directory: ./front-end
+          command: npm install
+      - run:
+          working_directory: ./front-end
+          command: echo "{"projectId":"prj_EbYfeF4gs5qXuWjESLHDGzQbEfjI","orgId":"sIpHFARbgZn3tMzH4k0WM3Tl"}" > .vercel/project.json
+      - run:
+          working_directory: ./front-end
+          command: ./node_modules/vercel/dist/index.js --token ${VERCEL_TOKEN} --cwd . --confirm --prod
+
+  front-end-deploy-staging:
+    docker:
+      - image: cimg/node:16.16.0
+    steps: 
+      - checkout
+      - run: 
+          working_directory: ./front-end
+          command: npm install
+      - run:
+          working_directory: ./front-end
+          command: mkdir .vercel
+      - run:
+          working_directory: ./front-end/.vercel
+          command: cat > project.json
+      - run:
+          working_directory: ./front-end/.vercel
+          command: echo '{"projectId":"prj_bcNxQUlZG59972eilV1bYhfOyJJY","orgId":"TJGpH5dxctiVPEdvJovVIi5K"}' > project.json
+      - run:
+          working_directory: ./front-end
+          command: ./node_modules/vercel/dist/index.js --token ${VERCEL_TOKEN} --cwd . --confirm --prod
+
+workflows:
+  Project-workflow:
+    jobs:
+      - front-end-eslint
+      - back-end-eslint
+      - front-end-deploy:
+          requires:
+            - front-end-eslint
+          filters:
+            branches:
+              only:
+                - master
+      - front-end-deploy-staging:
+          requires:
+            - front-end-eslint
+          filters:
+            branches:
+              only:
+                - develope
+  
