@@ -62,15 +62,22 @@ jobs:
           command: ./node_modules/vercel/dist/index.js --token ${VERCEL_TOKEN} --cwd . --confirm --prod
 
 workflows:
-  Front-end-workflow:
+  Project-workflow:
     jobs:
+      - front-end-eslint
+      - back-end-eslint
       - front-end-deploy:
+          requires:
+            - front-end-eslint
           filters:
             branches:
               only:
                 - Config-CircleCI-master
       - front-end-deploy-staging:
+          requires:
+            - front-end-eslint
           filters:
             branches:
               only:
                 - Config-CircleCI
+  

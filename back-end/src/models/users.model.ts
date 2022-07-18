@@ -1,9 +1,9 @@
 // const mongoose = require("mongoose");
 // const Schema = mongoose.Schema;
 // const Joi = require("joi");
-import mongoose from "mongoose";
-import { Schema } from "mongoose";
-import Joi from "joi";
+import mongoose from 'mongoose';
+import { Schema } from 'mongoose';
+import Joi from 'joi';
 
 const UsersSchema = new Schema({
   username: {
@@ -67,24 +67,24 @@ const registerSchema = Joi.object({
   username: Joi.string()
     .min(8)
     .max(32)
-    .pattern(new RegExp("^[a-zA-Z0-9_-]+$"))
+    .pattern(new RegExp('^[a-zA-Z0-9_-]+$'))
     .required(),
   password: Joi.string()
     .min(8)
     .max(16)
-    .pattern(new RegExp("^[a-zA-Z0-9_-]+$"))
+    .pattern(new RegExp('^[a-zA-Z0-9_-]+$'))
     .required(),
   fullName: Joi.string()
     .min(8)
     .max(50)
-    .pattern(new RegExp("^[a-zA-Z0-9_-]+$"))
+    .pattern(new RegExp('^[a-zA-Z0-9_-]+$'))
     .required(),
   email: Joi.string().email({
     minDomainSegments: 2,
-    tlds: { allow: ["com", "net"] },
+    tlds: { allow: ['com', 'net'] },
   }),
 });
 
-module.exports = {Users: mongoose.model("user", UsersSchema), registerSchema};
+module.exports = {Users: mongoose.model('user', UsersSchema), registerSchema};
 
 

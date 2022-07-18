@@ -1,21 +1,21 @@
-const Joi = require("joi");
-import express from "express";
+const Joi = require('joi');
+import express from 'express';
 const router = express.Router();
-const validator = require("express-joi-validation").createValidator({
+const validator = require('express-joi-validation').createValidator({
   passError: true,
 });
-import { ContainerTypes } from "express-joi-validation";
-const { Auth } = require("../controllers/authentication.controller");
+import { ContainerTypes } from 'express-joi-validation';
+const { Auth } = require('../controllers/authentication.controller');
 const { registerSchema } = require('../models/users.model');
 const authentication = new Auth();
 
 router.post(
-  "/register",
+  '/register',
   validator.body(registerSchema),
   authentication.register
 );
-router.get("/activate_account/:name", authentication.activateAccount);
-router.post("/sign-in", authentication.signIn);
+router.get('/activate_account/:name', authentication.activateAccount);
+router.post('/sign-in', authentication.signIn);
 
 router.use((err: any, req: any, res: any, next: any) => {
   if (err && err.error && err.error.isJoi) {

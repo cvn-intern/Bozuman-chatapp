@@ -35,7 +35,6 @@ function SignInPanel () {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm<SignInForm>({
     resolver: yupResolver(schema),
   });
@@ -43,10 +42,9 @@ function SignInPanel () {
   const onSubmit: SubmitHandler<SignInForm> = async (data) => {
     // post api here
     try {
-      const res = await axios.post('//localhost:3000/api/auth/sign-in', data);
-      console.log(res.data);
+      await axios.post('//localhost:3000/api/auth/sign-in', data);
     } catch (error) {
-      console.log(error)
+      // console.log(error);
     }
     // reset()
   } 

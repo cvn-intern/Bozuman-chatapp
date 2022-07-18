@@ -1,5 +1,5 @@
 const PORT = 3000;
-import express, { Application, Request, Response } from "express";
+import express, { Application, Request, Response } from 'express';
 const auth = require('./src/routes/authentication.route');
 const cookieParser = require('cookie-parser');
 const cors = require('cors')

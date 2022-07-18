@@ -1,16 +1,16 @@
 // const mongoose = require("mongoose");
 // const Schema = mongoose.Schema;
-import mongoose from "mongoose";
-import { Schema } from "mongoose";
+import mongoose from 'mongoose';
+import { Schema } from 'mongoose';
 
 const RefreshTokenSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: "Users" },
+  user: { type: Schema.Types.ObjectId, ref: 'Users' },
   token: String,
   created: { type: Date, default: Date.now },
   createdByIp: String,
 });
 
-RefreshTokenSchema.set("toJSON", {
+RefreshTokenSchema.set('toJSON', {
   virtuals: true,
   versionKey: false,
   transform: function (doc, ret) {
@@ -21,4 +21,4 @@ RefreshTokenSchema.set("toJSON", {
   },
 });
 
-module.exports = mongoose.model("RefreshToken", RefreshTokenSchema);
+module.exports = mongoose.model('RefreshToken', RefreshTokenSchema);

@@ -10,7 +10,7 @@ class Email {
   });
 
   public sendEmail = (emailAddress: any, activate_token: any) => {
-    var mailOptions = {
+    const mailOptions = {
       from: 'bozuman2022@gmail.com',
       to: emailAddress,
       subject: 'Activatetion code',
