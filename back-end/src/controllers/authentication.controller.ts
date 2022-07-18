@@ -99,8 +99,6 @@ export class Auth {
         email: req.body.email,
       };
 
-      console.log(data);
-
       const response = await UsersService.find(data);
       //It returns an array, if response find success, user
       //is the first elements in array
@@ -149,15 +147,13 @@ export class Auth {
       const response = await UsersService.addCode(data, code);
       if (response) {
         this.sendCodeToMail(data.email, code, FORGOT_PASSWORD);
-        //Code auto delete after 60s
-        setTimeout(() => {
-          UsersService.deleteCode(data);
-        }, 60 * 1000);
+        // setTimeout(() => {
+        //   UsersService.deleteCode(data);
+        // }, 60 * 1000);
         res.status(200).json({
           success: true,
         });
       }
-      //Write function to save code above in db by email
     } catch (error) {
       next(error);
     }
@@ -179,7 +175,7 @@ export class Auth {
     };
 
     try {
-      const response = UsersService.checkCode(data);
+      const response = await UsersService.checkCode(data);
       if (response) {
         res.status(200).json({
           success: true
@@ -202,7 +198,34 @@ export class Auth {
     req: express.Request,
     res: express.Response,
     next: express.NextFunction
-  ) => {};
+  ) => {
+    const data = {
+      email: req.body.email,
+      password: req.body.password,
+    }
+
+    try {
+      const user = await UsersService.checkSameOldPassword(data);
+      if(!user){
+        const newUser = await UsersService.resetPassword(data);
+        if(newUser) {
+          res.status(200).json({
+            success: true
+          })
+        }
+      }else{
+        res.status(400).json({
+          success: false,
+          error: {
+            code: 'FORGOT_PASSWORD_010',
+            message: 'New password must not be the same as the old password',
+          }
+        })
+      }
+    } catch(error) {
+      next(error);
+    }
+  };
 
   public setTokenCookie = (res: express.Response, token: string) => {
     const cookieOptions = {

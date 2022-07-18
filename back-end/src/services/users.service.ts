@@ -92,7 +92,28 @@ module.exports = class UsersService{
     const user = await Users.findOne({
       email: email,
       code: code,
+    });
+    return user;
+  }
+
+  static checkSameOldPassword = async (data: any) => {
+    const email = data.email;
+    const password = data.password;
+    const user = await Users.findOne({
+      email,
+      password
     })
+    return user;
+  }
+
+  static resetPassword = async (data: any) => {
+    const email = data.email;
+    const password = data.password;
+    const user = await Users.findOneAndUpdate(
+      {email: email},
+      {password: password},
+      {new: true}
+    );
     return user;
   }
 
