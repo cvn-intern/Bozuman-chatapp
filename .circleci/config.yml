@@ -24,45 +24,60 @@ jobs:
           command: |
             npm install
             npm run lint
-
-  #Build and deploy front-end
+  
   front-end-deploy:
     docker:
       - image: cimg/node:16.16.0
-    steps:
+    steps: 
       - checkout
       - run: 
           working_directory: ./front-end
-          command: |
-            npm install
-            npm i vercel
-            DEPLOYMENT_URL=$(vercel --name $CI_PROJECT_NAME --confirm -t $VERCEL_TOKEN)
-            vercel
+          command: npm install
+      - run:
+          working_directory: ./front-end
+          command: echo "{"projectId":"prj_EbYfeF4gs5qXuWjESLHDGzQbEfjI","orgId":"sIpHFARbgZn3tMzH4k0WM3Tl"}" > .vercel/project.json
+      - run:
+          working_directory: ./front-end
+          command: ./node_modules/vercel/dist/index.js --token ${VERCEL_TOKEN} --cwd . --confirm --prod
 
-  #Build and deploy back-end
-  back-end-deploy:
+  front-end-deploy-staging:
     docker:
       - image: cimg/node:16.16.0
-    steps:
+    steps: 
       - checkout
       - run: 
-          working_directory: ./back-end
-          command: |
-            npm install
-            vercel
+          working_directory: ./front-end
+          command: npm install
+      - run:
+          working_directory: ./front-end
+          command: mkdir .vercel
+      - run:
+          working_directory: ./front-end/.vercel
+          command: cat > project.json
+      - run:
+          working_directory: ./front-end/.vercel
+          command: echo '{"projectId":"prj_bcNxQUlZG59972eilV1bYhfOyJJY","orgId":"TJGpH5dxctiVPEdvJovVIi5K"}' > project.json
+      - run:
+          working_directory: ./front-end
+          command: ./node_modules/vercel/dist/index.js --token ${VERCEL_TOKEN} --cwd . --confirm --prod
 
 workflows:
-  Front-end-workflow:
+  Project-workflow:
     jobs:
       - front-end-eslint
-      # - front-end-deploy:
-      #     requires:
-      #       - front-end-eslint
-
-  Back-end-workflow:
-    jobs:
-      - front-end-eslint
-      # - front-end-deploy:
-      #     requires:
-      #       - front-end-eslint
-  # deploy to test on staging
+      - back-end-eslint
+      - front-end-deploy:
+          requires:
+            - front-end-eslint
+          filters:
+            branches:
+              only:
+                - master
+      - front-end-deploy-staging:
+          requires:
+            - front-end-eslint
+          filters:
+            branches:
+              only:
+                - develope
+  

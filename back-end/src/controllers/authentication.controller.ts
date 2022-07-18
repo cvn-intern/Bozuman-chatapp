@@ -1,45 +1,33 @@
+/* eslint-disable */
 import express from 'express';
 const UsersService = require('../services/users.service');
 const { Email } = require('../utils/Mail.utils');
-var validator = require('validator');
 
-class Auth {
+export class Auth {
   public validateSignup = async (data: any) => {
-    if (!validator.isEmail(data.email)) {
-      return {success: false, error: 'Email must be in correct format'};
-    } else if (!validator.isLength(data.userName, {min: 8, max: 32})){
-      return {success: false, error: 'Username must have 8-32 character'};
-    } else if (!validator.isLength(data.fullName, {min: 8, max: 50})){
-      return {success: false, error: 'Full name must have 8-50 character'};
-    } else if (!validator.isLength(data.password, {min: 8, max: 16})){
-      return {success: false, error: 'Password must have 8-16 character'};
-    } else if (!/^[a-zA-Z0-9_-]+$/.test(data.userName)) {
-      return {success: false, error: 'Username can not contain special character'};
-    } else if (!/^[a-zA-Z0-9_-]+$/.test(data.fullName)) {
-      return {success: false, error: 'Full name can not contain special character'};
-    } else if (!/^[a-zA-Z0-9_-]+$/.test(data.password)) {
-      return {success: false, error: 'Password can not contain special character'};
-    }
-
-    const checkUsername = await UsersService.find({userName: data.userName});
+    const checkUsername = await UsersService.find({ username: data.username });
     if (checkUsername.length > 0) {
-      return {success: false, error: 'Username already exist'};
+      return { success: false, error: 'Username already exist' };
     }
 
-    const checkEmail = await UsersService.find({email: data.email});
+    const checkEmail = await UsersService.find({ email: data.email });
     if (checkEmail.length > 0) {
-      return {success: false, error: 'Email already exist'};
+      return { success: false, error: 'Email already exist' };
     }
 
-    return {success: true};
-  }
+    return { success: true };
+  };
 
-  public register = async (req: express.Request, res: express.Response) => {
+  public register = async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     const data = {
-      userName: req.body.userName,
+      username: req.body.username,
       email: req.body.email,
       fullName: req.body.fullName,
-      password: req.body.password
+      password: req.body.password,
     };
 
     try {
@@ -47,43 +35,45 @@ class Auth {
       if (!validateResult.success) {
         res.json(validateResult.error);
       } else {
-        var user = await UsersService.create(data);
+        const user = await UsersService.create(data);
         const emailAgent = new Email();
-        console.log(emailAgent);
         emailAgent.sendEmail(user.email, user.username);
-        res.json("Create account success");
+        res.json('Create account success');
       }
     } catch (error) {
-      res.status(500).json({error: error});
+      res.status(500).json({ error: error });
     }
-  }
+  };
 
-  public activateAccount = async (req: express.Request, res: express.Response) => {
+  public activateAccount = async (
+    req: express.Request,
+    res: express.Response
+  ) => {
     try {
-      const activateResult = await UsersService.activateAccount(req.params.name);
+      const activateResult = await UsersService.activateAccount(
+        req.params.name
+      );
       res.json(activateResult);
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
-  public signIn = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  public signIn = async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     try {
       const data = {
         username: req.body.username,
         password: req.body.password,
-        ipAddress: req.ip
-      }
-      // const { username, password } = req.body;
-      // const ipAddress = req.ip;
-      const response  = await UsersService.authenticate(data);
-      res.json(response);
-
-    }catch(error) {
-      res.status(500).json({ error: "123" });
+      };
+      const response = await UsersService.authenticate(data);
+      res.status(200).json(response);
+    } catch (error) {
+        res.status(400).json({ success: false, error: {message: error} });
     }
-  }
-
+  };
 
 }
-module.exports = { Auth };
