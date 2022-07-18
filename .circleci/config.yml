@@ -72,12 +72,12 @@ workflows:
           filters:
             branches:
               only:
-                - Config-CircleCI-master
+                - master
       - front-end-deploy-staging:
           requires:
             - front-end-eslint
           filters:
             branches:
               only:
-                - Config-CircleCI
+                - develope
   
