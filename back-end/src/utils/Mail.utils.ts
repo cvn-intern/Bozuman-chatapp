@@ -1,5 +1,8 @@
 const nodemailer = require('nodemailer');
-require('dotenv').config();
+import { 
+  FORGOT_PASSWORD
+} from './Helper.utils';
+
 
 class Email {
   private transporter = nodemailer.createTransport({
@@ -24,8 +27,8 @@ class Email {
       subject: 'Activatetion code',
       html: '<p>Click <a href="http://localhost:3000/api/auth/activate_account/' + token + '">here</a> to activate your account</p>'
     };
-
-    if (type === process.env.FORGOT_PASSWORD){
+    
+    if (type === FORGOT_PASSWORD){
       mailOptions.subject = 'Reset password';
       mailOptions.html = `<h1>Your code is <strong>${token}</strong></h1>`;
     }

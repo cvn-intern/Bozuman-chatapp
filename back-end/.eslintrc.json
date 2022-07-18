@@ -39,7 +39,7 @@
     "indent": ["error",2],
     "quotes": ["error", "single"],
     "curly": "error",
-    "no-console": "off",
+    "no-console": "error",
     "camelcase": [
       "error", 
       {
@@ -49,8 +49,7 @@
       }
     ],
     "no-var": "error",
-    "space-before-function-paren": ["error", "always"],
-    "no-inline-comments": "error",
+    "no-inline-comments": "off",
     "no-dupe-keys": "error",
     "no-dupe-else-if": "error",
     "no-duplicate-imports": "error",

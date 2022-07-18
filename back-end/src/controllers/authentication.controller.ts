@@ -1,8 +1,11 @@
 import express from "express";
-import { generateSixDigitCode } from '../utils/Helper.utils';
+import { 
+  FORGOT_PASSWORD,
+  generateSixDigitCode
+} from '../utils/Helper.utils';
 const UsersService = require("../services/users.service");
 const { Email } = require("../utils/Mail.utils");
-require('dotenv').config();
+
 
 class Auth {
   public validateSignup = async (data: any) => {
@@ -141,7 +144,7 @@ class Auth {
       const code = generateSixDigitCode();
       const response = await UsersService.addCode(data, code);
       if(response){
-        this.sendCodeToMail(data.email, code, process.env.FORGOT_PASSWORD);
+        this.sendCodeToMail(data.email, code, FORGOT_PASSWORD);
         //Code auto delete after 60s
         setTimeout(() => {
           UsersService.deleteCode(data);
@@ -170,6 +173,10 @@ class Auth {
       email: req.body.email,
       code: req.body.code,
     };
+
+    const response = UsersService.checkCode(data);
+    console.log(response);
+    res.status(200);
 
     try {
       const response = UsersService.checkCode
