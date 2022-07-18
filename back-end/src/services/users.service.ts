@@ -3,7 +3,7 @@ import { isSet } from "util/types";
 const { Users } = require('../models/users.model');
 var jwt = require('jsonwebtoken')
 const _CONF = require('../configs/auth.config')
-const RefreshToken = require("../models/refreshToken.model.ts")
+const RefreshToken = require("../models/refreshToken.model")
 const crypto1 = require("crypto");
 
 interface User {
