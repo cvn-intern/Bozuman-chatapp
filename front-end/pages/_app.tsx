@@ -1,12 +1,14 @@
-import "styles/index.scss";
-import type { AppProps } from "next/app";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import 'styles/index.scss';
+import type { AppProps } from 'next/app';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp ({ Component, pageProps }: AppProps) {
   const router = useRouter();
   useEffect(() => {
-    if (router.pathname === "/_error") router.push("/sign-in");
+    if (router.pathname === '/_error') {
+      // router.push('/sign-in');
+    }
   }, []);
   return <Component {...pageProps} />;
 }

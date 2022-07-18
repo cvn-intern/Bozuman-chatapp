@@ -1,14 +1,15 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+/* eslint-disable */
+import mongoose from 'mongoose';
+import { Schema } from 'mongoose';
 
-const RefreshTokenSchema = Schema({
-  user: { type: Schema.Types.ObjectId, ref: "Users" },
+const RefreshTokenSchema = new Schema({
+  user: { type: Schema.Types.ObjectId, ref: 'Users' },
   token: String,
   created: { type: Date, default: Date.now },
   createdByIp: String,
 });
 
-RefreshTokenSchema.set("toJSON", {
+RefreshTokenSchema.set('toJSON', {
   virtuals: true,
   versionKey: false,
   transform: function (doc, ret) {
@@ -19,4 +20,4 @@ RefreshTokenSchema.set("toJSON", {
   },
 });
 
-module.exports = mongoose.model("RefreshToken", RefreshTokenSchema);
+module.exports = mongoose.model('RefreshToken', RefreshTokenSchema);

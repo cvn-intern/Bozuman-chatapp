@@ -1,7 +1,8 @@
-const jwt = require("jsonwebtoken");
-const _CONF = require("../config/");
+/* eslint-disable */
+const jwt = require('jsonwebtoken');
+const _CONF = require('../config/');
 // import jwt from "jsonwebtoken"
-import express from "express";
+import express from 'express';
 
 export interface requestWithToken extends express.Request {
   decoded: any;
@@ -22,7 +23,7 @@ module.exports = (
         console.error(err.toString());
         return res
           .status(401)
-          .json({ error: true, message: "Unauthorized access.", err });
+          .json({ error: true, message: 'Unauthorized access.', err });
       }
       console.log(`decoded>>${decoded}`);
       req.decoded = decoded;
@@ -31,7 +32,7 @@ module.exports = (
   } else {
     return res.status(403).send({
       error: true,
-      message: "No token provided.",
+      message: 'No token provided.',
     });
   }
 };

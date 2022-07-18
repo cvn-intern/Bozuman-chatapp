@@ -1,10 +1,11 @@
-import { isSet } from "util/types";
+/* eslint-disable */
+import { isSet } from 'util/types';
 
 const { Users } = require('../models/users.model');
-var jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 const _CONF = require('../configs/auth.config')
-const RefreshToken = require("../models/refreshToken.model.js")
-const crypto1 = require("crypto");
+const RefreshToken = require('../models/refreshToken.model')
+const crypto1 = require('crypto');
 
 interface User {
   username: string,
@@ -55,7 +56,7 @@ module.exports = class UsersService{
     const {username, password, ipAddress} = data;
     const user = await Users.findOne({username: username}).exec();
     if (!user || password != user.password) {
-      throw "Username or password is incorrect";
+      throw 'Username or password is incorrect';
     }
     const accessToken = this.generateAccessToken(user);
     const refreshToken = this.generateRefreshToken(user, ipAddress);
@@ -84,7 +85,7 @@ module.exports = class UsersService{
   }
   
   static randomTokenString = () => {
-    return crypto1.randomBytes(40).toString("hex");
+    return crypto1.randomBytes(40).toString('hex');
   }
   
   static basicDetails = (user:any) => {
