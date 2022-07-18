@@ -1,9 +1,9 @@
+const PORT = 3000;
 import express, { Application, Request, Response } from "express";
 const auth = require('./src/routes/authentication.route');
 const cookieParser = require('cookie-parser');
 const cors = require('cors')
 const app: Application = express();
-const port = 3000;
 const { Database } = require('./src/configs/db.config');
 
 const db = new Database();
@@ -22,7 +22,7 @@ app.use('/',(req,res) => {
     success: 'hello'
   })
 });
-
+const port = process.env.PORT || PORT;
 app.listen(port, (): void => {
-  console.log(`Connected successfully on port ${port}`);
+  console.log(`Connected successfully on port ${PORT}`);
 });
