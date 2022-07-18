@@ -59,7 +59,7 @@ jobs:
           command: echo '{"projectId":"prj_bcNxQUlZG59972eilV1bYhfOyJJY","orgId":"TJGpH5dxctiVPEdvJovVIi5K"}' > project.json
       - run:
           working_directory: ./front-end
-          command: ./node_modules/vercel/dist/index.js --token ${VERCEL_TOKEN} --cwd . --confirm --target staging --prod
+          command: ./node_modules/vercel/dist/index.js --token ${VERCEL_TOKEN} --cwd . --confirm --prod
 
 workflows:
   Front-end-workflow:
