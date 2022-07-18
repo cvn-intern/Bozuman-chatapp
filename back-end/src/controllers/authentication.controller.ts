@@ -147,9 +147,9 @@ export class Auth {
       const response = await UsersService.addCode(data, code);
       if (response) {
         this.sendCodeToMail(data.email, code, FORGOT_PASSWORD);
-        // setTimeout(() => {
-        //   UsersService.deleteCode(data);
-        // }, 60 * 1000);
+        setTimeout(() => {
+          UsersService.deleteCode(data);
+        }, 60 * 1000);
         res.status(200).json({
           success: true,
         });
