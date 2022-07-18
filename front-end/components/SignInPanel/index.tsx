@@ -51,7 +51,6 @@ function SignInPanel() {
   });
   const onSubmit: SubmitHandler<SignInForm> = async (data) => {
     try {
-      console.log(process.env.NEXT_PUBLIC_DOMAIN)
       const res = await axios.post(process.env.NEXT_PUBLIC_DOMAIN + '/api/auth/sign-in', data);
       setErrorMessage({
         trigger: false,

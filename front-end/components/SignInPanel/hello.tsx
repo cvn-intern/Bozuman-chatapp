@@ -20,13 +20,11 @@ function Hello() {
   const fetchdata = async () => {
    
     const res = await axiosClient.get(process.env.NEXT_PUBLIC_DOMAIN + '/api/auth/get');
-    console.log(res);
   };
   fetchdata();
   const testToken = async () => {
    
     const res = await axiosClient.get(process.env.NEXT_PUBLIC_DOMAIN);
-    console.log(res);
   };
   testToken();
   return <div className='wrapper'>{<p>{response}</p>}</div>;
