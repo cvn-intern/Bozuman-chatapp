@@ -14,11 +14,7 @@ module.exports = (
   res: express.Response,
   next: express.NextFunction
 ) => {
-  const refreshToken =
-    req.body.refreshToken ||
-    req.query.refreshToken ||
-    req.headers['x-refresh-token'] ||
-    req.cookies.refresh_token;
+  const refreshToken = req.headers['x-refresh-token'];
   // decode token
   if (refreshToken) {
     jwt.verify(

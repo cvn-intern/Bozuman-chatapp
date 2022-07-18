@@ -13,8 +13,7 @@ module.exports = (
   res: express.Response,
   next: express.NextFunction
 ) => {
-  const token =
-    req.body.token || req.query.token || req.headers['x-access-token'] || req.cookies.access_token;
+  const token = req.headers['x-access-token'];
   // decode token
   if (token) {
     jwt.verify(token, _CONF.SECRET, function (err: any, decoded: any) {
