@@ -72,7 +72,7 @@ module.exports = class UsersService {
   };
 
   static generateAccessToken = (user: any) => {
-    return jwt.sign({ username: user.username, id: user._id }, _CONF.SECRET, {
+    return jwt.sign({ id: user._id }, _CONF.SECRET, {
       expiresIn: _CONF.tokenLife,
     });
   };

@@ -72,7 +72,7 @@ class Auth {
       const response = await UsersService.authenticate(data);
       res.status(200).json(response);
     } catch (error) {
-        res.status(403).json({ success: false, error: {message: error} });
+        res.status(400).json({ success: false, error: {message: error} });
     }
   };
 

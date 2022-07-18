@@ -19,7 +19,7 @@ app.use(
 );
 
 app.use('/api/auth', auth);
-app.use('/token', expiredAccessTokenHandler)
+app.use('/api/token', expiredAccessTokenHandler)
 app.use(require('./src/middlewares/checkAccessToken'))
 // secure route goes here
 app.use('/', (req, res)=>{

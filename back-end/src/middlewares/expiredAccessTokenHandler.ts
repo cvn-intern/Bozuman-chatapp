@@ -12,6 +12,7 @@ module.exports = (
   res: express.Response,
   next: express.NextFunction
 ) => {
+  console.log("first")
   const refreshToken =
     req.body.refreshToken ||
     req.query.refreshToken ||
@@ -25,18 +26,20 @@ module.exports = (
       function (err: any, decoded: any) {
         if (err) {
           console.error(err.toString());
-          return res //logout stil not complete
+          return res 
             .status(401)
             .json({ error: true, message: 'Unauthorized access.', err });
         }
-        // const accessToken = UsersService.generateAccessToken(user);
-        // const refreshToken = UsersService.generateRefreshToken(user, ipAddress);
-        // res.status(200).json({
-        //   success: true,
-        //   accessToken,
-        //   refreshToken: refreshToken.token,
-        // });
-        next();
+        const {id} = decoded;
+        const user = {
+          _id: id
+        };
+        const accessToken = UsersService.generateAccessToken(user);
+        res.status(200).json({
+          success: true,
+          accessToken,
+          refreshToken: refreshToken,
+        });
       }
     );
   } else {
