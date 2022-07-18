@@ -1,7 +1,9 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+// const mongoose = require("mongoose");
+// const Schema = mongoose.Schema;
+import mongoose from "mongoose";
+import { Schema } from "mongoose";
 
-const RefreshTokenSchema = Schema({
+const RefreshTokenSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: "Users" },
   token: String,
   created: { type: Date, default: Date.now },
