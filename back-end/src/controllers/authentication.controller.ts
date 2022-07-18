@@ -1,8 +1,9 @@
+/* eslint-disable */
 import express from 'express';
 const UsersService = require('../services/users.service');
 const { Email } = require('../utils/Mail.utils');
 
-class Auth {
+export class Auth {
   public validateSignup = async (data: any) => {
     const checkUsername = await UsersService.find({ username: data.username });
     if (checkUsername.length > 0) {
@@ -34,7 +35,7 @@ class Auth {
       if (!validateResult.success) {
         res.json(validateResult.error);
       } else {
-        var user = await UsersService.create(data);
+        const user = await UsersService.create(data);
         const emailAgent = new Email();
         emailAgent.sendEmail(user.email, user.username);
         res.json('Create account success');
@@ -69,6 +70,7 @@ class Auth {
         password: req.body.password,
         ipAddress: req.ip,
       };
+      console.log(data)
       const response = await UsersService.authenticate(data);
       res.status(200).json(response);
     } catch (error) {
@@ -77,4 +79,3 @@ class Auth {
   };
 
 }
-module.exports = { Auth };

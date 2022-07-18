@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useState } from 'react';
 import useSWR, { Key, Fetcher } from 'swr';
 import _CONF from 'config/config';

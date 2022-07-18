@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
@@ -83,53 +85,38 @@ function SignUpPanel() {
         <h2>Register</h2>
         <input
           {...register('fullName')}
-          placeholder="Enter your full name"
-          type="text"
+          placeholder='Enter your full name'
+          type='text'
           required
         />
         {errors.fullName && <p>{errors.fullName.message}</p>}
         <br />
         <input
           {...register('email')}
-          placeholder="Enter your email"
-          type="text"
+          placeholder='Enter your email'
+          type='text'
           required
         />
         {errors.email && <p>{errors.email.message}</p>}
         <br />
         <input
           {...register('username')}
-          placeholder="Enter your username"
-          type="text"
+          placeholder='Enter your username'
+          type='text'
           required
         />
         {errors.username && <p>{errors.username.message}</p>}
         <br />
         <input
           {...register('password')}
-          placeholder="Enter your password"
-          type="password"
+          placeholder='Enter your password'
+          type='password'
           required
         />
         {errors.password && <p>{errors.password.message}</p>}
         <br />
-        <input
-          {...register('confirmPassword')}
-          placeholder="Enter your confirm password"
-          type="password"
-          required
-        />
-        {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
-        <br />
-        {!err.error ? (
-          <></>
-        ) : (
-          <>
-            <p>{err.message}</p>
-            <br />
-          </>
-        )}
-        <button type="submit">CREATE ACCOUNT</button>
+        {!err.error ? <></> : <><p>{err.message}</p><br /></>}
+        <button type='submit'>CREATE ACCOUNT</button>
       </form>
     </div>
   );

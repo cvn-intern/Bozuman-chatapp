@@ -1,6 +1,6 @@
 const config = Object.freeze({
-  SECRET:"SECRET_BOZUMAN",
-  SECRET_REFRESH: "SECRET_REFRESH_BOZUMAN",
+  SECRET:'SECRET_BOZUMAN',
+  SECRET_REFRESH: 'SECRET_REFRESH_BOZUMAN',
   tokenLife: 60,
   refreshTokenLife: 300,
   REGEX_USENAME_PASSWORD: '^[a-zA-Z0-9_]*$',

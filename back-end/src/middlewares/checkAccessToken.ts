@@ -1,6 +1,7 @@
+/* eslint-disable */
 const jwt = require('jsonwebtoken');
 const _CONF = require('../configs/auth.config');
-// import jwt from 'jsonwebtoken'
+// import jwt from "jsonwebtoken"
 import express from 'express';
 
 export interface requestWithToken extends express.Request {
@@ -18,7 +19,6 @@ module.exports = (
   if (token) {
     jwt.verify(token, _CONF.SECRET, function (err: any, decoded: any) {
       if (err) {
-        console.error(err.toString());
         return res
           .status(401)
           .json({ error: true, message: 'Unauthorized access.', err });

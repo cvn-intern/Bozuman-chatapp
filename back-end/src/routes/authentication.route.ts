@@ -1,16 +1,17 @@
-const Joi = require("joi");
-import express from "express";
+/* eslint-disable */
+const Joi = require('joi');
+import express from 'express';
 const router = express.Router();
-const validator = require("express-joi-validation").createValidator({
+const validator = require('express-joi-validation').createValidator({
   passError: true,
 });
-import { ContainerTypes } from "express-joi-validation";
+
 const { Auth } = require("../controllers/authentication.controller");
 const { registerSchema, signInSchema } = require("../models/users.model");
 const authentication = new Auth();
 
 router.post(
-  "/register",
+  '/register',
   validator.body(registerSchema),
   authentication.register
 );
@@ -40,4 +41,4 @@ router.get("/get", (req: express.Request, res: express.Response) => {
   res.json({ token: token });
 });
 
-module.exports = router;
+export default router;

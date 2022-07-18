@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const jwt = require('jsonwebtoken');
 const _CONF = require('../configs/auth.config');
 const UsersService = require('../services/users.service');
@@ -12,7 +14,6 @@ module.exports = (
   res: express.Response,
   next: express.NextFunction
 ) => {
-  console.log("first")
   const refreshToken =
     req.body.refreshToken ||
     req.query.refreshToken ||

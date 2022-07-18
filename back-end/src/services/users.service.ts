@@ -1,9 +1,10 @@
+/* eslint-disable */
 import { isSet } from 'util/types';
 
 const { Users } = require('../models/users.model');
-var jwt = require('jsonwebtoken');
-const _CONF = require('../configs/auth.config');
-const RefreshToken = require('../models/refreshToken.model.js');
+const jwt = require('jsonwebtoken')
+const _CONF = require('../configs/auth.config')
+const RefreshToken = require('../models/refreshToken.model')
 const crypto1 = require('crypto');
 
 interface User {
@@ -52,7 +53,7 @@ module.exports = class UsersService {
   };
   // authenticating to user when sigin in
   static authenticate = async (data: any) => {
-    const { username, password, ipAddress } = data;
+    const { username, password } = data;
     const user = await Users.findOne({ username: username }).exec();
     if (!user || password != user.password) {
       throw 'Username or password is incorrect';
@@ -61,7 +62,7 @@ module.exports = class UsersService {
       throw 'Your account is inactive';
     }
     const accessToken = this.generateAccessToken(user);
-    const refreshToken = this.generateRefreshToken(user, ipAddress);
+    const refreshToken = this.generateRefreshToken(user);
     await refreshToken.save();
     return {
       // ...this.basicDetails(user),
@@ -77,7 +78,7 @@ module.exports = class UsersService {
     });
   };
 
-  static generateRefreshToken = (user: any, ipAddress: string) => {
+  static generateRefreshToken = (user: any) => {
     return new RefreshToken({
       user: user._id,
       token: jwt.sign(
@@ -87,7 +88,6 @@ module.exports = class UsersService {
           expiresIn: _CONF.refreshTokenLife,
         }
       ),
-      createdByIp: ipAddress,
     });
   };
 

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
@@ -6,7 +8,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import _CONF from 'config/config';
 import { useRouter } from 'next/router';
-// import cookieCutter from 'cookie-cutter' // I dont know why it doesn't work
 import { setCookie } from 'cookies-next';
 
 interface SignInForm {
@@ -40,14 +41,15 @@ function SignInPanel() {
         'Password must not contain special character like @#$^...'
       ),
   });
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm<SignInForm>({
     resolver: yupResolver(schema),
   });
+
   const onSubmit: SubmitHandler<SignInForm> = async (data) => {
     try {
       const res = await axios.post(_CONF.DOMAIN + 'api/auth/sign-in', data);
