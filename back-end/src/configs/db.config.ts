@@ -2,7 +2,7 @@
 require('dotenv').config();
 const mongoose = require("mongoose");
 
-class Database {
+export class Database {
   protected username: any = process.env.DB_USERNAME;
   protected password: any = process.env.DB_PASSWORD;
   protected cluster: any = process.env.DB_CLUSTER;

@@ -2,7 +2,6 @@
 import express from 'express';
 const UsersService = require('../services/users.service');
 const { Email } = require('../utils/Mail.utils');
-const validator = require('validator');
 
 export class Auth {
   public validateSignup = async (data: any) => {
@@ -69,31 +68,12 @@ export class Auth {
       const data = {
         username: req.body.username,
         password: req.body.password,
-        ipAddress: req.ip,
       };
       const response = await UsersService.authenticate(data);
-      console.log(response.accessToken)
-      // this.setTokenCookie(res, response.accessToken);
-      res.cookie("access_token", response.accessToken, {
-        maxAge: 5 * 60,
-        httpOnly: true,
-      });
       res.status(200).json(response);
     } catch (error) {
-      if (error === 'Username or password is incorrect') {
-        res.status(403).json({ status: '403', error: error });
-      } else {
-        res.status(404).json({ status: '404', error: 'Invalid request' });
-      }
+        res.status(400).json({ success: false, error: {message: error} });
     }
   };
 
-  public setTokenCookie = (res: express.Response, token: string) => {
-    const cookieOptions = {
-      maxAge: 5 * 60, // thời gian sống 5 phút
-      // httpOnly: true, // chỉ có http mới đọc được token
-      //secure: true; //ssl nếu có, nếu chạy localhost thì comment nó lại
-    };
-    res.cookie('access_token', token, cookieOptions);
-  };
 }

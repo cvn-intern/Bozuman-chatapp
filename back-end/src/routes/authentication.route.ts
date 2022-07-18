@@ -7,7 +7,7 @@ const validator = require('express-joi-validation').createValidator({
 });
 
 const { Auth } = require("../controllers/authentication.controller");
-const { registerSchema } = require("../models/users.model");
+const { registerSchema, signInSchema } = require("../models/users.model");
 const authentication = new Auth();
 
 router.post(
@@ -15,8 +15,8 @@ router.post(
   validator.body(registerSchema),
   authentication.register
 );
-router.get('/activate_account/:name', authentication.activateAccount);
-router.post('/sign-in', authentication.signIn);
+router.get("/activate_account/:name", authentication.activateAccount);
+router.post("/sign-in", validator.body(signInSchema),authentication.signIn);
 
 router.use((err: any, req: any, res: any, next: any) => {
   if (err && err.error && err.error.isJoi) {
@@ -29,6 +29,16 @@ router.use((err: any, req: any, res: any, next: any) => {
     // pass on to another error handler
     next(err);
   }
+});
+// used to test cookie
+router.get("/get", (req: express.Request, res: express.Response) => {
+  const token =
+    req.body.token ||
+    req.query.token ||
+    req.headers["x-access-token"] ||
+    req.cookies.access_token;
+
+  res.json({ token: token });
 });
 
 export default router;

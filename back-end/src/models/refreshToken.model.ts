@@ -6,7 +6,6 @@ const RefreshTokenSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: 'Users' },
   token: String,
   created: { type: Date, default: Date.now },
-  createdByIp: String,
 });
 
 RefreshTokenSchema.set('toJSON', {

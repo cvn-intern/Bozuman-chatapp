@@ -4,7 +4,7 @@ import React from 'react'
 function SignIn() {
   return (
     <div className='wrapper'>
-      <div className="SignIn">
+      <div className='SignIn'>
         <SignUpPanel />
       </div>
     </div>
