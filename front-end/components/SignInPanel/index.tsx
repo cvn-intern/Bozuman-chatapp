@@ -46,7 +46,7 @@ function SignInPanel() {
   return (
     <div className="signin">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h2>Sign in</h2>
+        <h2>SIGN IN</h2>
         <label className='info'> Username </label>
         <input
           {...register("username")}
@@ -54,7 +54,7 @@ function SignInPanel() {
           type="text"
           required
         />
-        {errors.username && <p>{errors.username.message}</p>}
+        {errors.username && <p className="error">{errors.username.message}</p>}
         <label className='info'> Password </label>
         <input
           {...register("password")}
@@ -62,7 +62,7 @@ function SignInPanel() {
           type="password"
           required
         />
-        {errors.password && <p>{errors.password.message}</p>}
+        {errors.password && <p className="error">{errors.password.message}</p>}
         <div>
           <label className="remember-me">
             <input type="checkbox"/>
@@ -81,7 +81,7 @@ function SignInPanel() {
           />
         </a>
         <div>
-          <p>Dont't have an account?</p>
+          <p>Don't have an account?</p>
           <button type="submit" className="button__signup">Create new</button>
         </div>
       </form>
