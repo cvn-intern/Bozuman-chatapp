@@ -82,7 +82,20 @@ const registerSchema = Joi.object({
     tlds: { allow: ['com', 'net'] },
   }),
 });
+const signInSchema = Joi.object({
+  username: Joi.string()
+  .min(8)
+  .max(32)
+  .pattern(new RegExp('^[a-zA-Z0-9_-]+$'))
+  .required(),
+password: Joi.string()
+  .min(8)
+  .max(16)
+  .pattern(new RegExp('^[a-zA-Z0-9_-]+$'))
+  .required(),
+})
 
-module.exports = {Users: mongoose.model('user', UsersSchema), registerSchema};
+
+module.exports = {Users: mongoose.model('user', UsersSchema), registerSchema, signInSchema};
 
 

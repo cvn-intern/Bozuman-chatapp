@@ -68,9 +68,7 @@ export class Auth {
       const data = {
         username: req.body.username,
         password: req.body.password,
-        ipAddress: req.ip,
       };
-      console.log(data)
       const response = await UsersService.authenticate(data);
       res.status(200).json(response);
     } catch (error) {
