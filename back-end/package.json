@@ -2,7 +2,8 @@
   "name": "back-end",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/index",
+  "typings": "dist/index",
   "scripts": {
     "dev": "ts-node-dev ./index.ts",
     "start": "tsc && node dist/index.js",
