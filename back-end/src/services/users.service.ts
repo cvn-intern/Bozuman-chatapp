@@ -12,6 +12,8 @@ interface User {
   password: string;
   full_name: string;
   email: string;
+  active: boolean;
+  _id: string,
 }
 
 module.exports = class UsersService {
@@ -30,15 +32,20 @@ module.exports = class UsersService {
     }
   };
 
-  static find = async (data: any) => {
-    //TODO: It will return one element so we should return an object instead of array,
+  static find = async (data: {username?: string, email?: string}) => {
+    let user : User | undefined;
+
     if (data.username) {
-      const userList = await Users.find({ username: data.username }).exec();
-      return userList;
+      user = await Users.findOne({ username: data.username }).exec();
     } else if (data.email) {
-      const userList = await Users.find({ email: data.email }).exec();
-      return userList;
+      user = await Users.findOne({ email: data.email }).exec();
     }
+    
+    if(!user) { 
+      throw 'Account is not exists';
+    }
+    
+    return user;
   };
 
   static activateAccount = async (userName: string) => {
@@ -72,54 +79,52 @@ module.exports = class UsersService {
       refreshToken: refreshToken.token,
     };
   }
-  //All function 
-  //add forgot-password code to database
-  static addCode = async (data: any, code: number) => {
+
+  static addCode = async (data: {email: string}, code: number) => {
     const userEmail = data.email;
     const doc = await Users.findOneAndUpdate(
       { email: userEmail },
       { code: code },
       { new: true}
     );
+    if(!doc) {
+      throw 'Internal server error';
+    }
     return doc;
   }
 
-  static deleteCode = async (data: any) => {
+  static deleteCode = async (data: {email: string}) => {
     const userEmail = data.email;
     const user = await Users.findOne({email: userEmail});
     user.code = undefined;
     return user.save();
   }
 
-  static checkCode = async (data: any) => {
+  static checkCode = async (data: {email: string, code: string}) => {
     const email = data.email;
     const code = data.code;
     const user = await Users.findOne({
       email: email,
       code: code,
     });
-    return user;
-  }
-
-  static checkSameOldPassword = async (data: any) => {
-    const email = data.email;
-    const password = data.password;
-    const user = await Users.findOne({
-      email,
-      password
-    })
+    if(!user) {
+      throw 'Your code is incorrect';
+    }
     return user;
   }
 
   static resetPassword = async (data: any) => {
     const email = data.email;
     const password = data.password;
-    const user = await Users.findOneAndUpdate(
-      {email: email},
-      {password: password},
-      {new: true}
-    );
-    return user;
+    let user = await Users.findOne({
+      email,
+      password,
+    });
+    if(user) {
+      throw 'New password must not be the same as the old password';
+    }
+    user.password = password;
+    user = await user.save();
   }
 
   static generateAccessToken = (user: any) => {

@@ -1,8 +1,12 @@
 /* eslint-disable */
-import { FORGOT_PASSWORD, generateSixDigitCode } from "../utils/Helper.utils";
-import express from 'express';
-const UsersService = require('../services/users.service');
-const { Email } = require('../utils/Mail.utils');
+import express from "express";
+import { 
+  FORGOT_PASSWORD, 
+  generateSixDigitCode,
+  sendCodeToMail,
+} from "../utils/Helper.utils";
+const UsersService = require("../services/users.service");
+const { Email } = require("../utils/Mail.utils");
 
 export class Auth {
   public validateSignup = async (data: any) => {
@@ -91,83 +95,67 @@ export class Auth {
 
   public getUserByEmail = async (
     req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
+    res: express.Response
   ) => {
     try {
       const data = {
         email: req.body.email,
       };
-
-      const response = await UsersService.find(data);
-      //It returns an array, if response find success, user
-      //is the first elements in array
-      const user = response[0];
-      if (user) {
-        if (!user.active) {
-          res.status(400).json({
-            success: false,
-            // status: '404',
-            error: {
-              code: "FORGOT_PASSWORD_004",
-              message: "Your account is not verified",
-            },
-          });
-        } else {
-          res.status(200).json({
-            success: true,
-            email: user.email,
-          });
-        }
-      } else {
+      
+      const user = await UsersService.find(data);
+      if(!user.active) {
         res.status(400).json({
           success: false,
-          // status: '404',
           error: {
-            code: "FORGOT_PASSWORD_003",
-            message: "Email is not exists",
+            code: "FORGOT_PASSWORD_004",
+            message: "Your account is not verified",
           },
         });
       }
+      res.status(200).json({
+        success: true,
+        email: user.email,
+      });
     } catch (error) {
-      next(error);
+      res.status(400).json({
+        success: false,
+        error: {
+          code: 'FORGOT_PASSWORD_003',
+          message: error,
+        }
+      })
     }
   };
 
   public createCodeExpire = async (
     req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
+    res: express.Response
   ) => {
     try {
       const data = {
         email: req.body.email,
       };
       const code = generateSixDigitCode();
-      const response = await UsersService.addCode(data, code);
-      if (response) {
-        this.sendCodeToMail(data.email, code, FORGOT_PASSWORD);
-        setTimeout(() => {
-          UsersService.deleteCode(data);
-        }, 60 * 1000);
-        res.status(200).json({
-          success: true,
-        });
-      }
-    } catch (error) {
-      next(error);
-    }
-  };
+      await UsersService.addCode(data, code);
 
-  public sendCodeToMail = async (email: any, token: any, type: any) => {
-    const emailAgent = new Email();
-    emailAgent.sendEmail(email, token, type);
+      sendCodeToMail(data.email, code, FORGOT_PASSWORD);
+      setTimeout(() => {
+        UsersService.deleteCode(data);
+      }, 60 * 1000);
+
+      res.status(200).json({
+        success: true,
+      });
+    } catch (error) {
+      res.status(500).json({
+        error,
+      });
+    }
   };
 
   public checkForgotPasswordCode = async (
     req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
+    res: express.Response
   ) => {
     const data = {
       email: req.body.email,
@@ -176,55 +164,43 @@ export class Auth {
 
     try {
       const response = await UsersService.checkCode(data);
-      if (response) {
-        res.status(200).json({
-          success: true
-        })
-      } else {
-        res.status(400).json({
-          success: false,
-          error: {
-            code: 'FORGOT_PASSOWRD_005',
-            message: 'The code is incorrect'
-          }
-        })
-      }
+      res.status(200).json({
+        success: true,
+        email: response.email,
+      });
     } catch (error) {
-      next(error);
+      res.status(400).json({
+        success: false,
+        error: {
+          code: 'FORGOT_PASSWORD_005',
+          message: error,
+        },
+      });
     }
   };
 
   public resetPassword = async (
     req: express.Request,
     res: express.Response,
-    next: express.NextFunction
   ) => {
     const data = {
       email: req.body.email,
       password: req.body.password,
-    }
+    };
 
     try {
-      const user = await UsersService.checkSameOldPassword(data);
-      if(!user){
-        const newUser = await UsersService.resetPassword(data);
-        if(newUser) {
-          res.status(200).json({
-            success: true
-          })
+      await UsersService.resetPassword(data);
+      res.status(200).json({
+        success: true,
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        error: {
+          code: 'FORGOT_PASSWORD_010',
+          message: error,
         }
-      }else{
-        res.status(400).json({
-          success: false,
-          error: {
-            code: 'FORGOT_PASSWORD_010',
-            message: 'New password must not be the same as the old password',
-          }
-        })
-      }
-    } catch(error) {
-      next(error);
+      })
     }
   };
 }
-

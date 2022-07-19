@@ -40,14 +40,19 @@ function ForgotPasswordPanel() {
 
   const onSubmit: SubmitHandler<ForgotPasswordForm> = async (data) => {
     try {
-      console.log(process.env);
       const res = await axios.post(process.env.NEXT_PUBLIC_DOMAIN + '/api/auth/forgot-password', data);
-      console.log(res);
-      // setErrorMessage({
-      //   trigger: false,
-      //   message: '',
-      // });
-      // router.push('/');
+      if(res.status === 200) {
+        setErrorMessage({
+          trigger: false,
+          message: '',
+        });
+        router.push({
+          pathname: '/enter-forgot-password-code',
+          query: {
+            email: res.data.email,
+          }
+        })
+      }
     } catch (error: any) {
       setErrorMessage({ trigger: true, message: error.response.data.error.message });
     }
