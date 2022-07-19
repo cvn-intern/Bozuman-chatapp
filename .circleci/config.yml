@@ -39,7 +39,7 @@ jobs:
           command: cat > project.json
       - run:
           working_directory: ./front-end/.vercel
-          command: echo "{"projectId":"prj_QZat0kKlmvptFhZlX9pE7qNk7sAn","orgId":"sIpHFARbgZn3tMzH4k0WM3Tl"}" > project.json
+          command: echo '{"projectId":"prj_QZat0kKlmvptFhZlX9pE7qNk7sAn","orgId":"sIpHFARbgZn3tMzH4k0WM3Tl"}' > project.json
       - run:
           working_directory: ./front-end
           command: ./node_modules/vercel/dist/index.js --token ${VERCEL_TOKEN} --cwd . --confirm --prod
