@@ -1,7 +1,7 @@
 /* eslint-disable */
 import express from 'express';
-const UsersService = require('../services/users.service');
-const { Email } = require('../utils/Mail.utils');
+import {UsersService, User} from '../services/users.service'
+import { Email } from '../utils/Mail.utils'
 
 export class Auth {
   public validateSignup = async (data: any) => {
@@ -26,8 +26,9 @@ export class Auth {
     const data = {
       username: req.body.username,
       email: req.body.email,
-      fullName: req.body.fullName,
+      full_name: req.body.fullName,
       password: req.body.password,
+      _id: ''
     };
 
     try {
@@ -62,13 +63,12 @@ export class Auth {
   public signIn = async (
     req: express.Request,
     res: express.Response,
-    next: express.NextFunction
   ) => {
     try {
-      const data = {
+      const data = new User(
         username: req.body.username,
         password: req.body.password,
-      };
+      );
       const response = await UsersService.authenticate(data);
       res.status(200).json(response);
     } catch (error) {

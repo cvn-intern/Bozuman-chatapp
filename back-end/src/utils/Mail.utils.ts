@@ -1,7 +1,7 @@
 /* eslint-disable */
 const nodemailer = require('nodemailer');
 
-class Email {
+export class Email {
   private transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -10,7 +10,7 @@ class Email {
     }
   });
 
-  public sendEmail = (emailAddress: any, activate_token: any) => {
+  public sendEmail = (emailAddress: string | undefined, activate_token: string | undefined) => {
     const mailOptions = {
       from: 'bozuman2022@gmail.com',
       to: emailAddress,
@@ -28,5 +28,3 @@ class Email {
     });
   }
 }
-
-module.exports = { Email };

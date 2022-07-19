@@ -1,26 +1,25 @@
 /* eslint-disable */
-import { isSet } from 'util/types';
+import {Users} from '../models/users.model';
+import * as jwt from 'jsonwebtoken'
+import _CONF from '../configs/auth.config'
+import {RefreshToken} from '../models/refreshToken.model'
+import crypto from 'crypto' 
 
-const { Users } = require('../models/users.model');
-const jwt = require('jsonwebtoken')
-const _CONF = require('../configs/auth.config')
-const RefreshToken = require('../models/refreshToken.model')
-const crypto1 = require('crypto');
-
-interface User {
+export interface User {
   username: string;
   password: string;
   full_name: string;
   email: string;
+  _id: string
 }
 
-module.exports = class UsersService {
-  static create = async (data: any) => {
+export class UsersService {
+  static create = async (data: User) => {
     try {
       const user = {
         username: data.username,
         password: data.password,
-        full_name: data.fullName,
+        full_name: data.full_name,
         email: data.email,
       };
       const response = await new Users(user).save();
@@ -51,8 +50,8 @@ module.exports = class UsersService {
       console.log(err);
     }
   };
-  // authenticating to user when sigin in
-  static authenticate = async (data: any) => {
+ 
+  static authenticate = async (data: User) => {
     const { username, password } = data;
     const user = await Users.findOne({ username: username }).exec();
     if (!user || password != user.password) {
@@ -65,7 +64,6 @@ module.exports = class UsersService {
     const refreshToken = this.generateRefreshToken(user);
     await refreshToken.save();
     return {
-      // ...this.basicDetails(user),
       success: true,
       accessToken,
       refreshToken: refreshToken.token,
@@ -92,11 +90,7 @@ module.exports = class UsersService {
   };
 
   static randomTokenString = () => {
-    return crypto1.randomBytes(40).toString('hex');
+    return crypto.randomBytes(40).toString('hex');
   };
 
-  static basicDetails = (user: any) => {
-    const { _id } = user;
-    return { _id };
-  };
 };
