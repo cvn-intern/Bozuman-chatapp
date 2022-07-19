@@ -1,7 +1,6 @@
 version: 2.1
 
 jobs:
-  # ESLint in front-end
   front-end-eslint:
     docker: 
       - image: cimg/node:16.16.0
@@ -13,7 +12,6 @@ jobs:
             npm install
             npm run lint
 
-  #ESLint in back-end
   back-end-eslint:
     docker:
       - image: cimg/node:16.16.0
@@ -35,7 +33,13 @@ jobs:
           command: npm install
       - run:
           working_directory: ./front-end
-          command: echo "{"projectId":"prj_EbYfeF4gs5qXuWjESLHDGzQbEfjI","orgId":"sIpHFARbgZn3tMzH4k0WM3Tl"}" > .vercel/project.json
+          command: mkdir .vercel
+      - run:
+          working_directory: ./front-end/.vercel
+          command: cat > project.json
+      - run:
+          working_directory: ./front-end/.vercel
+          command: echo "{"projectId":"prj_EbYfeF4gs5qXuWjESLHDGzQbEfjI","orgId":"sIpHFARbgZn3tMzH4k0WM3Tl"}" > project.json
       - run:
           working_directory: ./front-end
           command: ./node_modules/vercel/dist/index.js --token ${VERCEL_TOKEN} --cwd . --confirm --prod
