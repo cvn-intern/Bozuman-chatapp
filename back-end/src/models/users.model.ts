@@ -55,6 +55,11 @@ const UsersSchema = new Schema({
     required: false,
   },
 
+  code: {
+    type: String,
+    required: false,
+  },
+
   room_list: {
     type: Array,
     required: false,

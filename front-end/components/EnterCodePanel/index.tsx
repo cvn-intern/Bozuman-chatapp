@@ -1,0 +1,151 @@
+import React, { MouseEvent, useEffect, useLayoutEffect, useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import { FaSignInAlt } from 'react-icons/fa';
+
+interface EnterCodeForm {
+  code: string;
+}
+
+function EnterCodePanel() {
+  const router = useRouter();
+  const { email } = router.query;
+
+  const [errorMessage, setErrorMessage] = useState({
+    trigger: false,
+    message: '',
+  });
+
+  const [showResendBtn, setShowResendBtn] = useState(true);
+  const [count, setCount] = useState(0);
+
+  const schema = yup.object().shape({
+    code: yup
+      .string()
+      .required('The code must not be empty')
+      .matches(/^[0-9]+$/, 'Must be only digits')
+      .min(6, 'Code must be 6 digits')
+      .max(6, 'Code must be 6 digits'),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<EnterCodeForm>({
+    reValidateMode: 'onSubmit',
+    resolver: yupResolver(schema),
+  });
+
+  const onBackSignIn = (e: MouseEvent) => {
+    e.preventDefault();
+    router.push('/sign-in');
+  };
+
+  const onCreateCodeAgain = async () => {
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/create-code`,
+        {
+          email,
+        }
+      );
+      if (res.status === 200) {
+        sessionStorage.clear();
+        setCount(60);
+        setShowResendBtn(false);
+      }
+    } catch (error) {
+      //TODO: Server error
+    }
+  };
+
+  const onSubmit: SubmitHandler<EnterCodeForm> = async (data) => {
+    try {
+      const { code } = data;
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/check-code`,
+        {
+          email,
+          code: code.toString(),
+        }
+      );
+
+      if (res.status === 200) {
+        setErrorMessage({
+          trigger: false,
+          message: '',
+        });
+      }
+
+      router.push({
+        pathname: '/reset-password',
+        query: {
+          email: res.data.email,
+        },
+      });
+    } catch (error: any) {
+      setErrorMessage({
+        trigger: true,
+        message: error.response.data.error.message,
+      });
+    }
+  };
+
+  useLayoutEffect(() => {
+    if (sessionStorage.count) {
+      setCount(Number(sessionStorage.count));
+    } else {
+      setCount(60);
+    }
+  }, []);
+
+  useEffect(() => {
+    let countDown = setTimeout(() => {
+      if (count > 0) {
+        setCount(count - 1);
+        sessionStorage.setItem('count', (count - 1).toString());
+      }
+    }, 1000);
+
+    if (count === 0) {
+      setShowResendBtn(true);
+    }
+
+    return () => {
+      clearTimeout(countDown);
+    };
+  }, [count, showResendBtn]);
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="header d-flex justify-content-between align-item-center">
+        <h2>Enter code</h2>
+        <button className="goSignIn" onClick={onBackSignIn}>
+          <FaSignInAlt />
+        </button>
+      </div>
+      <div className="inputCode d-flex">
+        <input {...register('code')} className="code" type="text" required />
+        <div className="countDown">{count}</div>
+      </div>
+      <div className="errorMessage">
+        {(errors.code && <p>{errors.code.message}</p>) ||
+          (errorMessage.trigger && <p>{errorMessage.message}</p>)}
+      </div>
+      {showResendBtn && (
+        <p className="resendCode" onClick={onCreateCodeAgain}>
+          Didn't receive any code? Click here to resent your code
+        </p>
+      )}
+      <button type="submit" className="button__search">
+        Submit
+      </button>
+    </form>
+  );
+}
+
+export default EnterCodePanel;
