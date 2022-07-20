@@ -1,14 +1,13 @@
 /* eslint-disable */
 
-import React, { useState } from 'react';
+import React, { MouseEvent, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
-// import Image from 'next/image';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import _CONF from 'config/config';
 import { useRouter } from 'next/router';
-import { GoSignIn } from 'react-icons/go';
+import { FaSignInAlt } from 'react-icons/fa';
 
 interface EnterCodeForm {
   code: string;
@@ -16,6 +15,8 @@ interface EnterCodeForm {
 
 function EnterCodePanel() {
   const router = useRouter();
+  const { email } = router.query;
+
   const [errorMessage, setErrorMessage] = useState({
     trigger: false,
     message: '',
@@ -23,10 +24,11 @@ function EnterCodePanel() {
 
   const schema = yup.object().shape({
     code: yup
-            .number()
+            .string()
             .required()
-            .min(6, 'Code must be 6 digit')
-            .max(6, 'Code must be 6 digit'),
+            .matches(/^[0-9]+$/, 'Must be only digits')
+            .min(6, 'Code must be 6 digits')
+            .max(6, 'Code must be 6 digits'),
   });
 
   const {
@@ -34,26 +36,36 @@ function EnterCodePanel() {
     handleSubmit,
     formState: { errors },
   } = useForm<EnterCodeForm>({
+    reValidateMode: 'onSubmit',
     resolver: yupResolver(schema),
   });
 
-  const onBackSignIn = (e : any) => {
+  const onBackSignIn = (e : MouseEvent) => {
     e.preventDefault();
     router.push('/sign-in');
   }
 
   const onSubmit: SubmitHandler<EnterCodeForm> = async (data) => {
     try {
-      const res = await axios.post(process.env.NEXT_PUBLIC_DOMAIN + '/api/auth/forgot-password', data);
-      // setErrorMessage({
-      //   trigger: false,
-      //   message: '',
-      // });
-      // router.push('/');
+      const { code } = data;
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/check-code`, {
+        email,
+        code: code.toString(),
+      });
+
+      if(res.status === 200) {
+        setErrorMessage({
+          trigger: false,
+          message: '',
+        });
+      }
+
     } catch (error: any) {
-      setErrorMessage({ trigger: true, message: error.response.data.error.message });
+      setErrorMessage({ 
+        trigger: true,
+        message: error.response.data.error.message 
+      });
     }
-    // reset()
   };
   return (
     <div className='forgotpassword'>
@@ -64,17 +76,19 @@ function EnterCodePanel() {
             className='goSignIn'
             onClick={onBackSignIn}
           >
-            <GoSignIn />
+            <FaSignInAlt />
           </button>
         </div>
         <input
           {...register('code')}
+          className='code'
           type='text'
           required
         />
-        {errors.code && <p>{errors.code.message}</p>}
-        <br />
-        {errorMessage.trigger && <p>{errorMessage.message}</p>}
+        <div className='errorMessage'>
+        {(errors.code && <p>{errors.code.message}</p>) ||
+        (errorMessage.trigger && <p>{errorMessage.message}</p>)}
+        </div>
         
         <button type='submit' className='button__search'>
           Submit

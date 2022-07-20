@@ -17,6 +17,7 @@ interface ResetPasswordForm {
 
 function ResetPasswordPanel() {
   const router = useRouter();
+  
   const [errorMessage, setErrorMessage] = useState({
     trigger: false,
     message: '',

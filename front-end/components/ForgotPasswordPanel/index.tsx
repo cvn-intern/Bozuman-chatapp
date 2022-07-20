@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import React, { useState } from 'react';
+import React, { useState, MouseEvent } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
 // import Image from 'next/image';
@@ -33,19 +33,23 @@ function ForgotPasswordPanel() {
     resolver: yupResolver(schema),
   });
 
-  const onBackSignIn = (e : any) => {
+  const onBackSignIn = (e : MouseEvent) => {
     e.preventDefault();
     router.push('/sign-in');
   }
 
   const onSubmit: SubmitHandler<ForgotPasswordForm> = async (data) => {
     try {
-      const res = await axios.post(process.env.NEXT_PUBLIC_DOMAIN + '/api/auth/forgot-password', data);
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/forgot-password`, data);
       if(res.status === 200) {
         setErrorMessage({
           trigger: false,
           message: '',
         });
+        const email : string = res.data.email;
+        await axios.post(`${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/create-code`, {
+          email
+        })
         router.push({
           pathname: '/enter-forgot-password-code',
           query: {
@@ -54,7 +58,10 @@ function ForgotPasswordPanel() {
         })
       }
     } catch (error: any) {
-      setErrorMessage({ trigger: true, message: error.response.data.error.message });
+      setErrorMessage({ 
+        trigger: true, 
+        message: error.response.data.error.message 
+      });
     }
     // reset()
   };
