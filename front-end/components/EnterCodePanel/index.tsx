@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { MouseEvent, useEffect, useLayoutEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -19,6 +19,9 @@ function EnterCodePanel() {
     message: '',
   });
 
+  const [showResendBtn, setShowResendBtn] = useState(true);
+  const [count, setCount] = useState(60);
+
   const schema = yup.object().shape({
     code: yup
       .string()
@@ -37,20 +40,41 @@ function EnterCodePanel() {
     resolver: yupResolver(schema),
   });
 
-  const onBackSignIn = (e : MouseEvent) => {
+  const onBackSignIn = (e: MouseEvent) => {
     e.preventDefault();
     router.push('/sign-in');
-  }
+  };
+
+  const onCreateCodeAgain = async () => {
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/create-code`,
+        {
+          email,
+        }
+      );
+      if (res.status === 200) {
+        sessionStorage.clear();
+        setCount(60);
+        setShowResendBtn(false);
+      }
+    } catch (error) {
+      //TODO: Server error
+    }
+  };
 
   const onSubmit: SubmitHandler<EnterCodeForm> = async (data) => {
     try {
       const { code } = data;
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/check-code`, {
-        email,
-        code: code.toString(),
-      });
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/check-code`,
+        {
+          email,
+          code: code.toString(),
+        }
+      );
 
-      if(res.status === 200) {
+      if (res.status === 200) {
         setErrorMessage({
           trigger: false,
           message: '',
@@ -63,43 +87,65 @@ function EnterCodePanel() {
           email: res.data.email,
         },
       });
-
     } catch (error: any) {
-      setErrorMessage({ 
+      setErrorMessage({
         trigger: true,
-        message: error.response.data.error.message 
+        message: error.response.data.error.message,
       });
     }
   };
+
+  useLayoutEffect(() => {
+    if(sessionStorage.count) {
+      setCount(Number(sessionStorage.count));
+    }
+  }); 
+
+  useEffect(() => {
+    let countDown = setTimeout(() => {
+      if (count > 0) {
+        setCount(count - 1);
+        sessionStorage.setItem('count', (count-1).toString())
+      }
+    }, 1000);
+
+    if (count === 0) {
+      setShowResendBtn(true);
+    }
+
+    return () => {
+      clearTimeout(countDown);
+    };
+  }, [count, showResendBtn]);
+
   return (
-    <div className='forgotpassword'>
+    <div className="forgotpassword">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className='header d-flex justify-content-between align-item-center'>
+        <div className="header d-flex justify-content-between align-item-center">
           <h2>Enter code</h2>
-          <button 
-            className='goSignIn'
-            onClick={onBackSignIn}
-          >
+          <button className="goSignIn" onClick={onBackSignIn}>
             <FaSignInAlt />
           </button>
         </div>
-        <input
-          {...register('code')}
-          className='code'
-          type='text'
-          required
-        />
-        <div className='errorMessage'>
-          {(errors.code && <p>{errors.code.message}</p>) ||
-          (errorMessage.trigger && <p>{errorMessage.message}</p>)}
+        <div className="inputCode d-flex">
+          <input {...register('code')} className="code" type="text" required />
+          <div className="countDown">{count}</div>
         </div>
-        
-        <button type='submit' className='button__search'>
+        <div className="errorMessage">
+          {(errors.code && <p>{errors.code.message}</p>) ||
+            (errorMessage.trigger && <p>{errorMessage.message}</p>)}
+        </div>
+        {showResendBtn && (
+          <p className="resendCode" onClick={onCreateCodeAgain}>
+            Didn't receive any code? Click here to resent your code
+          </p>
+        )}
+        <button type="submit" className="button__search">
           Submit
         </button>
       </form>
     </div>
-  )
+  );
 }
 
 export default EnterCodePanel;
