@@ -98,11 +98,11 @@ export class Auth {
     res: express.Response
   ) => {
     try {
-      const data = {
+      const userEmail = {
         email: req.body.email,
       };
       
-      const user = await UsersService.find(data);
+      const user = await UsersService.find(userEmail);
       if(!user.active) {
         res.status(400).json({
           success: false,
@@ -158,13 +158,13 @@ export class Auth {
     req: express.Request,
     res: express.Response
   ) => {
-    const data = {
+    const codeOfUser = {
       email: req.body.email,
       code: req.body.code,
     };
 
     try {
-      const response = await UsersService.checkCode(data);
+      const response = await UsersService.checkCode(codeOfUser);
       res.status(200).json({
         success: true,
         email: response.email,
@@ -184,13 +184,13 @@ export class Auth {
     req: express.Request,
     res: express.Response,
   ) => {
-    const data = {
+    const newPasswordOfUser = {
       email: req.body.email,
       password: req.body.password,
     };
 
     try {
-      await UsersService.resetPassword(data);
+      await UsersService.resetPassword(newPasswordOfUser);
       res.status(200).json({
         success: true,
       });

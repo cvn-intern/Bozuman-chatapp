@@ -20,7 +20,7 @@ function EnterCodePanel() {
   });
 
   const [showResendBtn, setShowResendBtn] = useState(true);
-  const [count, setCount] = useState(60);
+  const [count, setCount] = useState(0);
 
   const schema = yup.object().shape({
     code: yup
@@ -98,8 +98,10 @@ function EnterCodePanel() {
   useLayoutEffect(() => {
     if(sessionStorage.count) {
       setCount(Number(sessionStorage.count));
+    }else{
+      setCount(60);
     }
-  }); 
+  },[]); 
 
   useEffect(() => {
     let countDown = setTimeout(() => {

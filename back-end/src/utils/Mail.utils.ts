@@ -26,12 +26,12 @@ class Email {
       from: 'bozuman2022@gmail.com',
       to: emailAddress,
       subject: 'Activatetion code',
-      html: '<p>Click <a href="http://localhost:3000/api/auth/activate_account/' + token + '">here</a> to activate your account</p>'
+      html: `<p>Click <a href="${process.env.PROJECT_DOMAIN}/api/auth/activate_account/${token}>here</a> to activate your account</p>`
     };
     
     if (type === FORGOT_PASSWORD){
       mailOptions.subject = 'Reset password';
-      mailOptions.html = `<h1>Your code is <strong>${token}</strong></h1>`;
+      mailOptions.html = `<h2>Your code is <strong>${token}</strong></h2>`;
     }
 
     this.transporter.sendMail(mailOptions, function(error: any, info: any){
