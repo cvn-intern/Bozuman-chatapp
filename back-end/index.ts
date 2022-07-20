@@ -1,11 +1,10 @@
 /* eslint-disable */
-
+import express, { Application } from 'express';
+import cors from 'cors';
+import auth from './src/routes/authentication.route';
 const expiredAccessTokenHandler = require('./src/middlewares/expiredAccessTokenHandler')
 const { Database } = require('./src/configs/db.config');
 
-import express, { Application } from 'express';
-import auth from './src/routes/authentication.route';
-import cors from 'cors';
 const db = new Database();
 const app: Application = express();
 

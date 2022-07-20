@@ -83,9 +83,9 @@ function SignInPanel() {
           type='password'
           required
         />
-        {errors.password && <p>{errors.password.message}</p>}
+        {errors.password && <p className="error">{errors.password.message}</p>}
         <br />
-        {errorMessage.trigger && <p>{errorMessage.message}</p>}
+        {errorMessage.trigger && <p >{errorMessage.message}</p>}
         <div>
           <label className='remember-me'>
             <input type='checkbox' />

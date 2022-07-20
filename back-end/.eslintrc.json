@@ -47,7 +47,7 @@
       }
     ],
     "no-var": "error",
-    "no-inline-comments": "error",
+    "no-inline-comments": "off",
     "no-dupe-keys": "error",
     "no-dupe-else-if": "error",
     "no-duplicate-imports": "error",
