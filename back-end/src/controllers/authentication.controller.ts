@@ -139,6 +139,7 @@ export class Auth {
       await UsersService.addCode(data, code);
 
       sendCodeToMail(data.email, code, FORGOT_PASSWORD);
+      
       setTimeout(() => {
         UsersService.deleteCode(data);
       }, 60 * 1000);

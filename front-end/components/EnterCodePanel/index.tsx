@@ -1,11 +1,8 @@
-/* eslint-disable */
-
 import React, { MouseEvent, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
-import _CONF from 'config/config';
 import { useRouter } from 'next/router';
 import { FaSignInAlt } from 'react-icons/fa';
 
@@ -24,11 +21,11 @@ function EnterCodePanel() {
 
   const schema = yup.object().shape({
     code: yup
-            .string()
-            .required()
-            .matches(/^[0-9]+$/, 'Must be only digits')
-            .min(6, 'Code must be 6 digits')
-            .max(6, 'Code must be 6 digits'),
+      .string()
+      .required('The code must not be empty')
+      .matches(/^[0-9]+$/, 'Must be only digits')
+      .min(6, 'Code must be 6 digits')
+      .max(6, 'Code must be 6 digits'),
   });
 
   const {
@@ -60,6 +57,13 @@ function EnterCodePanel() {
         });
       }
 
+      router.push({
+        pathname: '/reset-password',
+        query: {
+          email: res.data.email,
+        },
+      });
+
     } catch (error: any) {
       setErrorMessage({ 
         trigger: true,
@@ -86,8 +90,8 @@ function EnterCodePanel() {
           required
         />
         <div className='errorMessage'>
-        {(errors.code && <p>{errors.code.message}</p>) ||
-        (errorMessage.trigger && <p>{errorMessage.message}</p>)}
+          {(errors.code && <p>{errors.code.message}</p>) ||
+          (errorMessage.trigger && <p>{errorMessage.message}</p>)}
         </div>
         
         <button type='submit' className='button__search'>

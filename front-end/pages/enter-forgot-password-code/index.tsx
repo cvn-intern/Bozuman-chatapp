@@ -1,7 +1,6 @@
 import EnterCodePanel from 'components/EnterCodePanel'
 import Image from 'next/image'
 import React from 'react'
-import { withRouter } from 'next/router';
 
 function EnterCode() {
   return (

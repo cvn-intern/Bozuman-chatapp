@@ -123,8 +123,13 @@ module.exports = class UsersService {
     if(user) {
       throw 'New password must not be the same as the old password';
     }
+    
+    user = await Users.findOne({
+      email
+    });
+    
     user.password = password;
-    user = await user.save();
+    return await user.save();
   }
 
   static generateAccessToken = (user: any) => {
