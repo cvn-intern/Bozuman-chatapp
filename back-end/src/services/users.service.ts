@@ -34,6 +34,7 @@ export class UsersService {
       const response = await new Users(user).save();
       return response;
     } catch (error) {
+      //TODO: throw server error
       console.log(error);
     }
   };
@@ -51,10 +52,11 @@ export class UsersService {
       ).exec();
       return 'Activate account success';
     } catch (err) {
+      //TODO: throw server error
       console.log(err);
     }
   };
- 
+
   static authenticate = async (data: User) => {
     const { username, password } = data;
     const user = await Users.findOne({ username: username }).exec();
@@ -63,7 +65,6 @@ export class UsersService {
         code: 'SIGN_IN_007',
         message: 'Username or password is incorrect'
       }
-      
     }
     if (!user.active) {
       throw {
@@ -96,7 +97,7 @@ export class UsersService {
 
   static deleteCode = async (data: {email: string}) => {
     const userEmail = data.email;
-    console.log(userEmail);
+  
     const user = await Users.findOne({email: userEmail});
     if (user) {
       user.code = undefined;
@@ -165,5 +166,4 @@ export class UsersService {
   static randomTokenString = () => {
     return crypto.randomBytes(40).toString('hex');
   };
-
 };

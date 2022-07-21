@@ -86,6 +86,7 @@ export const registerSchema = Joi.object({
     tlds: { allow: ['com', 'net'] },
   }),
 });
+
 export const signInSchema = Joi.object({
   username: Joi.string()
   .min(8)
@@ -99,9 +100,7 @@ password: Joi.string()
   .required(),
 })
 
-
 export const Users = mongoose.model('user', UsersSchema)
-
 
 module.exports = {
   Users: mongoose.model('user', UsersSchema),

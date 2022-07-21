@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import * as jwt from 'jsonwebtoken'
 import _CONF from '../configs/auth.config'
 import {UsersService} from '../services/users.service'

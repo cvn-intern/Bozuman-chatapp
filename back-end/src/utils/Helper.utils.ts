@@ -1,9 +1,8 @@
 import {Response} from 'express';
+import { Email } from './Mail.utils';
 
 export const FORGOT_PASSWORD = 'FORGOT_PASSWORD';
 export const ACTIVATE_ACCOUNT = 'ACTIVATE_ACCOUNT';
-
-import { Email } from './Mail.utils';
 
 export const generateSixDigitCode = (): string => {
   const number = Math.floor(100000 + Math.random() * 900000);
