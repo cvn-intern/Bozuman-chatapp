@@ -103,8 +103,12 @@ module.exports = class UsersService {
       email: email,
       code: code,
     });
+
     if(!user) {
-      throw 'Your code is incorrect';
+      throw {
+        code: 'FORGOT_PASSWORD_005',
+        message: 'Your code is incorrect'
+      };
     }
     return user;
   }

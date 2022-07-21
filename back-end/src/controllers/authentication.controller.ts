@@ -107,13 +107,9 @@ export class Auth {
 
       if(!user) {
         responseError(res,400,'FORGOT_PASSWORD_003','Your account is not exists');
-      }
-
-      if(!user.active) {
+      }else if(!user.active) {
         responseError(res,400,"FORGOT_PASSWORD_004","Your account is not verified");
-      }
-
-      if(user.code) {
+      }else if(user.code) {
         responseError(res,400,"FORGOT_PASSWORD_011","Your code has exists, please check your email");
       }
 
@@ -168,14 +164,8 @@ export class Auth {
         success: true,
         email: response.email,
       });
-    } catch (error) {
-      res.status(400).json({
-        success: false,
-        error: {
-          code: 'FORGOT_PASSWORD_005',
-          message: error,
-        },
-      });
+    } catch (error : any) {
+      responseError(res,400,error.code,error.message);
     }
   };
 
