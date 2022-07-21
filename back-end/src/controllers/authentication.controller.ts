@@ -95,38 +95,6 @@ export class Auth {
     }
   };
 
-<<<<<<< HEAD
-  // public getUserByEmail = async (req: TypedRequestBody<{email: string}>, res: Response) => {
-  //   try {
-  //     const userEmail = {
-  //       email: req.body.email,
-  //     };
-
-  //     const user = await UsersService.find(userEmail);
-  //     if (!user.active) {
-  //       res.status(400).json({
-  //         success: false,
-  //         error: {
-  //           code: 'FORGOT_PASSWORD_004',
-  //           message: 'Your account is not verified',
-  //         },
-  //       });
-  //     }
-  //     res.status(200).json({
-  //       success: true,
-  //       email: user.email,
-  //     });
-  //   } catch (error) {
-  //     res.status(400).json({
-  //       success: false,
-  //       error: {
-  //         code: 'FORGOT_PASSWORD_003',
-  //         message: error,
-  //       },
-  //     });
-  //   }
-  // };
-=======
   public forgotPassword = async (req: TypedRequestBody<{email: string}>, res: Response) => {
     try {
       const userEmail = {
@@ -154,7 +122,6 @@ export class Auth {
       responseError(res,500,'500','Internal server error');
     }
   };
->>>>>>> 8c371407e55da135163882b9acfb8e425f3fdcff
 
   public createCodeExpire = async (req: TypedRequestBody<{email: string}>, res: Response) => {
     try {
