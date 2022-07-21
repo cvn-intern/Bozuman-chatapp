@@ -1,21 +1,21 @@
 /* eslint-disable */
 
-const jwt = require('jsonwebtoken');
-const _CONF = require('../configs/auth.config');
-const UsersService = require('../services/users.service');
+import * as jwt from 'jsonwebtoken'
+import _CONF from '../configs/auth.config'
+import {UsersService} from '../services/users.service'
 import express from 'express';
 
 export interface requestWithToken extends express.Request {
   decoded: any;
 }
 
-module.exports = (
+export const expiredAccessTokenHandler = () => (
   req: requestWithToken,
   res: express.Response,
   next: express.NextFunction
 ) => {
   const refreshToken = req.headers['x-refresh-token'];
-  // decode token
+  // TODO: fix this typescript error
   if (refreshToken) {
     jwt.verify(
       refreshToken,

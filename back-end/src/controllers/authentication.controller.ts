@@ -1,16 +1,18 @@
 /* eslint-disable */
-import express from 'express';
+import { Request, Response } from 'express';
 import {
   FORGOT_PASSWORD,
   generateSixDigitCode,
   sendCodeToMail,
+  ACTIVATE_ACCOUNT,
 } from '../utils/Helper.utils';
-import { UsersService } from '../services/users.service';
+import { UsersService, User } from '../services/users.service';
 import { Email } from '../utils/Mail.utils';
-import { ACTIVATE_ACCOUNT } from '../utils/Helper.utils';
-import { User } from '../services/users.service';
 import md5 from 'md5';
 
+export interface TypedRequestBody<T> extends Request {
+  body: T
+}
 
 export class Auth {
   public validateSignup = async (data: User) => {
@@ -22,13 +24,13 @@ export class Auth {
       return {
         success: false,
         error: 'Username already exist',
-        errorCode: 'SIGNUP_009',
+        errorCode: 'SIGN_UP_009',
       };
     } else if (user.email === data.email) {
       return {
         success: false,
         error: 'Email already exist',
-        errorCode: 'SIGNUP_010',
+        errorCode: 'SIGN_UP_010',
       };
     }
 
@@ -36,18 +38,17 @@ export class Auth {
   };
 
   public register = async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
+    req: Request,
+    res: Response
   ) => {
-    const data = {
+    const inputData = {
       username: req.body.username,
       email: req.body.email,
       full_name: req.body.fullName,
       password: md5(req.body.password)
     };
     try {
-      const validateResult = await this.validateSignup(data);
+      const validateResult = await this.validateSignup(inputData);
       if (!validateResult.success) {
         res.json({
           success: false,
@@ -57,63 +58,42 @@ export class Auth {
           },
         });
       } else {
-        const user = await UsersService.create(data);
-        const emailAgent = new Email();
-        emailAgent.sendEmail(user.email, user.username, ACTIVATE_ACCOUNT);
-        res.json({ success: true });
-      }
+        const user = await UsersService.create(inputData);
+        if (user) {
+          const emailAgent = new Email();
+          emailAgent.sendEmail(user.email, user.username, ACTIVATE_ACCOUNT);
+          res.json({ success: true });
+        }
+        }
     } catch (error) {
       res.status(500).json({ error: error });
     }
   };
 
-  public activateAccount = async (
-    req: express.Request,
-    res: express.Response
-  ) => {
+  public activateAccount = async (req: Request, res: Response) => {
     try {
       const activateResult = await UsersService.activateAccount(
         req.params.name
       );
       res.json(activateResult);
     } catch (err) {
-      console.log(err);
     }
   };
 
-  public signIn = async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
+  public signIn = async (req: Request, res: Response) => {
     try {
-      const data = {
-        username: req.body.username,
-        password: req.body.password,
-      };
-
-      const response = await UsersService.authenticate(data);
-      console.log(response);
-      console.log(response.accessToken);
-      // this.setTokenCookie(res, response.accessToken);
-      res.cookie('access_token', response.accessToken, {
-        maxAge: 5 * 60,
-        httpOnly: true,
-      });
+      const inputData = req.body as User
+      const response = await UsersService.authenticate(inputData);
       res.status(200).json(response);
-    } catch (error) {
-      if (error === 'Username or password is incorrect') {
-        res.status(403).json({ status: '403', error: error });
-      } else {
-        res.status(404).json({ status: '404', error: 'Invalid request' });
-      }
+    } catch (error: any) {
+      res.status(400).json({
+        success: false,
+        error: { code: error.code, message: error.message },
+      });
     }
   };
 
-  public getUserByEmail = async (
-    req: express.Request,
-    res: express.Response
-  ) => {
+  public getUserByEmail = async (req: TypedRequestBody<{email: string}>, res: Response) => {
     try {
       const userEmail = {
         email: req.body.email,
@@ -144,10 +124,7 @@ export class Auth {
     }
   };
 
-  public createCodeExpire = async (
-    req: express.Request,
-    res: express.Response
-  ) => {
+  public createCodeExpire = async (req: TypedRequestBody<{email: string}>, res: Response) => {
     try {
       const data = {
         email: req.body.email,
@@ -155,10 +132,13 @@ export class Auth {
       const code = generateSixDigitCode();
       await UsersService.addCode(data, Number(code));
 
-      sendCodeToMail(data.email, code, FORGOT_PASSWORD);
+      await sendCodeToMail(data.email, code, FORGOT_PASSWORD);
 
       setTimeout(() => {
-        UsersService.deleteCode(data);
+        (async () => {
+          await UsersService.deleteCode(data);
+        })
+        
       }, 60 * 1000);
 
       res.status(200).json({
@@ -171,10 +151,7 @@ export class Auth {
     }
   };
 
-  public checkForgotPasswordCode = async (
-    req: express.Request,
-    res: express.Response
-  ) => {
+  public checkForgotPasswordCode = async (req: TypedRequestBody<{email: string, code: string}>, res: Response) => {
     const codeOfUser = {
       email: req.body.email,
       code: req.body.code,
@@ -197,10 +174,7 @@ export class Auth {
     }
   };
 
-  public resetPassword = async (
-    req: express.Request,
-    res: express.Response
-  ) => {
+  public resetPassword = async (req: TypedRequestBody<{email: string, password: string}>, res: Response) => {
     const newPasswordOfUser = {
       email: req.body.email,
       password: req.body.password,
