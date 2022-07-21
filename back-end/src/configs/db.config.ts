@@ -1,25 +1,25 @@
-/* eslint-disable */
-require('dotenv').config();
-const mongoose = require("mongoose");
+import dotenv from 'dotenv';
+dotenv.config();
+import mongoose from 'mongoose';
+/* eslint-disable no-debugger, no-console */
 
 export class Database {
-  protected username: any = process.env.DB_USERNAME;
-  protected password: any = process.env.DB_PASSWORD;
-  protected cluster: any = process.env.DB_CLUSTER;
-  protected dbname: any = process.env.DB_NAME;
-  protected conn: any;
+  protected username: string | undefined = process.env.DB_USERNAME;
+  protected password: string | undefined = process.env.DB_PASSWORD;
+  protected cluster: string | undefined = process.env.DB_CLUSTER;
+  protected dbname: string | undefined = process.env.DB_NAME;
 
-  constructor() {
-    mongoose.connect(
-      `mongodb+srv://${this.username}:${this.password}@${this.cluster}.mongodb.net/${this.dbname}?retryWrites=true&w=majority`
-    )
-      .then((error : any)=>{
-        /* eslint-disable no-debugger, no-console */
-        console.log(error);
+  public dbConnect = async () => {
+    await mongoose
+      .connect(
+        `mongodb+srv://${this.username || ''}:${this.password || ''}@${this.cluster || ''}.mongodb.net/${this.dbname || ''}?retryWrites=true&w=majority`
+      )
+      .then(() => {
+        //TO DO
       });
-    this.conn = mongoose.connection;
-    this.conn.on('error', console.error.bind(console, 'connection error: '));
-    this.conn.once('open', function () {
+    const conn: mongoose.Connection = mongoose.connection;
+    conn.on('error', console.error.bind(console, 'connection error: '));
+    conn.once('open', function () {
       console.log('Connected successfully');
     });
   }

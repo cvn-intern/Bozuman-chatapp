@@ -6,6 +6,7 @@ const expiredAccessTokenHandler = require('./src/middlewares/expiredAccessTokenH
 const { Database } = require('./src/configs/db.config');
 
 const db = new Database();
+db.dbConnect();
 const app: Application = express();
 
 // Body parsing Middleware
