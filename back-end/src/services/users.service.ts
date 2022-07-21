@@ -12,6 +12,7 @@ export interface User {
   email?: string;
   active?: boolean;
   _id?: string,
+  code?: string
 }
 
 export class UsersService {
@@ -32,7 +33,7 @@ export class UsersService {
 
   static find = async (data: {username?: string, email?: string}) => {
     let user : User | undefined;
-
+    
     if (data.username) {
       user = await Users.findOne({ username: data.username }).exec();
     } else if (data.email) {
@@ -89,6 +90,7 @@ export class UsersService {
 
   static deleteCode = async (data: {email: string}) => {
     const userEmail = data.email;
+    console.log(userEmail);
     const user = await Users.findOne({email: userEmail});
     user.code = undefined;
     return user.save();

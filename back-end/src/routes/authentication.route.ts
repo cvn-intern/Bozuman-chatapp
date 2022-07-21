@@ -18,7 +18,7 @@ router.post(
 router.get("/activate_account/:name", authentication.activateAccount);
 router.post("/sign-in", authentication.signIn);
 
-router.post('/forgot-password', authentication.getUserByEmail);
+router.post('/forgot-password', authentication.forgotPassword);
 router.post('/create-code', authentication.createCodeExpire);
 router.post('/check-code', authentication.checkForgotPasswordCode);
 router.post('/reset-password', authentication.resetPassword);

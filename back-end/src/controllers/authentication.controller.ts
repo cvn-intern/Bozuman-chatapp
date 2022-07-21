@@ -1,13 +1,15 @@
 /* eslint-disable */
-import express from 'express';
+import express, {Request, Response} from 'express';
 import {
   FORGOT_PASSWORD,
+  ACTIVATE_ACCOUNT, 
   generateSixDigitCode,
   sendCodeToMail,
-  ACTIVATE_ACCOUNT, 
   responseError
 } from "../utils/Helper.utils";
-const UsersService = require("../services/users.service");
+import { HashClass } from '../utils/Hash.util';
+import { UsersService } from '../services/users.service';
+// const UsersService = require("../services/users.service");
 const { Email } = require("../utils/Mail.utils");
 import { User } from '../services/users.service';
 
@@ -27,8 +29,8 @@ export class Auth {
   };
 
   public register = async (
-    req: express.Request,
-    res: express.Response,
+    req: Request,
+    res: Response,
     next: express.NextFunction
   ) => {
     const data = {
@@ -54,8 +56,8 @@ export class Auth {
   };
 
   public activateAccount = async (
-    req: express.Request,
-    res: express.Response
+    req: Request,
+    res: Response
   ) => {
     try {
       const activateResult = await UsersService.activateAccount(
@@ -68,8 +70,8 @@ export class Auth {
   };
 
   public signIn = async (
-    req: express.Request,
-    res: express.Response,
+    req: Request,
+    res: Response,
     next: express.NextFunction
   ) => {
     try {
@@ -96,9 +98,9 @@ export class Auth {
     }
   };
 
-  public getUserByEmail = async (
-    req: express.Request,
-    res: express.Response
+  public forgotPassword = async (
+    req: Request,
+    res: Response
   ) => {
     try {
       const userEmail = {
@@ -106,45 +108,49 @@ export class Auth {
       };
 
       const user = await UsersService.find(userEmail);
+      
 
       if(!user) {
         responseError(res,400,'FORGOT_PASSWORD_003','Your account is not exists');
-      }else if(!user.active) {
+      }else{
+        if(!user.active) {
         responseError(res,400,"FORGOT_PASSWORD_004","Your account is not verified");
-      }else if(user.code) {
+        }else if(user.code) {
         responseError(res,400,"FORGOT_PASSWORD_011","Your code has exists, please check your email");
+        }
+        
+        res.status(200).json({
+          success: true,
+          email: HashClass.encode(user.email || ''),
+        });
       }
-
-      res.status(200).json({
-        success: true,
-        email: user.email,
-      });
-    } catch (error) {
+      
+    } catch (error : any) {
       responseError(res,500,'500','Internal server error');
     }
   };
 
   public createCodeExpire = async (
-    req: express.Request,
-    res: express.Response
+    req: Request,
+    res: Response
   ) => {
     try {
-      const data = {
-        email: req.body.email,
+      const userEmail = {
+        email: HashClass.decode(req.body.email),
       };
       const code = generateSixDigitCode();
-      await UsersService.addCode(data, Number(code));
+      await UsersService.addCode(userEmail, Number(code));
 
-      sendCodeToMail(data.email, code, FORGOT_PASSWORD);
+      sendCodeToMail(userEmail.email, code, FORGOT_PASSWORD);
 
       setTimeout(() => {
-        UsersService.deleteCode(data);
+        UsersService.deleteCode(userEmail);
       }, 60 * 1000);
 
       res.status(200).json({
         success: true,
       });
-    } catch (error) {
+    } catch (error : any) {
       res.status(500).json({
         error,
       });
@@ -152,11 +158,11 @@ export class Auth {
   };
 
   public checkForgotPasswordCode = async (
-    req: express.Request,
-    res: express.Response
+    req: Request,
+    res: Response
   ) => {
     const codeOfUser = {
-      email: req.body.email,
+      email: HashClass.decode(req.body.email),
       code: req.body.code,
     };
 
@@ -164,7 +170,7 @@ export class Auth {
       const response = await UsersService.checkCode(codeOfUser);
       res.status(200).json({
         success: true,
-        email: response.email,
+        email: HashClass.encode(response.email),
       });
     } catch (error : any) {
       responseError(res,400,error.code,error.message);
@@ -172,11 +178,11 @@ export class Auth {
   };
 
   public resetPassword = async (
-    req: express.Request,
-    res: express.Response
+    req: Request,
+    res: Response
   ) => {
     const newPasswordOfUser = {
-      email: req.body.email,
+      email: HashClass.decode(req.body.email),
       password: req.body.password,
     };
 
