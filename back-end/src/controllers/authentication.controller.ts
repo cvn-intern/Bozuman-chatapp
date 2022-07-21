@@ -1,23 +1,25 @@
 /* eslint-disable */
-import express from "express";
-import { 
-  FORGOT_PASSWORD, 
+import express from 'express';
+import {
+  FORGOT_PASSWORD,
   generateSixDigitCode,
   sendCodeToMail,
-} from "../utils/Helper.utils";
-const UsersService = require("../services/users.service");
-const { Email } = require("../utils/Mail.utils");
+} from '../utils/Helper.utils';
+import { UsersService } from '../services/users.service';
+import { Email } from '../utils/Mail.utils';
+import { ACTIVATE_ACCOUNT } from '../utils/Helper.utils';
+import { User } from '../services/users.service';
 
 export class Auth {
-  public validateSignup = async (data: any) => {
+  public validateSignup = async (data: User) => {
     const checkUsername = await UsersService.find({ username: data.username });
-    if (checkUsername.length > 0) {
-      return { success: false, error: "Username already exist" };
+    if (checkUsername) {
+      return { success: false, error: 'Username already exist' };
     }
 
     const checkEmail = await UsersService.find({ email: data.email });
-    if (checkEmail.length > 0) {
-      return { success: false, error: "Email already exist" };
+    if (checkEmail) {
+      return { success: false, error: 'Email already exist' };
     }
 
     return { success: true };
@@ -43,8 +45,8 @@ export class Auth {
       } else {
         const user = await UsersService.create(data);
         const emailAgent = new Email();
-        emailAgent.sendEmail(user.email, user.username);
-        res.json("Create account success");
+        emailAgent.sendEmail(user.email, user.username, ACTIVATE_ACCOUNT);
+        res.json('Create account success');
       }
     } catch (error) {
       res.status(500).json({ error: error });
@@ -90,14 +92,14 @@ export class Auth {
       const userEmail = {
         email: req.body.email,
       };
-      
+
       const user = await UsersService.find(userEmail);
-      if(!user.active) {
+      if (!user.active) {
         res.status(400).json({
           success: false,
           error: {
-            code: "FORGOT_PASSWORD_004",
-            message: "Your account is not verified",
+            code: 'FORGOT_PASSWORD_004',
+            message: 'Your account is not verified',
           },
         });
       }
@@ -111,8 +113,8 @@ export class Auth {
         error: {
           code: 'FORGOT_PASSWORD_003',
           message: error,
-        }
-      })
+        },
+      });
     }
   };
 
@@ -125,10 +127,10 @@ export class Auth {
         email: req.body.email,
       };
       const code = generateSixDigitCode();
-      await UsersService.addCode(data, code);
+      await UsersService.addCode(data, Number(code));
 
       sendCodeToMail(data.email, code, FORGOT_PASSWORD);
-      
+
       setTimeout(() => {
         UsersService.deleteCode(data);
       }, 60 * 1000);
@@ -171,7 +173,7 @@ export class Auth {
 
   public resetPassword = async (
     req: express.Request,
-    res: express.Response,
+    res: express.Response
   ) => {
     const newPasswordOfUser = {
       email: req.body.email,
@@ -189,8 +191,8 @@ export class Auth {
         error: {
           code: 'FORGOT_PASSWORD_010',
           message: error,
-        }
-      })
+        },
+      });
     }
   };
 }

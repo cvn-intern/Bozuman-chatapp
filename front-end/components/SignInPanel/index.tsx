@@ -1,9 +1,6 @@
-/* eslint-disable */
-
 import React, { useState } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import * as yup from 'yup'
-import Image from 'next/image'
 import { yupResolver } from '@hookform/resolvers/yup'
 import axios from 'axios'
 import _CONF from 'config/config'

@@ -8,10 +8,10 @@ import crypto from 'crypto'
 export interface User {
   username: string;
   password: string;
-  full_name: string;
-  email: string;
-  active: boolean;
-  _id: string,
+  full_name?: string;
+  email?: string;
+  active?: boolean;
+  _id?: string,
 }
 
 export class UsersService {
