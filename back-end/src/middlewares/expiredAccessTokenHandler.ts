@@ -9,7 +9,7 @@ export interface requestWithToken extends express.Request {
   decoded: any;
 }
 
-module.exports = (
+export const expiredAccessTokenHandler = () => (
   req: requestWithToken,
   res: express.Response,
   next: express.NextFunction

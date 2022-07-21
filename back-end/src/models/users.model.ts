@@ -66,7 +66,7 @@ const UsersSchema = new Schema({
   },
 });
 
-const registerSchema = Joi.object({
+export const registerSchema = Joi.object({
   username: Joi.string()
     .min(8)
     .max(32)
@@ -87,7 +87,7 @@ const registerSchema = Joi.object({
     tlds: { allow: ['com', 'net'] },
   }),
 });
-const signInSchema = Joi.object({
+export const signInSchema = Joi.object({
   username: Joi.string()
   .min(8)
   .max(32)
@@ -101,6 +101,6 @@ password: Joi.string()
 })
 
 
-module.exports = {Users: mongoose.model('user', UsersSchema), registerSchema, signInSchema};
+export const Users = mongoose.model('user', UsersSchema)
 
 

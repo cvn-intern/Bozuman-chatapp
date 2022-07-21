@@ -19,4 +19,4 @@ RefreshTokenSchema.set('toJSON', {
   },
 });
 
-module.exports = mongoose.model('RefreshToken', RefreshTokenSchema);
+export const RefreshToken = mongoose.model('RefreshToken', RefreshTokenSchema);

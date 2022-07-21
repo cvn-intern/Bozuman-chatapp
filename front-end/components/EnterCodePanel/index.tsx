@@ -96,18 +96,18 @@ function EnterCodePanel() {
   };
 
   useLayoutEffect(() => {
-    if(sessionStorage.count) {
+    if (sessionStorage.count) {
       setCount(Number(sessionStorage.count));
-    }else{
+    } else {
       setCount(60);
     }
-  },[]); 
+  }, []);
 
   useEffect(() => {
     let countDown = setTimeout(() => {
       if (count > 0) {
         setCount(count - 1);
-        sessionStorage.setItem('count', (count-1).toString())
+        sessionStorage.setItem('count', (count - 1).toString());
       }
     }, 1000);
 
@@ -121,32 +121,30 @@ function EnterCodePanel() {
   }, [count, showResendBtn]);
 
   return (
-    <div className="forgotpassword">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="header d-flex justify-content-between align-item-center">
-          <h2>Enter code</h2>
-          <button className="goSignIn" onClick={onBackSignIn}>
-            <FaSignInAlt />
-          </button>
-        </div>
-        <div className="inputCode d-flex">
-          <input {...register('code')} className="code" type="text" required />
-          <div className="countDown">{count}</div>
-        </div>
-        <div className="errorMessage">
-          {(errors.code && <p>{errors.code.message}</p>) ||
-            (errorMessage.trigger && <p>{errorMessage.message}</p>)}
-        </div>
-        {showResendBtn && (
-          <p className="resendCode" onClick={onCreateCodeAgain}>
-            Didn't receive any code? Click here to resent your code
-          </p>
-        )}
-        <button type="submit" className="button__search">
-          Submit
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="header d-flex justify-content-between align-item-center">
+        <h2>Enter code</h2>
+        <button className="goSignIn" onClick={onBackSignIn}>
+          <FaSignInAlt />
         </button>
-      </form>
-    </div>
+      </div>
+      <div className="inputCode d-flex">
+        <input {...register('code')} className="code" type="text" required />
+        <div className="countDown">{count}</div>
+      </div>
+      <div className="errorMessage">
+        {(errors.code && <p>{errors.code.message}</p>) ||
+          (errorMessage.trigger && <p>{errorMessage.message}</p>)}
+      </div>
+      {showResendBtn && (
+        <p className="resendCode" onClick={onCreateCodeAgain}>
+          Didn't receive any code? Click here to resent your code
+        </p>
+      )}
+      <button type="submit" className="button__search">
+        Submit
+      </button>
+    </form>
   );
 }
 

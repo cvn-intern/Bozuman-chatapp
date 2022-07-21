@@ -5,10 +5,10 @@ const _CONF = require('../configs/auth.config');
 import express from 'express';
 
 export interface requestWithToken extends express.Request {
-  decoded: any;
+  decoded: {};
 }
 
-module.exports = (
+export const checkAccessToken = () => (
   req: requestWithToken,
   res: express.Response,
   next: express.NextFunction

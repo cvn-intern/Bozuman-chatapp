@@ -1,9 +1,9 @@
 /* eslint-disable */
-const { Users } = require('../models/users.model');
-const jwt = require('jsonwebtoken')
-const _CONF = require('../configs/auth.config')
-const RefreshToken = require('../models/refreshToken.model')
-const crypto1 = require('crypto');
+import {Users} from '../models/users.model';
+import * as jwt from 'jsonwebtoken'
+import _CONF from '../configs/auth.config'
+import {RefreshToken} from '../models/refreshToken.model'
+import crypto from 'crypto' 
 
 export interface User {
   username: string;
@@ -20,7 +20,7 @@ export class UsersService {
       const user = {
         username: data.username,
         password: data.password,
-        full_name: data.fullName,
+        full_name: data.full_name,
         email: data.email,
       };
       const response = await new Users(user).save();
@@ -31,7 +31,7 @@ export class UsersService {
   };
 
   static find = async (data: {username?: string, email?: string}) => {
-    let user : User | undefined;
+    let user : any | undefined;
 
     if (data.username) {
       user = await Users.findOne({ username: data.username }).exec();
@@ -57,21 +57,27 @@ export class UsersService {
       console.log(err);
     }
   };
-  // authenticating to user when sigin in
-  static authenticate = async (data: any) => {
+ 
+  static authenticate = async (data: User) => {
     const { username, password } = data;
     const user = await Users.findOne({ username: username }).exec();
     if (!user || password != user.password) {
-      throw 'Username or password is incorrect';
+      throw {
+        code: 'SIGN_IN_007',
+        message: 'Username or password is incorrect'
+      }
+      
     }
     if (!user.active) {
-      throw 'Your account is inactive';
+      throw {
+        code: 'SIGN_IN_008',
+        message: 'Your account is inactive'
+      }
     }
     const accessToken = this.generateAccessToken(user);
     const refreshToken = this.generateRefreshToken(user);
     await refreshToken.save();
     return {
-      // ...this.basicDetails(user),
       success: true,
       accessToken,
       refreshToken: refreshToken.token,
@@ -94,8 +100,11 @@ export class UsersService {
   static deleteCode = async (data: {email: string}) => {
     const userEmail = data.email;
     const user = await Users.findOne({email: userEmail});
-    user.code = undefined;
-    return user.save();
+    if (user) {
+      user.code = undefined;
+      return user.save();
+    }
+    throw 'Server error';
   }
 
   static checkCode = async (data: {email: string, code: string}) => {
@@ -125,9 +134,11 @@ export class UsersService {
     user = await Users.findOne({
       email
     });
-    
-    user.password = password;
-    return await user.save();
+    if (user) {
+      user.password = password;
+      return await user.save();
+    }
+    throw 'Server error';
   }
 
   static generateAccessToken = (user: any) => {
@@ -150,11 +161,7 @@ export class UsersService {
   };
 
   static randomTokenString = () => {
-    return crypto1.randomBytes(40).toString('hex');
+    return crypto.randomBytes(40).toString('hex');
   };
 
-  static basicDetails = (user: any) => {
-    const { _id } = user;
-    return { _id };
-  };
 };

@@ -74,30 +74,28 @@ function ForgotPasswordPanel() {
   };
 
   return (
-    <div className="forgotpassword">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="header d-flex justify-content-between align-item-center">
-          <h2>Forgot password</h2>
-          <button className="goSignIn" onClick={onBackSignIn}>
-            <FaSignInAlt />
-          </button>
-        </div>
-        <input
-          {...register('email')}
-          placeholder="Type your email"
-          type="email"
-          required
-        />
-        <div className="errorMessage">
-          {(errors.email && <p>{errors.email.message}</p>) ||
-          (errorMessage.trigger && <p>{errorMessage.message}</p>)}
-        </div>
-
-        <button type="submit" className="button__search">
-          Search
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="header d-flex justify-content-between align-item-center">
+        <h2>Forgot password</h2>
+        <button className="goSignIn" onClick={onBackSignIn}>
+          <FaSignInAlt />
         </button>
-      </form>
-    </div>
+      </div>
+      <input
+        {...register('email')}
+        placeholder="Type your email"
+        type="email"
+        required
+      />
+      <div className="errorMessage">
+        {(errors.email && <p>{errors.email.message}</p>) ||
+          (errorMessage.trigger && <p>{errorMessage.message}</p>)}
+      </div>
+
+      <button type="submit" className="button__search">
+        Search
+      </button>
+    </form>
   );
 }
 

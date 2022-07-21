@@ -1,7 +1,5 @@
-import SignInPanel from 'components/SignInPanel';
-import Image from 'next/image';
-import React from 'react';
-
+import SignInPanel from 'components/SignInPanel'
+import Image from 'next/image'
 function SignIn() {
   return (
     <div className="container">
@@ -21,7 +19,7 @@ function SignIn() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default SignIn;
+export default SignIn

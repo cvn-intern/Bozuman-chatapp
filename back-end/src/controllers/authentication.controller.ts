@@ -35,6 +35,7 @@ export class Auth {
       email: req.body.email,
       full_name: req.body.fullName,
       password: req.body.password,
+      _id: ''
     };
 
     try {
@@ -72,26 +73,14 @@ export class Auth {
     next: express.NextFunction
   ) => {
     try {
-      const data = {
+      const input = {
         username: req.body.username,
         password: req.body.password,
       };
-
-      const response = await UsersService.authenticate(data);
-      console.log(response);
-      console.log(response.accessToken);
-      // this.setTokenCookie(res, response.accessToken);
-      res.cookie('access_token', response.accessToken, {
-        maxAge: 5 * 60,
-        httpOnly: true,
-      });
+      const response = await UsersService.authenticate(input);
       res.status(200).json(response);
-    } catch (error) {
-      if (error === 'Username or password is incorrect') {
-        res.status(403).json({ status: '403', error: error });
-      } else {
-        res.status(404).json({ status: '404', error: 'Invalid request' });
-      }
+    } catch (error:any) {
+        res.status(400).json({ success: false, error: {code: error.code, message: error.message} });
     }
   };
 
