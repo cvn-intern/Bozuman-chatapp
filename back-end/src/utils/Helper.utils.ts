@@ -1,7 +1,8 @@
+/* eslint-disable */
 export const FORGOT_PASSWORD = 'FORGOT_PASSWORD';
 export const ACTIVATE_ACCOUNT = 'ACTIVATE_ACCOUNT';
+import { Email } from '../utils/Mail.utils'
 
-const { Email } = require("../utils/Mail.utils");
 
 export const generateSixDigitCode = () : string => {
   const number = Math.floor(100000 + Math.random() * 900000);

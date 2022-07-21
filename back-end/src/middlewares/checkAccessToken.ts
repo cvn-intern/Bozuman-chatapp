@@ -1,7 +1,6 @@
-/* eslint-disable */
-const jwt = require('jsonwebtoken');
-const _CONF = require('../configs/auth.config');
-// import jwt from "jsonwebtoken"
+
+import * as jwt from 'jsonwebtoken'
+import _CONF from '../configs/auth.config'
 import express from 'express';
 
 export interface requestWithToken extends express.Request {
@@ -13,7 +12,7 @@ export const checkAccessToken = () => (
   res: express.Response,
   next: express.NextFunction
 ) => {
-  const token = req.headers['x-access-token'];
+  const token: string = req.headers['x-access-token'];
   // decode token
   if (token) {
     jwt.verify(token, _CONF.SECRET, function (err: any, decoded: any) {

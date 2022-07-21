@@ -8,6 +8,7 @@ import auth from './src/routes/authentication.route';
 import cors from 'cors';
 
 const db = new Database();
+db.dbConnect();
 const app: Application = express();
 
 // Body parsing Middleware

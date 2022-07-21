@@ -1,5 +1,5 @@
 /* eslint-disable */
-const nodemailer = require('nodemailer');
+import * as nodemailer from 'nodemailer'
 import { 
   FORGOT_PASSWORD
 } from './Helper.utils';

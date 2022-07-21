@@ -1,8 +1,8 @@
 /* eslint-disable */
 
-const jwt = require('jsonwebtoken');
-const _CONF = require('../configs/auth.config');
-const UsersService = require('../services/users.service');
+import * as jwt from 'jsonwebtoken'
+import _CONF from '../configs/auth.config'
+import {UsersService} from '../services/users.service'
 import express from 'express';
 
 export interface requestWithToken extends express.Request {

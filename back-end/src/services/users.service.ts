@@ -8,10 +8,18 @@ import crypto from 'crypto'
 export interface User {
   username: string;
   password: string;
-  full_name: string;
-  email: string;
-  active: boolean;
-  _id: string,
+  full_name?: string;
+  email?: string;
+  active?: boolean;
+  _id?: any;
+  birth_day?: Date;
+  gender?: boolean;
+  phone?: string;
+  avatar?: string;
+  description?: string;
+  code?: string;
+  // TODO: Change room_list types
+  room_list?: Array<string>;
 }
 
 export class UsersService {
@@ -142,14 +150,14 @@ export class UsersService {
   }
 
   static generateAccessToken = (user: any) => {
-    return jwt.sign({ id: user._id }, _CONF.SECRET, {
+    return jwt.sign({ username: user.username }, _CONF.SECRET, {
       expiresIn: _CONF.tokenLife,
     });
   };
 
   static generateRefreshToken = (user: any) => {
     return new RefreshToken({
-      user: user._id,
+      username: user.username,
       token: jwt.sign(
         { randomString: this.randomTokenString() },
         _CONF.SECRET_REFRESH,
