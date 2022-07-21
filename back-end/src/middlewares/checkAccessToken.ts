@@ -20,7 +20,7 @@ export const checkAccessToken = () => (
   const token = req.headers['x-access-token'];
   // TODO: fix this typescript error
   if (token) {
-    jwt.verify(token, _CONF.SECRET, function (err: any, decoded: any) {
+    jwt.verify(token.toString(), _CONF.SECRET, function (err: any, decoded: any) {
       if (err) {
         return res
           .status(401)
