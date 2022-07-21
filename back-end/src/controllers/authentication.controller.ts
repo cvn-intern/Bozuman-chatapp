@@ -12,14 +12,22 @@ import { User } from '../services/users.service';
 
 export class Auth {
   public validateSignup = async (data: User) => {
-    const checkUsername = await UsersService.find({ username: data.username });
-    if (checkUsername) {
-      return { success: false, error: 'Username already exist' };
+    const user = await UsersService.find(data);
+    if (!user) {
+      return { success: true };
     }
-
-    const checkEmail = await UsersService.find({ email: data.email });
-    if (checkEmail) {
-      return { success: false, error: 'Email already exist' };
+    if (user.username == data.username) {
+      return {
+        success: false,
+        error: 'Username already exist',
+        errorCode: 'SIGNUP009',
+      };
+    } else if (user.email == data.email) {
+      return {
+        success: false,
+        error: 'Email already exist',
+        errorCode: 'SIGNUP010',
+      };
     }
 
     return { success: true };
@@ -36,16 +44,21 @@ export class Auth {
       full_name: req.body.fullName,
       password: req.body.password,
     };
-
     try {
       const validateResult = await this.validateSignup(data);
       if (!validateResult.success) {
-        res.json(validateResult.error);
+        res.json({
+          success: false,
+          error: {
+            code: validateResult.errorCode,
+            message: validateResult.error,
+          },
+        });
       } else {
         const user = await UsersService.create(data);
         const emailAgent = new Email();
         emailAgent.sendEmail(user.email, user.username, ACTIVATE_ACCOUNT);
-        res.json('Create account success');
+        res.json({ success: true });
       }
     } catch (error) {
       res.status(500).json({ error: error });

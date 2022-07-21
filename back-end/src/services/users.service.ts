@@ -20,7 +20,7 @@ export class UsersService {
       const user = {
         username: data.username,
         password: data.password,
-        full_name: data.fullName,
+        full_name: data.full_name,
         email: data.email,
       };
       const response = await new Users(user).save();
@@ -31,18 +31,7 @@ export class UsersService {
   };
 
   static find = async (data: {username?: string, email?: string}) => {
-    let user : User | undefined;
-
-    if (data.username) {
-      user = await Users.findOne({ username: data.username }).exec();
-    } else if (data.email) {
-      user = await Users.findOne({ email: data.email }).exec();
-    }
-    
-    if(!user) { 
-      throw 'Account is not exists';
-    }
-    
+    let user = await Users.findOne({$or:[{ username: data.username },{ email: data.email }]}).exec();
     return user;
   };
 
