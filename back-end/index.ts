@@ -1,5 +1,4 @@
 /* eslint-disable */
-<<<<<<< HEAD
 
 import { Database } from './src/configs/db.config';
 import { expiredAccessTokenHandler } from './src/middlewares/expiredAccessTokenHandler';
@@ -7,13 +6,6 @@ import {checkAccessToken} from './src/middlewares/checkAccessToken';
 import express, { Application } from 'express';
 import auth from './src/routes/authentication.route';
 import cors from 'cors';
-=======
-import express, { Application } from 'express';
-import cors from 'cors';
-import auth from './src/routes/authentication.route';
-const expiredAccessTokenHandler = require('./src/middlewares/expiredAccessTokenHandler')
-const { Database } = require('./src/configs/db.config');
->>>>>>> a5cc3b92a98433478fc8a85ff77fcc0d8727b941
 
 const db = new Database();
 const app: Application = express();

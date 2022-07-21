@@ -100,8 +100,11 @@ export class UsersService {
   static deleteCode = async (data: {email: string}) => {
     const userEmail = data.email;
     const user = await Users.findOne({email: userEmail});
-    user.code = undefined;
-    return user.save();
+    if (user) {
+      user.code = undefined;
+      return user.save();
+    }
+    throw 'Server error';
   }
 
   static checkCode = async (data: {email: string, code: string}) => {
@@ -131,9 +134,11 @@ export class UsersService {
     user = await Users.findOne({
       email
     });
-    
-    user.password = password;
-    return await user.save();
+    if (user) {
+      user.password = password;
+      return await user.save();
+    }
+    throw 'Server error';
   }
 
   static generateAccessToken = (user: any) => {
