@@ -19,7 +19,7 @@ function EnterCodePanel() {
     message: '',
   });
 
-  const [showResendBtn, setShowResendBtn] = useState(true);
+  const [showResendBtn, setShowResendBtn] = useState(false);
   const [count, setCount] = useState(0);
 
   const schema = yup.object().shape({
@@ -96,9 +96,10 @@ function EnterCodePanel() {
   };
 
   useLayoutEffect(() => {
-    if(sessionStorage.count) {
+    if(sessionStorage?.count !==0 ) {
       setCount(Number(sessionStorage.count));
     }else{
+      console.log(sessionStorage.count);
       setCount(60);
     }
   },[]); 
@@ -113,6 +114,8 @@ function EnterCodePanel() {
 
     if (count === 0) {
       setShowResendBtn(true);
+    }else{
+      setShowResendBtn(false);
     }
 
     return () => {

@@ -5,6 +5,7 @@ import {
   generateSixDigitCode,
   sendCodeToMail,
 } from "../utils/Helper.utils";
+import { responseError } from "../utils/Helper.utils";
 const UsersService = require("../services/users.service");
 const { Email } = require("../utils/Mail.utils");
 
@@ -103,27 +104,25 @@ export class Auth {
       };
       
       const user = await UsersService.find(userEmail);
-      if(!user.active) {
-        res.status(400).json({
-          success: false,
-          error: {
-            code: "FORGOT_PASSWORD_004",
-            message: "Your account is not verified",
-          },
-        });
+
+      if(!user) {
+        responseError(res,400,'FORGOT_PASSWORD_003','Your account is not exists');
       }
+
+      if(!user.active) {
+        responseError(res,400,"FORGOT_PASSWORD_004","Your account is not verified");
+      }
+
+      if(user.code) {
+        responseError(res,400,"FORGOT_PASSWORD_011","Your code has exists, please check your email");
+      }
+
       res.status(200).json({
         success: true,
         email: user.email,
       });
     } catch (error) {
-      res.status(400).json({
-        success: false,
-        error: {
-          code: 'FORGOT_PASSWORD_003',
-          message: error,
-        }
-      })
+      responseError(res,500,'500','Internal server error');
     }
   };
 

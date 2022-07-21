@@ -41,10 +41,6 @@ module.exports = class UsersService {
       user = await Users.findOne({ email: data.email }).exec();
     }
     
-    if(!user) { 
-      throw 'Account is not exists';
-    }
-    
     return user;
   };
 
