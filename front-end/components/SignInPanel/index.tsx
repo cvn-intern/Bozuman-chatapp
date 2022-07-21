@@ -1,9 +1,6 @@
-/* eslint-disable */
-
 import React, { useState } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import * as yup from 'yup'
-import Image from 'next/image'
 import { yupResolver } from '@hookform/resolvers/yup'
 import axios from 'axios'
 import _CONF from 'config/config'
@@ -75,13 +72,8 @@ function SignInPanel() {
   return (
     <AuthPanel>
       <form onSubmit={handleSubmit(onSubmit)}>
-<<<<<<< HEAD
-        <h2>SIGN IN</h2>
-        <label className='info'> Username </label>
-=======
         <h2>Sign in</h2>
         <label className="info"> Username </label>
->>>>>>> eb563a191004fc692f42ef757b3b031629ddfee7
         <input
           {...register('username')}
           placeholder="Type your username"
@@ -89,11 +81,7 @@ function SignInPanel() {
           required
         />
         {errors.username && <p className="error">{errors.username.message}</p>}
-<<<<<<< HEAD
-        <label className='info'> Password </label>
-=======
         <label className="info"> Password </label>
->>>>>>> eb563a191004fc692f42ef757b3b031629ddfee7
         <input
           {...register('password')}
           placeholder="Type your password"
@@ -102,13 +90,9 @@ function SignInPanel() {
         />
         {errors.password && <p className="error">{errors.password.message}</p>}
         <br />
-<<<<<<< HEAD
-        {errorMessage.trigger && <p >{errorMessage.message}</p>}
-=======
         {errorMessage.trigger && (
           <p className="error">{errorMessage.message}</p>
         )}
->>>>>>> eb563a191004fc692f42ef757b3b031629ddfee7
         <div>
           <a>Forgot password?</a>
         </div>
