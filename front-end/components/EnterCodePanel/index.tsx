@@ -67,7 +67,6 @@ function EnterCodePanel() {
   };
 
   const onSubmit: SubmitHandler<EnterCodeForm> = async (data) => {
-    console.log(data);
     try {
       const { code } = data;
       const res = await axios.post(
