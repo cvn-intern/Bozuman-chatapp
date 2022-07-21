@@ -115,7 +115,7 @@ function SignUpPanel() {
         <input
           {...register('passwordConfirmation')}
           placeholder="Re-enter your password"
-          type="passwordConfirmation"
+          type="password"
           required
         />
         {errors.passwordConfirmation && <p className="error">{errors.passwordConfirmation.message}</p>}
