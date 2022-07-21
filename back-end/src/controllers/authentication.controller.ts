@@ -2,10 +2,12 @@
 import { Request, Response } from 'express';
 import {
   FORGOT_PASSWORD,
+  ACTIVATE_ACCOUNT, 
   generateSixDigitCode,
   sendCodeToMail,
-  ACTIVATE_ACCOUNT,
-} from '../utils/Helper.utils';
+  responseError
+} from "../utils/Helper.utils";
+import { HashClass } from '../utils/Hash.util';
 import { UsersService, User } from '../services/users.service';
 import { Email } from '../utils/Mail.utils';
 import md5 from 'md5';
@@ -93,6 +95,7 @@ export class Auth {
     }
   };
 
+<<<<<<< HEAD
   // public getUserByEmail = async (req: TypedRequestBody<{email: string}>, res: Response) => {
   //   try {
   //     const userEmail = {
@@ -123,28 +126,56 @@ export class Auth {
   //     });
   //   }
   // };
+=======
+  public forgotPassword = async (req: TypedRequestBody<{email: string}>, res: Response) => {
+    try {
+      const userEmail = {
+        email: req.body.email,
+      };
+
+      const user = await UsersService.find(userEmail);
+
+      if(!user) {
+        responseError(res,400,'FORGOT_PASSWORD_003','Your account is not exists');
+      }else{
+        if(!user.active) {
+        responseError(res,400,"FORGOT_PASSWORD_004","Your account is not verified");
+        }else if(user.code) {
+        responseError(res,400,"FORGOT_PASSWORD_011","Your code has exists, please check your email");
+        }
+        
+        res.status(200).json({
+          success: true,
+          email: HashClass.encode(user.email || ''),
+        });
+      }
+      
+    } catch (error : any) {
+      responseError(res,500,'500','Internal server error');
+    }
+  };
+>>>>>>> 8c371407e55da135163882b9acfb8e425f3fdcff
 
   public createCodeExpire = async (req: TypedRequestBody<{email: string}>, res: Response) => {
     try {
-      const data = {
-        email: req.body.email,
+      const userEmail = {
+        email: HashClass.decode(req.body.email),
       };
       const code = generateSixDigitCode();
-      await UsersService.addCode(data, Number(code));
+      await UsersService.addCode(userEmail, Number(code));
 
-      await sendCodeToMail(data.email, code, FORGOT_PASSWORD);
+      await sendCodeToMail(userEmail.email, code, FORGOT_PASSWORD);
 
       setTimeout(() => {
         (async () => {
-          await UsersService.deleteCode(data);
-        })
-        
+          await UsersService.deleteCode(userEmail);
+        })();
       }, 60 * 1000);
 
       res.status(200).json({
         success: true,
       });
-    } catch (error) {
+    } catch (error : any) {
       res.status(500).json({
         error,
       });
@@ -153,7 +184,7 @@ export class Auth {
 
   public checkForgotPasswordCode = async (req: TypedRequestBody<{email: string, code: string}>, res: Response) => {
     const codeOfUser = {
-      email: req.body.email,
+      email: HashClass.decode(req.body.email),
       code: req.body.code,
     };
 
@@ -161,22 +192,16 @@ export class Auth {
       const response = await UsersService.checkCode(codeOfUser);
       res.status(200).json({
         success: true,
-        email: response.email,
+        email: HashClass.encode(response.email),
       });
-    } catch (error) {
-      res.status(400).json({
-        success: false,
-        error: {
-          code: 'FORGOT_PASSWORD_005',
-          message: error,
-        },
-      });
+    } catch (error : any) {
+      responseError(res,400,error.code,error.message);
     }
   };
 
   public resetPassword = async (req: TypedRequestBody<{email: string, password: string}>, res: Response) => {
     const newPasswordOfUser = {
-      email: req.body.email,
+      email: HashClass.decode(req.body.email),
       password: req.body.password,
     };
 

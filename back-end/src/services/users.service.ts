@@ -99,6 +99,7 @@ export class UsersService {
 
   static deleteCode = async (data: {email: string}) => {
     const userEmail = data.email;
+    console.log(userEmail);
     const user = await Users.findOne({email: userEmail});
     if (user) {
       user.code = undefined;
@@ -114,8 +115,12 @@ export class UsersService {
       email: email,
       code: code,
     });
+
     if(!user) {
-      throw 'Your code is incorrect';
+      throw {
+        code: 'FORGOT_PASSWORD_005',
+        message: 'Your code is incorrect'
+      };
     }
     return user;
   }

@@ -6,6 +6,7 @@ import axios from 'axios';
 import _CONF from 'config/config';
 import { useRouter } from 'next/router';
 import { FaSignInAlt } from 'react-icons/fa';
+import AuthPanel from 'components/AuthPanel';
 
 interface ResetPasswordForm {
   password: string;
@@ -45,6 +46,7 @@ function ResetPasswordPanel() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ResetPasswordForm>({
     reValidateMode: 'onSubmit',
@@ -81,40 +83,48 @@ function ResetPasswordPanel() {
         message: error.response.data.error.message,
       });
     }
+    reset({
+      password: '',
+      confirmPassword: '',
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <AuthPanel>
       <div className="header d-flex justify-content-between align-item-center">
         <h2>Reset password</h2>
         <button className="goSignIn" onClick={onBackSignIn}>
           <FaSignInAlt />
         </button>
       </div>
-      <input
-        {...register('password')}
-        placeholder="Enter new passowrd"
-        type="password"
-        required
-      />
-      <div className="errorMessage">
-        {errors.password && <p>{errors.password.message}</p>}
-      </div>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <input
+          {...register('password')}
+          placeholder="Enter new passowrd"
+          type="password"
+          required
+        />
+        <div className="errorMessage">
+          {errors.password && <p>{errors.password.message}</p>}
+        </div>
 
-      <input
-        {...register('confirmPassword')}
-        placeholder="Enter confirm passowrd"
-        type="password"
-        required
-      />
-      <div className="errorMessage">
-        {(errors.confirmPassword && <p>{errors.confirmPassword.message}</p>) ||
-          (errorMessage.trigger && <p>{errorMessage.message}</p>)}
-      </div>
-      <button type="submit" className="button__search">
-        Submit
-      </button>
-    </form>
+        <input
+          {...register('confirmPassword')}
+          placeholder="Enter confirm passowrd"
+          type="password"
+          required
+        />
+        <div className="errorMessage">
+          {(errors.confirmPassword && (
+            <p>{errors.confirmPassword.message}</p>
+          )) ||
+            (errorMessage.trigger && <p>{errorMessage.message}</p>)}
+        </div>
+        <button type="submit" className="button__search">
+          Submit
+        </button>
+      </form>
+    </AuthPanel>
   );
 }
 
