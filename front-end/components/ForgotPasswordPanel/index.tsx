@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { FaSignInAlt } from 'react-icons/fa';
+import AuthPanel from 'components/AuthPanel';
 
 interface ForgotPasswordForm {
   email: string;
@@ -74,7 +75,7 @@ function ForgotPasswordPanel() {
   };
 
   return (
-    <div className="forgotpassword">
+    <AuthPanel>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="header d-flex justify-content-between align-item-center">
           <h2>Forgot password</h2>
@@ -90,14 +91,14 @@ function ForgotPasswordPanel() {
         />
         <div className="errorMessage">
           {(errors.email && <p>{errors.email.message}</p>) ||
-          (errorMessage.trigger && <p>{errorMessage.message}</p>)}
+            (errorMessage.trigger && <p>{errorMessage.message}</p>)}
         </div>
 
         <button type="submit" className="button__search">
           Search
         </button>
       </form>
-    </div>
+    </AuthPanel>
   );
 }
 

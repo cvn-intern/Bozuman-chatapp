@@ -1,9 +1,9 @@
 /* eslint-disable */
-const { Users } = require('../models/users.model');
-const jwt = require('jsonwebtoken')
-const _CONF = require('../configs/auth.config')
-const RefreshToken = require('../models/refreshToken.model')
-const crypto1 = require('crypto');
+import {Users} from '../models/users.model';
+import * as jwt from 'jsonwebtoken'
+import _CONF from '../configs/auth.config'
+import {RefreshToken} from '../models/refreshToken.model'
+import crypto from 'crypto' 
 
 export interface User {
   username: string;
@@ -11,8 +11,15 @@ export interface User {
   full_name?: string;
   email?: string;
   active?: boolean;
-  _id?: string,
-  code?: string
+  _id?: any;
+  birth_day?: Date;
+  gender?: boolean;
+  phone?: string;
+  avatar?: string;
+  description?: string;
+  code?: string;
+  // TODO: Change room_list types
+  room_list?: Array<string>;
 }
 
 export class UsersService {
@@ -21,7 +28,7 @@ export class UsersService {
       const user = {
         username: data.username,
         password: data.password,
-        full_name: data.fullName,
+        full_name: data.full_name,
         email: data.email,
       };
       const response = await new Users(user).save();
@@ -32,21 +39,14 @@ export class UsersService {
   };
 
   static find = async (data: {username?: string, email?: string}) => {
-    let user : User | undefined;
-    
-    if (data.username) {
-      user = await Users.findOne({ username: data.username }).exec();
-    } else if (data.email) {
-      user = await Users.findOne({ email: data.email }).exec();
-    }
-    
+    let user = await Users.findOne({$or:[{ username: data.username },{ email: data.email }]}).exec();
     return user;
   };
 
   static activateAccount = async (userName: string) => {
     try {
       await Users.findOneAndUpdate(
-        { username: userName },
+        {username: userName} ,
         { active: true }
       ).exec();
       return 'Activate account success';
@@ -54,21 +54,27 @@ export class UsersService {
       console.log(err);
     }
   };
-  // authenticating to user when sigin in
-  static authenticate = async (data: any) => {
+ 
+  static authenticate = async (data: User) => {
     const { username, password } = data;
     const user = await Users.findOne({ username: username }).exec();
     if (!user || password != user.password) {
-      throw 'Username or password is incorrect';
+      throw {
+        code: 'SIGN_IN_007',
+        message: 'Username or password is incorrect'
+      }
+      
     }
     if (!user.active) {
-      throw 'Your account is inactive';
+      throw {
+        code: 'SIGN_IN_008',
+        message: 'Your account is inactive'
+      }
     }
     const accessToken = this.generateAccessToken(user);
     const refreshToken = this.generateRefreshToken(user);
     await refreshToken.save();
     return {
-      // ...this.basicDetails(user),
       success: true,
       accessToken,
       refreshToken: refreshToken.token,
@@ -92,8 +98,11 @@ export class UsersService {
     const userEmail = data.email;
     console.log(userEmail);
     const user = await Users.findOne({email: userEmail});
-    user.code = undefined;
-    return user.save();
+    if (user) {
+      user.code = undefined;
+      return user.save();
+    }
+    throw 'Server error';
   }
 
   static checkCode = async (data: {email: string, code: string}) => {
@@ -127,20 +136,22 @@ export class UsersService {
     user = await Users.findOne({
       email
     });
-    
-    user.password = password;
-    return await user.save();
+    if (user) {
+      user.password = password;
+      return await user.save();
+    }
+    throw 'Server error';
   }
 
   static generateAccessToken = (user: any) => {
-    return jwt.sign({ id: user._id }, _CONF.SECRET, {
+    return jwt.sign({ username: user.username }, _CONF.SECRET, {
       expiresIn: _CONF.tokenLife,
     });
   };
 
   static generateRefreshToken = (user: any) => {
     return new RefreshToken({
-      user: user._id,
+      username: user.username,
       token: jwt.sign(
         { randomString: this.randomTokenString() },
         _CONF.SECRET_REFRESH,
@@ -152,11 +163,7 @@ export class UsersService {
   };
 
   static randomTokenString = () => {
-    return crypto1.randomBytes(40).toString('hex');
+    return crypto.randomBytes(40).toString('hex');
   };
 
-  static basicDetails = (user: any) => {
-    const { _id } = user;
-    return { _id };
-  };
 };

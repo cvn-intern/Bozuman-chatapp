@@ -1,9 +1,8 @@
-/* eslint-disable */
+/* eslint-disable camelcase */
 import mongoose from 'mongoose';
-import { Schema } from 'mongoose';
 import Joi from 'joi';
 
-const UsersSchema = new Schema({
+const UsersSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
@@ -27,7 +26,7 @@ const UsersSchema = new Schema({
   active: {
     type: Boolean,
     required: false,
-    default: false
+    default: false,
   },
 
   birth_day: {
@@ -66,7 +65,7 @@ const UsersSchema = new Schema({
   },
 });
 
-const registerSchema = Joi.object({
+export const registerSchema = Joi.object({
   username: Joi.string()
     .min(8)
     .max(32)
@@ -87,7 +86,7 @@ const registerSchema = Joi.object({
     tlds: { allow: ['com', 'net'] },
   }),
 });
-const signInSchema = Joi.object({
+export const signInSchema = Joi.object({
   username: Joi.string()
   .min(8)
   .max(32)
@@ -101,6 +100,11 @@ password: Joi.string()
 })
 
 
-module.exports = {Users: mongoose.model('user', UsersSchema), registerSchema, signInSchema};
+export const Users = mongoose.model('user', UsersSchema)
 
 
+module.exports = {
+  Users: mongoose.model('user', UsersSchema),
+  registerSchema,
+  signInSchema,
+};

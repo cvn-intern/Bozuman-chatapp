@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { FaSignInAlt } from 'react-icons/fa';
+import AuthPanel from 'components/AuthPanel';
 
 interface EnterCodeForm {
   code: string;
@@ -96,24 +97,24 @@ function EnterCodePanel() {
   };
 
   useLayoutEffect(() => {
-    if(!sessionStorage.count) {
+    if (!sessionStorage.count) {
       setCount(60);
-    }else if(sessionStorage.count !== 0){
+    } else if (sessionStorage.count !== 0) {
       setCount(Number(sessionStorage.count));
     }
-  },[]); 
+  }, []);
 
   useEffect(() => {
     let countDown = setTimeout(() => {
       if (count > 0) {
         setCount(count - 1);
-        sessionStorage.setItem('count', (count-1).toString())
+        sessionStorage.setItem('count', (count - 1).toString());
       }
     }, 1000);
 
     if (count === 0) {
       setShowResendBtn(true);
-    }else{
+    } else {
       setShowResendBtn(false);
     }
 
@@ -123,7 +124,7 @@ function EnterCodePanel() {
   }, [count, showResendBtn]);
 
   return (
-    <div className="forgotpassword">
+    <AuthPanel>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="header d-flex justify-content-between align-item-center">
           <h2>Enter code</h2>
@@ -148,7 +149,7 @@ function EnterCodePanel() {
           Submit
         </button>
       </form>
-    </div>
+    </AuthPanel>
   );
 }
 

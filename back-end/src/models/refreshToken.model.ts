@@ -1,9 +1,8 @@
 /* eslint-disable */
 import mongoose from 'mongoose';
-import { Schema } from 'mongoose';
 
-const RefreshTokenSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: 'Users' },
+const RefreshTokenSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'Users' },
   token: String,
   created: { type: Date, default: Date.now },
 });
@@ -19,4 +18,4 @@ RefreshTokenSchema.set('toJSON', {
   },
 });
 
-module.exports = mongoose.model('RefreshToken', RefreshTokenSchema);
+export const RefreshToken = mongoose.model('RefreshToken', RefreshTokenSchema);
