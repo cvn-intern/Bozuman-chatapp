@@ -8,29 +8,11 @@ import {
 } from '../utils/Helper.utils';
 import { UsersService, User } from '../services/users.service';
 import { Email } from '../utils/Mail.utils';
-<<<<<<< HEAD
+import md5 from 'md5';
 
 export interface TypedRequestBody<T> extends Request {
   body: T
 }
-
-export class Auth {
-  public validateSignup = async (data: User) => {
-    const checkUsername: User = await UsersService.find({
-      username: data.username,
-    });
-    if (checkUsername) {
-      return { success: false, error: 'Username already exist' };
-    }
-
-    const checkEmail: User = await UsersService.find({ email: data.email });
-    if (checkEmail) {
-      return { success: false, error: 'Email already exist' };
-=======
-import { ACTIVATE_ACCOUNT } from '../utils/Helper.utils';
-import { User } from '../services/users.service';
-import md5 from 'md5';
-
 
 export class Auth {
   public validateSignup = async (data: User) => {
@@ -42,36 +24,29 @@ export class Auth {
       return {
         success: false,
         error: 'Username already exist',
-        errorCode: 'SIGNUP_009',
+        errorCode: 'SIGN_UP_009',
       };
     } else if (user.email === data.email) {
       return {
         success: false,
         error: 'Email already exist',
-        errorCode: 'SIGNUP_010',
+        errorCode: 'SIGN_UP_010',
       };
->>>>>>> caf81df4df529e9f75eaa4aa860a48c66ff99077
     }
 
     return { success: true };
   };
 
-<<<<<<< HEAD
-  public register = async (req: Request, res: Response) => {
-    const inputData = req.body as User
-=======
   public register = async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
+    req: Request,
+    res: Response
   ) => {
-    const data = {
+    const inputData = {
       username: req.body.username,
       email: req.body.email,
       full_name: req.body.fullName,
       password: md5(req.body.password)
     };
->>>>>>> caf81df4df529e9f75eaa4aa860a48c66ff99077
     try {
       const validateResult = await this.validateSignup(inputData);
       if (!validateResult.success) {
@@ -83,20 +58,13 @@ export class Auth {
           },
         });
       } else {
-<<<<<<< HEAD
         const user = await UsersService.create(inputData);
         if (user) {
           const emailAgent = new Email();
           emailAgent.sendEmail(user.email, user.username, ACTIVATE_ACCOUNT);
-          res.json('Create account success');
+          res.json({ success: true });
         }
-=======
-        const user = await UsersService.create(data);
-        const emailAgent = new Email();
-        emailAgent.sendEmail(user.email, user.username, ACTIVATE_ACCOUNT);
-        res.json({ success: true });
->>>>>>> caf81df4df529e9f75eaa4aa860a48c66ff99077
-      }
+        }
     } catch (error) {
       res.status(500).json({ error: error });
     }
@@ -114,7 +82,6 @@ export class Auth {
 
   public signIn = async (req: Request, res: Response) => {
     try {
-<<<<<<< HEAD
       const inputData = req.body as User
       const response = await UsersService.authenticate(inputData);
       res.status(200).json(response);
@@ -123,16 +90,6 @@ export class Auth {
         success: false,
         error: { code: error.code, message: error.message },
       });
-=======
-      const input = {
-        username: req.body.username,
-        password: req.body.password,
-      };
-      const response = await UsersService.authenticate(input);
-      res.status(200).json(response);
-    } catch (error:any) {
-        res.status(400).json({ success: false, error: {code: error.code, message: error.message} });
->>>>>>> 1b453de1e6e1481f9e8ededd97afa6b4a2f2ca86
     }
   };
 
