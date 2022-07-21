@@ -4,12 +4,12 @@ import {createValidator} from 'express-joi-validation'
 import { Auth } from '../controllers/authentication.controller'
 import { registerSchema, signInSchema } from '../models/users.model'
 
-
 const authentication = new Auth();
 const router = express.Router();
 const validator = createValidator({
   passError: true,
 });
+
 router.post(
   '/register',
   validator.body(registerSchema),

@@ -1,4 +1,3 @@
-
 import * as jwt from 'jsonwebtoken'
 import _CONF from '../configs/auth.config'
 import express from 'express';
@@ -6,12 +5,14 @@ import express from 'express';
 export interface requestWithToken extends express.Request {
   decoded: {};
 }
+
 export interface TokenPayload {
   exp: number;
   accessTypes: string[];
   name: string;
   userId: number;
 }
+
 export const checkAccessToken = () => (
   req: requestWithToken,
   res: express.Response,
