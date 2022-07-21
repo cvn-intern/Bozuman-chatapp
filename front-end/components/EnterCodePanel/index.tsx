@@ -35,6 +35,7 @@ function EnterCodePanel() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<EnterCodeForm>({
     reValidateMode: 'onSubmit',
@@ -62,9 +63,11 @@ function EnterCodePanel() {
     } catch (error) {
       //TODO: Server error
     }
+    reset({ code: '' });
   };
 
   const onSubmit: SubmitHandler<EnterCodeForm> = async (data) => {
+    console.log(data);
     try {
       const { code } = data;
       const res = await axios.post(
@@ -99,7 +102,7 @@ function EnterCodePanel() {
   useLayoutEffect(() => {
     if (!sessionStorage.count) {
       setCount(60);
-    } else if (sessionStorage.count !== 0) {
+    } else if (Number(sessionStorage.count) !== 0) {
       setCount(Number(sessionStorage.count));
     }
   }, []);
@@ -125,13 +128,13 @@ function EnterCodePanel() {
 
   return (
     <AuthPanel>
+      <div className="header d-flex justify-content-between align-item-center">
+        <h2>Enter code</h2>
+        <button className="goSignIn" onClick={onBackSignIn}>
+          <FaSignInAlt />
+        </button>
+      </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="header d-flex justify-content-between align-item-center">
-          <h2>Enter code</h2>
-          <button className="goSignIn" onClick={onBackSignIn}>
-            <FaSignInAlt />
-          </button>
-        </div>
         <div className="inputCode d-flex">
           <input {...register('code')} className="code" type="text" required />
           <div className="countDown">{count}</div>
@@ -139,12 +142,13 @@ function EnterCodePanel() {
         <div className="errorMessage">
           {(errors.code && <p>{errors.code.message}</p>) ||
             (errorMessage.trigger && <p>{errorMessage.message}</p>)}
+          {showResendBtn && (
+            <p className="resendCode" onClick={onCreateCodeAgain}>
+              Didn&apos;t receive any code? Click here to resent
+            </p>
+          )}
         </div>
-        {showResendBtn && (
-          <p className="resendCode" onClick={onCreateCodeAgain}>
-            Didn&apos;t receive any code? Click here to resent your code
-          </p>
-        )}
+
         <button type="submit" className="button__search">
           Submit
         </button>

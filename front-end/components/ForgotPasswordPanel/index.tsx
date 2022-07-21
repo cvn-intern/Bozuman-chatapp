@@ -28,13 +28,14 @@ function ForgotPasswordPanel() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ForgotPasswordForm>({
     reValidateMode: 'onSubmit',
     resolver: yupResolver(schema),
   });
 
-  const onBackSignIn = (e: MouseEvent) => {
+  const onBackSignIn = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     router.push('/sign-in');
   };
@@ -72,17 +73,18 @@ function ForgotPasswordPanel() {
         message: error.response.data.error.message,
       });
     }
+    reset({ email: '' });
   };
 
   return (
     <AuthPanel>
+      <div className="header d-flex justify-content-between align-item-center">
+        <h2>Forgot password</h2>
+        <button className="goSignIn" onClick={onBackSignIn}>
+          <FaSignInAlt />
+        </button>
+      </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="header d-flex justify-content-between align-item-center">
-          <h2>Forgot password</h2>
-          <button className="goSignIn" onClick={onBackSignIn}>
-            <FaSignInAlt />
-          </button>
-        </div>
         <input
           {...register('email')}
           placeholder="Type your email"

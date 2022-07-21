@@ -46,6 +46,7 @@ function ResetPasswordPanel() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ResetPasswordForm>({
     reValidateMode: 'onSubmit',
@@ -82,17 +83,21 @@ function ResetPasswordPanel() {
         message: error.response.data.error.message,
       });
     }
+    reset({
+      password: '',
+      confirmPassword: '',
+    });
   };
 
   return (
     <AuthPanel>
+      <div className="header d-flex justify-content-between align-item-center">
+        <h2>Reset password</h2>
+        <button className="goSignIn" onClick={onBackSignIn}>
+          <FaSignInAlt />
+        </button>
+      </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="header d-flex justify-content-between align-item-center">
-          <h2>Reset password</h2>
-          <button className="goSignIn" onClick={onBackSignIn}>
-            <FaSignInAlt />
-          </button>
-        </div>
         <input
           {...register('password')}
           placeholder="Enter new passowrd"

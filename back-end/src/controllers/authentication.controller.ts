@@ -102,7 +102,6 @@ export class Auth {
       };
 
       const user = await UsersService.find(userEmail);
-      
 
       if(!user) {
         responseError(res,400,'FORGOT_PASSWORD_003','Your account is not exists');
@@ -137,8 +136,7 @@ export class Auth {
       setTimeout(() => {
         (async () => {
           await UsersService.deleteCode(userEmail);
-        })
-        
+        })();
       }, 60 * 1000);
 
       res.status(200).json({
