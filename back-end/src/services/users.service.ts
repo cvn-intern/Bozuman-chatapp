@@ -37,11 +37,14 @@ export class UsersService {
 
   static activateAccount = async (userName: string) => {
     try {
-      await Users.findOneAndUpdate(
+      const user = await Users.findOneAndUpdate(
         {username: userName} ,
         { active: true }
       ).exec();
-      return 'Activate account success';
+      if (user) {
+        return {sucess: true};
+      }
+      return {success: false};
     } catch (err) {
       console.log(err);
     }
