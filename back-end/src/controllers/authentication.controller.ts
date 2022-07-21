@@ -8,6 +8,7 @@ import {
 } from '../utils/Helper.utils';
 import { UsersService, User } from '../services/users.service';
 import { Email } from '../utils/Mail.utils';
+<<<<<<< HEAD
 
 export interface TypedRequestBody<T> extends Request {
   body: T
@@ -25,24 +26,76 @@ export class Auth {
     const checkEmail: User = await UsersService.find({ email: data.email });
     if (checkEmail) {
       return { success: false, error: 'Email already exist' };
+=======
+import { ACTIVATE_ACCOUNT } from '../utils/Helper.utils';
+import { User } from '../services/users.service';
+import md5 from 'md5';
+
+
+export class Auth {
+  public validateSignup = async (data: User) => {
+    const user = await UsersService.find(data);
+    if (!user) {
+      return { success: true };
+    }
+    if (user.username === data.username) {
+      return {
+        success: false,
+        error: 'Username already exist',
+        errorCode: 'SIGNUP_009',
+      };
+    } else if (user.email === data.email) {
+      return {
+        success: false,
+        error: 'Email already exist',
+        errorCode: 'SIGNUP_010',
+      };
+>>>>>>> caf81df4df529e9f75eaa4aa860a48c66ff99077
     }
 
     return { success: true };
   };
 
+<<<<<<< HEAD
   public register = async (req: Request, res: Response) => {
     const inputData = req.body as User
+=======
+  public register = async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    const data = {
+      username: req.body.username,
+      email: req.body.email,
+      full_name: req.body.fullName,
+      password: md5(req.body.password)
+    };
+>>>>>>> caf81df4df529e9f75eaa4aa860a48c66ff99077
     try {
       const validateResult = await this.validateSignup(inputData);
       if (!validateResult.success) {
-        res.json(validateResult.error);
+        res.json({
+          success: false,
+          error: {
+            code: validateResult.errorCode,
+            message: validateResult.error,
+          },
+        });
       } else {
+<<<<<<< HEAD
         const user = await UsersService.create(inputData);
         if (user) {
           const emailAgent = new Email();
           emailAgent.sendEmail(user.email, user.username, ACTIVATE_ACCOUNT);
           res.json('Create account success');
         }
+=======
+        const user = await UsersService.create(data);
+        const emailAgent = new Email();
+        emailAgent.sendEmail(user.email, user.username, ACTIVATE_ACCOUNT);
+        res.json({ success: true });
+>>>>>>> caf81df4df529e9f75eaa4aa860a48c66ff99077
       }
     } catch (error) {
       res.status(500).json({ error: error });

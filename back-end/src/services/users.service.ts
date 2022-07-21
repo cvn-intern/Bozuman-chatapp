@@ -39,25 +39,14 @@ export class UsersService {
   };
 
   static find = async (data: {username?: string, email?: string}) => {
-    let user : any | undefined;
-
-    if (data.username) {
-      user = await Users.findOne({ username: data.username }).exec();
-    } else if (data.email) {
-      user = await Users.findOne({ email: data.email }).exec();
-    }
-    
-    if(!user) { 
-      throw 'Account is not exists';
-    }
-    
+    let user = await Users.findOne({$or:[{ username: data.username },{ email: data.email }]}).exec();
     return user;
   };
 
   static activateAccount = async (userName: string) => {
     try {
       await Users.findOneAndUpdate(
-        { username: userName },
+        {username: userName} ,
         { active: true }
       ).exec();
       return 'Activate account success';
