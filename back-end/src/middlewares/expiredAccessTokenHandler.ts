@@ -15,7 +15,7 @@ export const expiredAccessTokenHandler = () => (
   next: express.NextFunction
 ) => {
   const refreshToken = req.headers['x-refresh-token'];
-  // decode token
+  // TODO: fix this typescript error
   if (refreshToken) {
     jwt.verify(
       refreshToken,

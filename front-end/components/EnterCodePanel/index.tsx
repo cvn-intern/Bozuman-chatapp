@@ -138,7 +138,7 @@ function EnterCodePanel() {
       </div>
       {showResendBtn && (
         <p className="resendCode" onClick={onCreateCodeAgain}>
-          Didn't receive any code? Click here to resent your code
+          Didn&apos;t receive any code? Click here to resent your code
         </p>
       )}
       <button type="submit" className="button__search">

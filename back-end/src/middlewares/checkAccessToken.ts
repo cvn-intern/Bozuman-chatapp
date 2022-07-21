@@ -6,14 +6,19 @@ import express from 'express';
 export interface requestWithToken extends express.Request {
   decoded: {};
 }
-
+export interface TokenPayload {
+  exp: number;
+  accessTypes: string[];
+  name: string;
+  userId: number;
+}
 export const checkAccessToken = () => (
   req: requestWithToken,
   res: express.Response,
   next: express.NextFunction
 ) => {
-  const token: string = req.headers['x-access-token'];
-  // decode token
+  const token = req.headers['x-access-token'];
+  // TODO: fix this typescript error
   if (token) {
     jwt.verify(token, _CONF.SECRET, function (err: any, decoded: any) {
       if (err) {

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* eslint-disable */
 
 import React, { useState } from 'react';
@@ -10,6 +11,17 @@ import _CONF from 'config/config';
 import { useRouter } from 'next/router';
 import { setCookie } from 'cookies-next';
 import AuthPanel from 'components/AuthPanel';
+=======
+import React, { useState } from 'react'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import axios from 'axios'
+import _CONF from 'config/config'
+import { useRouter } from 'next/router'
+import { setCookie } from 'cookies-next'
+import AuthPanel from 'components/AuthPanel'
+>>>>>>> 1b453de1e6e1481f9e8ededd97afa6b4a2f2ca86
 
 interface SignInForm {
   username: string;

@@ -61,6 +61,7 @@ export class Auth {
 
   public signIn = async (req: Request, res: Response) => {
     try {
+<<<<<<< HEAD
       const inputData = req.body as User
       const response = await UsersService.authenticate(inputData);
       res.status(200).json(response);
@@ -69,6 +70,16 @@ export class Auth {
         success: false,
         error: { code: error.code, message: error.message },
       });
+=======
+      const input = {
+        username: req.body.username,
+        password: req.body.password,
+      };
+      const response = await UsersService.authenticate(input);
+      res.status(200).json(response);
+    } catch (error:any) {
+        res.status(400).json({ success: false, error: {code: error.code, message: error.message} });
+>>>>>>> 1b453de1e6e1481f9e8ededd97afa6b4a2f2ca86
     }
   };
 
