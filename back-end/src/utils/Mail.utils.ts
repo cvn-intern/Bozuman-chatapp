@@ -5,7 +5,7 @@ import {
 } from './Helper.utils';
 
 
-class Email {
+export class Email {
   private transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -44,4 +44,3 @@ class Email {
   }
 }
 
-module.exports = { Email };
