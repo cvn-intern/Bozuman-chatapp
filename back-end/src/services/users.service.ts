@@ -1,22 +1,20 @@
 /* eslint-disable */
-import { isSet } from 'util/types';
-
 const { Users } = require('../models/users.model');
 const jwt = require('jsonwebtoken')
 const _CONF = require('../configs/auth.config')
 const RefreshToken = require('../models/refreshToken.model')
 const crypto1 = require('crypto');
 
-interface User {
+export interface User {
   username: string;
   password: string;
-  full_name: string;
-  email: string;
-  active: boolean;
-  _id: string,
+  full_name?: string;
+  email?: string;
+  active?: boolean;
+  _id?: string,
 }
 
-module.exports = class UsersService {
+export class UsersService {
   static create = async (data: any) => {
     try {
       const user = {
