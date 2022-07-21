@@ -33,7 +33,7 @@ app.use(checkAccessToken);
 app.use('/', (req, res) => {
   res.json({ success: 'ok' });
 });
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 app.listen(port, (): void => {
   /* eslint-disable no-debugger, no-console */
   console.log(`Connected successfully on port ${port}`);
