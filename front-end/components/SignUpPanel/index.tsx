@@ -6,19 +6,20 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import _CONF from 'config/config';
+import AuthPanel from 'components/AuthPanel';
 interface SignUpForm {
-  fullName: string;
+  full_name: string;
   email: string;
   username: string;
   password: string;
-  confirmPassword: string;
+  passwordConfirmation: string;
 }
 
 function SignUpPanel() {
   const [err, setErr] = useState({ error: false, message: '' });
 
   const schema = yup.object().shape({
-    fullName: yup
+    full_name: yup
       .string()
       .min(8, 'Full name must have 8-50 character')
       .max(50, 'Full name must have 8-50 character')
@@ -46,12 +47,8 @@ function SignUpPanel() {
         _CONF.REGEX_USENAME_PASSWORD,
         'Password must not contain special character like @#$^...'
       ),
-    confirmPassword: yup
-      .string()
-      .oneOf(
-        [yup.ref('password'), null],
-        'Password and confirm password does not match'
-      ),
+    passwordConfirmation: yup.string()
+      .oneOf([yup.ref('password'), null], 'Passwords must match')
   });
   const {
     register,
@@ -61,16 +58,14 @@ function SignUpPanel() {
     resolver: yupResolver(schema),
   });
   const onSubmit: SubmitHandler<SignUpForm> = async (data) => {
+    let {passwordConfirmation, ...postData} = data;
     try {
-      const { confirmPassword, ...postData } = data;
       const res = await axios
         .post(process.env.NEXT_PUBLIC_DOMAIN + '/api/auth/register', postData)
         .then((res) => {
-          if (res.data == 'Username already exist') {
-            setErr({ error: true, message: 'Username repeat' });
-          } else if (res.data == 'Email already exist') {
-            setErr({ error: true, message: 'Email repeat' });
-          } else if (res.data == 'Create account success') {
+          if (!res.data.success) {
+            setErr({ error: true, message: res.data.error.message });
+          } else {
             setErr({ error: false, message: 'Create account success' });
           }
         });
@@ -79,45 +74,65 @@ function SignUpPanel() {
     }
   };
   return (
-    <div className="form">
+    <AuthPanel>
       <form onSubmit={handleSubmit(onSubmit)}>
         <h2>Register</h2>
+        <label className="info"> Full name </label>
         <input
-          {...register('fullName')}
-          placeholder='Enter your full name'
-          type='text'
+          {...register('full_name')}
+          placeholder="Enter your full name"
+          type="text"
           required
         />
-        {errors.fullName && <p>{errors.fullName.message}</p>}
-        <br />
+        {errors.full_name && (
+          <p className="error">{errors.full_name.message}</p>
+        )}
+        <label className="info"> Email </label>
         <input
           {...register('email')}
-          placeholder='Enter your email'
-          type='text'
+          placeholder="Enter your email"
+          type="text"
           required
         />
-        {errors.email && <p>{errors.email.message}</p>}
-        <br />
+        {errors.email && <p className="error">{errors.email.message}</p>}
+        <label className="info"> Username </label>
         <input
           {...register('username')}
-          placeholder='Enter your username'
-          type='text'
+          placeholder="Enter your username"
+          type="text"
           required
         />
-        {errors.username && <p>{errors.username.message}</p>}
-        <br />
+        {errors.username && <p className="error">{errors.username.message}</p>}
+        <label className="info"> Password </label>
         <input
           {...register('password')}
-          placeholder='Enter your password'
-          type='password'
+          placeholder="Enter your password"
+          type="password"
           required
         />
-        {errors.password && <p>{errors.password.message}</p>}
+        {errors.password && <p className="error">{errors.password.message}</p>}
+        <label className="info"> Checking password </label>
+        <input
+          {...register('passwordConfirmation')}
+          placeholder="Re-enter your password"
+          type="passwordConfirmation"
+          required
+        />
+        {errors.passwordConfirmation && <p className="error">{errors.passwordConfirmation.message}</p>}
         <br />
-        {!err.error ? <></> : <><p>{err.message}</p><br /></>}
-        <button type='submit'>CREATE ACCOUNT</button>
+        {!err.error ? (
+            <p className="error">{err.message}</p>
+        ) : (
+          <>
+            <p className="error">{err.message}</p>
+          </>
+        )}
+        
+        <button className="button__signup" type="submit">
+          CREATE ACCOUNT
+        </button>
       </form>
-    </div>
+    </AuthPanel>
   );
 }
 

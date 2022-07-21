@@ -44,7 +44,7 @@ export class Auth {
     const inputData = {
       username: req.body.username,
       email: req.body.email,
-      full_name: req.body.fullName,
+      full_name: req.body.full_name,
       password: md5(req.body.password)
     };
     try {
@@ -93,36 +93,36 @@ export class Auth {
     }
   };
 
-  public getUserByEmail = async (req: TypedRequestBody<{email: string}>, res: Response) => {
-    try {
-      const userEmail = {
-        email: req.body.email,
-      };
+  // public getUserByEmail = async (req: TypedRequestBody<{email: string}>, res: Response) => {
+  //   try {
+  //     const userEmail = {
+  //       email: req.body.email,
+  //     };
 
-      const user = await UsersService.find(userEmail);
-      if (!user.active) {
-        res.status(400).json({
-          success: false,
-          error: {
-            code: 'FORGOT_PASSWORD_004',
-            message: 'Your account is not verified',
-          },
-        });
-      }
-      res.status(200).json({
-        success: true,
-        email: user.email,
-      });
-    } catch (error) {
-      res.status(400).json({
-        success: false,
-        error: {
-          code: 'FORGOT_PASSWORD_003',
-          message: error,
-        },
-      });
-    }
-  };
+  //     const user = await UsersService.find(userEmail);
+  //     if (!user.active) {
+  //       res.status(400).json({
+  //         success: false,
+  //         error: {
+  //           code: 'FORGOT_PASSWORD_004',
+  //           message: 'Your account is not verified',
+  //         },
+  //       });
+  //     }
+  //     res.status(200).json({
+  //       success: true,
+  //       email: user.email,
+  //     });
+  //   } catch (error) {
+  //     res.status(400).json({
+  //       success: false,
+  //       error: {
+  //         code: 'FORGOT_PASSWORD_003',
+  //         message: error,
+  //       },
+  //     });
+  //   }
+  // };
 
   public createCodeExpire = async (req: TypedRequestBody<{email: string}>, res: Response) => {
     try {

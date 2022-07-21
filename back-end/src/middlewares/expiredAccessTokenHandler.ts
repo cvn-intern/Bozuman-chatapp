@@ -18,7 +18,7 @@ export const expiredAccessTokenHandler = () => (
   // TODO: fix this typescript error
   if (refreshToken) {
     jwt.verify(
-      refreshToken,
+      refreshToken.toString(),
       _CONF.SECRET_REFRESH,
       function (err: any, decoded: any) {
         if (err) {
