@@ -1,9 +1,8 @@
-/* eslint-disable */
+/* eslint-disable camelcase */
 import mongoose from 'mongoose';
-import { Schema } from 'mongoose';
 import Joi from 'joi';
 
-const UsersSchema = new Schema({
+const UsersSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
@@ -27,7 +26,7 @@ const UsersSchema = new Schema({
   active: {
     type: Boolean,
     required: false,
-    default: false
+    default: false,
   },
 
   birth_day: {
@@ -89,18 +88,19 @@ const registerSchema = Joi.object({
 });
 const signInSchema = Joi.object({
   username: Joi.string()
-  .min(8)
-  .max(32)
-  .pattern(new RegExp('^[a-zA-Z0-9_-]+$'))
-  .required(),
-password: Joi.string()
-  .min(8)
-  .max(16)
-  .pattern(new RegExp('^[a-zA-Z0-9_-]+$'))
-  .required(),
-})
+    .min(8)
+    .max(32)
+    .pattern(new RegExp('^[a-zA-Z0-9_-]+$'))
+    .required(),
+  password: Joi.string()
+    .min(8)
+    .max(16)
+    .pattern(new RegExp('^[a-zA-Z0-9_-]+$'))
+    .required(),
+});
 
-
-module.exports = {Users: mongoose.model('user', UsersSchema), registerSchema, signInSchema};
-
-
+module.exports = {
+  Users: mongoose.model('user', UsersSchema),
+  registerSchema,
+  signInSchema,
+};
