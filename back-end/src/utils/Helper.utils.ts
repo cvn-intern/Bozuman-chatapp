@@ -1,3 +1,4 @@
+/* eslint-disable */
 export const FORGOT_PASSWORD = 'FORGOT_PASSWORD';
 export const ACTIVATE_ACCOUNT = 'ACTIVATE_ACCOUNT';
 
