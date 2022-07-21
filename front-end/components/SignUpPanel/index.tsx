@@ -57,7 +57,6 @@ function SignUpPanel() {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm<SignUpForm>({
     resolver: yupResolver(schema),
   });
@@ -76,7 +75,7 @@ function SignUpPanel() {
           }
         });
     } catch (error) {
-      console.log(error);
+      // handle error
     }
   };
   return (
