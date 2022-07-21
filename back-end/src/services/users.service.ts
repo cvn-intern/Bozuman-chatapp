@@ -38,7 +38,7 @@ export class UsersService {
   static activateAccount = async (userName: string) => {
     try {
       await Users.findOneAndUpdate(
-        { username: userName },
+        {username: userName} ,
         { active: true }
       ).exec();
       return 'Activate account success';

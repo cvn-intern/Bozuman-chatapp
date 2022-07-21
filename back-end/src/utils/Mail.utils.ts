@@ -1,23 +1,19 @@
 import nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { FORGOT_PASSWORD } from './Helper.utils';
+import dotenv from 'dotenv';
+dotenv.config();
 /* eslint-disable no-debugger, no-console */
 
 export class Email {
   private transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'bozuman2022@gmail.com',
-      pass: 'qafiidxzwzimdcku', //Real password is bozuman123
+      user: process.env.EMAIL_NAME,
+      pass: process.env.EMAIL_PASS
     },
   });
 
-  //SIL: change this function for active account and sendcode
-  /**
-   * @param emailAddress: email
-   * @param token: activate_token or code (forgot password)
-   * @param type: active | reset_password
-   */
   public sendEmail = (emailAddress: string, token: string, type: string) => {
     const mailOptions = {
       from: 'bozuman2022@gmail.com',

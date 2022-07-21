@@ -9,6 +9,8 @@ import { UsersService } from '../services/users.service';
 import { Email } from '../utils/Mail.utils';
 import { ACTIVATE_ACCOUNT } from '../utils/Helper.utils';
 import { User } from '../services/users.service';
+import md5 from 'md5';
+
 
 export class Auth {
   public validateSignup = async (data: User) => {
@@ -16,17 +18,17 @@ export class Auth {
     if (!user) {
       return { success: true };
     }
-    if (user.username == data.username) {
+    if (user.username === data.username) {
       return {
         success: false,
         error: 'Username already exist',
-        errorCode: 'SIGNUP009',
+        errorCode: 'SIGNUP_009',
       };
-    } else if (user.email == data.email) {
+    } else if (user.email === data.email) {
       return {
         success: false,
         error: 'Email already exist',
-        errorCode: 'SIGNUP010',
+        errorCode: 'SIGNUP_010',
       };
     }
 
@@ -42,7 +44,7 @@ export class Auth {
       username: req.body.username,
       email: req.body.email,
       full_name: req.body.fullName,
-      password: req.body.password,
+      password: md5(req.body.password)
     };
     try {
       const validateResult = await this.validateSignup(data);
