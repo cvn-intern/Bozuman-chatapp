@@ -15,7 +15,7 @@ function EnterCode() {
           />
         </div>
         <div className="forgotpassword col-12 col-lg-6 d-flex justify-content-center align-self-center">
-            <ResetPasswordPanel />
+          <ResetPasswordPanel />
         </div>
       </div>
     </div>
