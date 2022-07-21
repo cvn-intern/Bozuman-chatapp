@@ -96,11 +96,10 @@ function EnterCodePanel() {
   };
 
   useLayoutEffect(() => {
-    if(sessionStorage?.count !==0 ) {
-      setCount(Number(sessionStorage.count));
-    }else{
-      console.log(sessionStorage.count);
+    if(!sessionStorage.count) {
       setCount(60);
+    }else if(sessionStorage.count !== 0){
+      setCount(Number(sessionStorage.count));
     }
   },[]); 
 
@@ -142,7 +141,7 @@ function EnterCodePanel() {
         </div>
         {showResendBtn && (
           <p className="resendCode" onClick={onCreateCodeAgain}>
-            Didn't receive any code? Click here to resent your code
+            Didn&apos;t receive any code? Click here to resent your code
           </p>
         )}
         <button type="submit" className="button__search">
