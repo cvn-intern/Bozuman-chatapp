@@ -1,20 +1,24 @@
-/* eslint-disable */
-const jwt = require('jsonwebtoken');
-const _CONF = require('../configs/auth.config');
-// import jwt from "jsonwebtoken"
+
+import * as jwt from 'jsonwebtoken'
+import _CONF from '../configs/auth.config'
 import express from 'express';
 
 export interface requestWithToken extends express.Request {
-  decoded: any;
+  decoded: {};
 }
-
-module.exports = (
+export interface TokenPayload {
+  exp: number;
+  accessTypes: string[];
+  name: string;
+  userId: number;
+}
+export const checkAccessToken = () => (
   req: requestWithToken,
   res: express.Response,
   next: express.NextFunction
 ) => {
   const token = req.headers['x-access-token'];
-  // decode token
+  // TODO: fix this typescript error
   if (token) {
     jwt.verify(token, _CONF.SECRET, function (err: any, decoded: any) {
       if (err) {
