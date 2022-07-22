@@ -7,6 +7,7 @@ import axios from 'axios';
 import _CONF from 'config/config';
 import AuthPanel from 'components/AuthPanel';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 interface SignUpForm {
   full_name: string;
@@ -132,11 +133,16 @@ function SignUpPanel() {
             <p className="error">{err.message}</p>
           </>
         )}
-        
         <button className="button__signup" type="submit">
           CREATE ACCOUNT
         </button>
       </form>
+      <div className="linkToSignup">
+          <p>Already have an account ?</p>
+          <Link href="/sign-in">
+              <a>Sign-in now</a>
+          </Link>
+        </div>
     </AuthPanel>
   );
 }
