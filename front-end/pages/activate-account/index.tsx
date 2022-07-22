@@ -1,7 +1,6 @@
-import SignUpPanel from 'components/SignUpPanel';
+import SignUpSuccess from 'components/SignUpSuccess';
 import Image from 'next/image';
-
-function SignIn() {
+function ActivateAccount() {
   return (
     <div className="container">
       <div className="row mt-5">
@@ -14,8 +13,8 @@ function SignIn() {
           />
         </div>
         <div className="col-12 col-lg-6 d-flex justify-content-center align-self-center">
-          <div className="signup">
-            <SignUpPanel />
+          <div className="signuppopup">
+            <SignUpSuccess />
           </div>
         </div>
       </div>
@@ -23,4 +22,4 @@ function SignIn() {
   );
 }
 
-export default SignIn;
+export default ActivateAccount;

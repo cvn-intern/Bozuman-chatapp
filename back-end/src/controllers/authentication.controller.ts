@@ -67,7 +67,11 @@ export class Auth {
         const user = await UsersService.create(inputData);
         if (user) {
           const emailAgent = new Email();
-          emailAgent.sendEmail(user.email, user.username, ACTIVATE_ACCOUNT);
+          emailAgent.sendEmail(
+            user.email,
+            HashClass.encode(user.username),
+            ACTIVATE_ACCOUNT
+          );
           res.json({ success: true });
         }
       }
@@ -78,13 +82,14 @@ export class Auth {
 
   public activateAccount = async (req: Request, res: Response) => {
     try {
-      const activateResult = await UsersService.activateAccount(
-        req.params.name
-      );
+      const username = HashClass.decode(req.params.name);
+      if (username == '@Wrong user token') {
+        res.json('Wrong activate link');
+      }
+      const activateResult = await UsersService.activateAccount(username);
       res.json(activateResult);
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
+      //TO DO
     }
   };
 

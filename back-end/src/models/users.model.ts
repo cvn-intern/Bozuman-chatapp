@@ -76,10 +76,10 @@ export const registerSchema = Joi.object({
     .max(16)
     .pattern(new RegExp('^[a-zA-Z0-9_-]+$'))
     .required(),
-  fullName: Joi.string()
+  full_name: Joi.string()
     .min(8)
     .max(50)
-    .pattern(new RegExp('^[a-zA-Z0-9_-]+$'))
+    .pattern(new RegExp('^[a-zA-Z0-9_ ]*$'))
     .required(),
   email: Joi.string().email({
     minDomainSegments: 2,
