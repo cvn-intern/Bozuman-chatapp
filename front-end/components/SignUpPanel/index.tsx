@@ -50,8 +50,9 @@ function SignUpPanel() {
         _CONF.REGEX_USENAME_PASSWORD,
         'Password must not contain special character like @#$^...'
       ),
-    passwordConfirmation: yup.string()
-      .oneOf([yup.ref('password'), null], 'Passwords must match')
+    passwordConfirmation: yup
+      .string()
+      .oneOf([yup.ref('password'), null], 'Passwords must match'),
   });
   const {
     register,
@@ -62,7 +63,7 @@ function SignUpPanel() {
   });
 
   const onSubmit: SubmitHandler<SignUpForm> = async (data) => {
-    let {passwordConfirmation, ...postData} = data;
+    let { passwordConfirmation, ...postData } = data;
     try {
       const res = await axios
         .post(process.env.NEXT_PUBLIC_DOMAIN + '/api/auth/register', postData)
@@ -70,7 +71,6 @@ function SignUpPanel() {
           if (!res.data.success) {
             setErr({ error: true, message: res.data.error.message });
           } else {
-            console.log('cc');
             router.push('/sign-up-success');
             setErr({ error: false, message: 'Create account success' });
           }
@@ -124,10 +124,12 @@ function SignUpPanel() {
           type="password"
           required
         />
-        {errors.passwordConfirmation && <p className="error">{errors.passwordConfirmation.message}</p>}
+        {errors.passwordConfirmation && (
+          <p className="error">{errors.passwordConfirmation.message}</p>
+        )}
         <br />
         {!err.error ? (
-            <p className="error">{err.message}</p>
+          <p className="error">{err.message}</p>
         ) : (
           <>
             <p className="error">{err.message}</p>
@@ -138,11 +140,11 @@ function SignUpPanel() {
         </button>
       </form>
       <div className="linkToSignup">
-          <p>Already have an account ?</p>
-          <Link href="/sign-in">
-              <a>Sign-in now</a>
-          </Link>
-        </div>
+        <p>Already have an account ?</p>
+        <Link href="/sign-in">
+          <a>Sign-in now</a>
+        </Link>
+      </div>
     </AuthPanel>
   );
 }
