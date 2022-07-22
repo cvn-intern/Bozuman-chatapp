@@ -71,7 +71,7 @@ function ResetPasswordPanel() {
         }
       );
 
-      if (res.status === 200) {
+      if (res.data.success) {
         setErrorMessage({
           trigger: false,
           message: '',

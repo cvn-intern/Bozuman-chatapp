@@ -59,7 +59,7 @@ function EnterCodePanel() {
           email,
         }
       );
-      if (res.status === 200) {
+      if (res.data.success) {
         sessionStorage.clear();
         setCount(COUNT_DOWN_NUMBER);
         setShowResendBtn(false);
@@ -81,7 +81,7 @@ function EnterCodePanel() {
         }
       );
 
-      if (res.status === 200) {
+      if (res.data.sucess) {
         setErrorMessage({
           trigger: false,
           message: '',
