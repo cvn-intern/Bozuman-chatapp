@@ -4,6 +4,7 @@ import * as jwt from 'jsonwebtoken';
 import _CONF from '../configs/auth.config';
 import { RefreshToken } from '../models/refreshToken.model';
 import crypto from 'crypto';
+import md5 from 'md5';
 
 export interface User {
   username: string;
@@ -35,6 +36,7 @@ export class UsersService {
       return response;
     } catch (error) {
       // eslint-disable-next-line no-console
+      // TODO: handle error
       console.log(error);
     }
   };
@@ -48,13 +50,14 @@ export class UsersService {
 
   static activateAccount = async (userName: string) => {
     try {
-      await Users.findOneAndUpdate(
+      const user = await Users.findOneAndUpdate(
         { username: userName },
         { active: true }
       ).exec();
       return 'Activate account success';
     } catch (error) {
       // eslint-disable-next-line no-console
+      // TODO: handle error
       console.log(error);
     }
   };
@@ -62,7 +65,7 @@ export class UsersService {
   static authenticate = async (data: User) => {
     const { username, password } = data;
     const user = await Users.findOne({ username: username }).exec();
-    if (!user || password != user.password) {
+    if (!user || md5(password) != user.password) {
       throw {
         code: 'SIGN_IN_007',
         message: 'Username or password is incorrect',
@@ -139,10 +142,14 @@ export class UsersService {
       email,
     });
     if (user) {
-      user.password = password;
+      user.password = md5(password);
       return await user.save();
+    } else {
+      throw {
+        code: 'FORGOT_PASSWORD_014',
+        message: 'Your account does not exist'
+      }
     }
-    throw 'Server error';
   };
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   static generateAccessToken = (username: any) => {

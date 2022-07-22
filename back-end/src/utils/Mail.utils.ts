@@ -28,7 +28,7 @@ export class Email {
     switch(type) {
       case ACTIVATE_ACCOUNT:
         mailOptions.subject = 'Activation cod';
-        mailOptions.html = `<p>Click <a href="${process.env.PROJECT_DOMAIN || ''}/api/auth/activate_account/${token}>here</a> to activate your account</p>`;
+        mailOptions.html = `<p>Click <a href="${process.env.PROJECT_DOMAIN || ''}/activate-account?user=${token}">here</a> to activate your account</p>`;
         break;
 
       case FORGOT_PASSWORD:

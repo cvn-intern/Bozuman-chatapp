@@ -13,6 +13,7 @@ interface EnterCodeForm {
 
 function EnterCodePanel() {
   const router = useRouter();
+
   const { email } = router.query;
 
   const [errorMessage, setErrorMessage] = useState({
@@ -99,6 +100,9 @@ function EnterCodePanel() {
   };
 
   useLayoutEffect(() => {
+    if (!email) {
+      router.push('/sign-in');
+    }
     if (!sessionStorage.count) {
       setCount(60);
     } else if (Number(sessionStorage.count) !== 0) {

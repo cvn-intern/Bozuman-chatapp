@@ -44,7 +44,7 @@ export class Auth {
       username: req.body.username,
       email: req.body.email,
       full_name: req.body.full_name,
-      password: md5(req.body.password)
+      password: md5(req.body.password),
     };
     try {
       const validateResult = await this.validateSignup(inputData);
@@ -60,7 +60,11 @@ export class Auth {
         const user = await UsersService.create(inputData);
         if (user) {
           const emailAgent = new Email();
-          emailAgent.sendEmail(user.email, user.username, ACTIVATE_ACCOUNT);
+          emailAgent.sendEmail(
+            user.email,
+            HashClass.encode(user.username),
+            ACTIVATE_ACCOUNT
+          );
           res.json({ success: true });
         }
       }
@@ -71,11 +75,12 @@ export class Auth {
 
   public activateAccount = async (req: Request, res: Response) => {
     try {
-      const activateResult = await UsersService.activateAccount(
-        req.params.name
-      );
+      const username = HashClass.decode(req.params.name);
+      const activateResult = await UsersService.activateAccount(username);
       res.json(activateResult);
-    } catch (err) {}
+    } catch (err) {
+      // TODO
+    }
   };
 
   public signIn = async (req: Request, res: Response) => {
