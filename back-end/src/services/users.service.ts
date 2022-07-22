@@ -107,7 +107,7 @@ export class UsersService {
       user.code = undefined;
       return user.save();
     }
-    throw 'Server error';
+    throw 'Internal server error';
   };
 
   static checkCode = async (data: { email: string; code: string }) => {

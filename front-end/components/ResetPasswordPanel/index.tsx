@@ -79,7 +79,7 @@ function ResetPasswordPanel() {
 
         Swal.fire({
           title: 'Reset success, click button to go sign in page',
-          confirmButtonText: `Let's go`
+          confirmButtonText: 'Let\'s go'
         }).then(result => {
           if(result.isConfirmed) {
             router.push('/sign-in');

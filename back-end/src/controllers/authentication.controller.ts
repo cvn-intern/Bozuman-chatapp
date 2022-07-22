@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { Request, Response } from 'express';
 import {
   FORGOT_PASSWORD,
@@ -14,6 +13,11 @@ import md5 from 'md5';
 
 export interface TypedRequestBody<T> extends Request {
   body: T;
+}
+
+export interface ErrorObj {
+  code: string;
+  message: string;
 }
 
 export class Auth {
@@ -39,13 +43,16 @@ export class Auth {
     return { success: true };
   };
 
-  public register = async (req: Request, res: Response) => {
-    const inputData = {
-      username: req.body.username,
-      email: req.body.email,
-      full_name: req.body.full_name,
-      password: md5(req.body.password),
-    };
+  public register = async (
+    req: TypedRequestBody<{
+      username: string;
+      password: string;
+      email: string;
+      full_name: string;
+    }>,
+    res: Response
+  ) => {
+    const inputData = { ...req.body, password: md5(req.body.password) } as User;
     try {
       const validateResult = await this.validateSignup(inputData);
       if (!validateResult.success) {
@@ -78,8 +85,9 @@ export class Auth {
       const username = HashClass.decode(req.params.name);
       const activateResult = await UsersService.activateAccount(username);
       res.json(activateResult);
-    } catch (err) {
-      // TODO
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
     }
   };
 
@@ -88,10 +96,11 @@ export class Auth {
       const inputData = req.body as User;
       const response = await UsersService.authenticate(inputData);
       res.status(200).json(response);
-    } catch (error: any) {
+    } catch (error) {
+      const err = error as ErrorObj;
       res.status(400).json({
         success: false,
-        error: { code: error.code, message: error.message },
+        error: { code: err.code, message: err.message },
       });
     }
   };
@@ -152,18 +161,18 @@ export class Auth {
       const code = generateSixDigitCode();
       await UsersService.addCode(userEmail, Number(code));
 
-      await sendCodeToMail(userEmail.email, code, FORGOT_PASSWORD);
+      sendCodeToMail(userEmail.email, code, FORGOT_PASSWORD);
 
       setTimeout(() => {
-        (async () => {
-          await UsersService.deleteCode(userEmail);
-        })();
+        UsersService.deleteCode(userEmail).catch((error) => {
+          throw error;
+        });
       }, 60 * 1000);
 
       res.status(200).json({
         success: true,
       });
-    } catch (error: any) {
+    } catch (error) {
       res.status(500).json({
         error,
       });
@@ -185,8 +194,9 @@ export class Auth {
         success: true,
         email: HashClass.encode(response.email),
       });
-    } catch (error: any) {
-      responseError(res, 400, error.code, error.message);
+    } catch (error) {
+      const err = error as ErrorObj;
+      responseError(res, 400, err.code, err.message);
     }
   };
 
