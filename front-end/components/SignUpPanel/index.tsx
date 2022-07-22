@@ -24,9 +24,9 @@ function SignUpPanel() {
   const schema = yup.object().shape({
     full_name: yup
       .string()
+      .required('Full name must not be empty')
       .min(8, 'Full name must have 8-50 character')
       .max(50, 'Full name must have 8-50 character')
-      .required('Full name must not be empty')
       .matches(
         _CONF.REGEX_FULLNAME,
         'Full name must not contain special character like @#$^...'
@@ -34,18 +34,18 @@ function SignUpPanel() {
     email: yup.string().email('Email must be in correct format'),
     username: yup
       .string()
+      .required('Username must not be empty')
       .min(8, 'Username must have 8-32 character')
       .max(32, 'Username must have 8-32 character')
-      .required('Username must not be empty')
       .matches(
         _CONF.REGEX_USENAME_PASSWORD,
         'Username must not contain special character like @#$^...'
       ),
     password: yup
       .string()
+      .required('Password must not be empty')
       .min(8, 'Password must have 8-16 character')
       .max(316, 'Password must have 8-16 character')
-      .required('Password must not be empty')
       .matches(
         _CONF.REGEX_USENAME_PASSWORD,
         'Password must not contain special character like @#$^...'
