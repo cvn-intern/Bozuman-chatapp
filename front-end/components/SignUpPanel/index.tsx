@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
@@ -7,6 +6,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import _CONF from 'config/config';
 import AuthPanel from 'components/AuthPanel';
+import { useRouter } from 'next/router';
+
 interface SignUpForm {
   full_name: string;
   email: string;
@@ -16,6 +17,7 @@ interface SignUpForm {
 }
 
 function SignUpPanel() {
+  const router = useRouter();
   const [err, setErr] = useState({ error: false, message: '' });
 
   const schema = yup.object().shape({
@@ -57,6 +59,7 @@ function SignUpPanel() {
   } = useForm<SignUpForm>({
     resolver: yupResolver(schema),
   });
+
   const onSubmit: SubmitHandler<SignUpForm> = async (data) => {
     let {passwordConfirmation, ...postData} = data;
     try {
@@ -66,6 +69,8 @@ function SignUpPanel() {
           if (!res.data.success) {
             setErr({ error: true, message: res.data.error.message });
           } else {
+            console.log('cc');
+            router.push('/sign-up-success');
             setErr({ error: false, message: 'Create account success' });
           }
         });

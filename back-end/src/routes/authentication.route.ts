@@ -18,11 +18,7 @@ router.post(
 router.get("/activate_account/:name", authentication.activateAccount);
 router.post("/sign-in",validator.body(signInSchema), authentication.signIn);
 
-<<<<<<< HEAD
-// router.post('/forgot-password', authentication.getUserByEmail);
-=======
 router.post('/forgot-password', authentication.forgotPassword);
->>>>>>> 8c371407e55da135163882b9acfb8e425f3fdcff
 router.post('/create-code', authentication.createCodeExpire);
 router.post('/check-code', authentication.checkForgotPasswordCode);
 router.post('/reset-password', authentication.resetPassword);
