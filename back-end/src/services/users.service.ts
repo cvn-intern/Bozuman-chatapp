@@ -35,8 +35,8 @@ export class UsersService {
       const response = await new Users(user).save();
       return response;
     } catch (error) {
-      // eslint-disable-next-line no-console
       // TODO: handle error
+      // eslint-disable-next-line no-console
       console.log(error);
     }
   };
@@ -50,14 +50,14 @@ export class UsersService {
 
   static activateAccount = async (userName: string) => {
     try {
-      const user = await Users.findOneAndUpdate(
+      await Users.findOneAndUpdate(
         { username: userName },
         { active: true }
       ).exec();
       return 'Activate account success';
     } catch (error) {
-      // eslint-disable-next-line no-console
       // TODO: handle error
+      // eslint-disable-next-line no-console
       console.log(error);
     }
   };

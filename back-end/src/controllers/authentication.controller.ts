@@ -53,7 +53,6 @@ export class Auth {
     res: Response
   ) => {
     const inputData = { ...req.body, password: md5(req.body.password) } as User;
-    const x = HashClass.decode('6ac851ec333b2c79831e1c35b37c88ec');
     try {
       const validateResult = await this.validateSignup(inputData);
       if (!validateResult.success) {
