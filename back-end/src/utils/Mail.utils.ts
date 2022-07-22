@@ -6,7 +6,7 @@ import {
 } from './Helper.utils';
 import dotenv from 'dotenv';
 dotenv.config();
-/* eslint-disable no-debugger, no-console */
+
 
 export class Email {
   private transporter = nodemailer.createTransport({
@@ -42,8 +42,10 @@ export class Email {
 
     this.transporter.sendMail(mailOptions, function (error: Error | null, info: SMTPTransport.SentMessageInfo) {
       if (error) {
+        // eslint-disable-next-line no-console
         console.log(error);
       } else {
+        // eslint-disable-next-line no-console
         console.log('Email sent: ' + info.response);
       }
     });

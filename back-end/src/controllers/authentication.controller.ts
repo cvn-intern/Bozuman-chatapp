@@ -189,7 +189,8 @@ export class Auth {
     req: TypedRequestBody<{ email: string; password: string }>,
     res: Response
   ) => {
-    const newPasswordOfUser = {
+    const newPasswordOfUser: User = {
+      username: '',
       email: HashClass.decode(req.body.email),
       password: req.body.password,
     };
