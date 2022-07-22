@@ -1,19 +1,15 @@
 import nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
-import { 
-  FORGOT_PASSWORD,
-  ACTIVATE_ACCOUNT
-} from './Helper.utils';
+import { FORGOT_PASSWORD, ACTIVATE_ACCOUNT } from './Helper.utils';
 import dotenv from 'dotenv';
 dotenv.config();
-
 
 export class Email {
   private transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
       user: process.env.EMAIL_NAME,
-      pass: process.env.EMAIL_PASS
+      pass: process.env.EMAIL_PASS,
     },
   });
 
@@ -22,13 +18,15 @@ export class Email {
       from: 'bozuman2022@gmail.com',
       to: emailAddress,
       subject: '',
-      html: ``,
+      html: '',
     };
 
-    switch(type) {
+    switch (type) {
       case ACTIVATE_ACCOUNT:
         mailOptions.subject = 'Activation cod';
-        mailOptions.html = `<p>Click <a href="${process.env.PROJECT_DOMAIN || ''}/api/auth/activate_account/${token}>here</a> to activate your account</p>`;
+        mailOptions.html = `<p>Click <a href="${
+          process.env.PROJECT_DOMAIN || ''
+        }/api/auth/activate_account/${token}>here</a> to activate your account</p>`;
         break;
 
       case FORGOT_PASSWORD:
@@ -40,14 +38,17 @@ export class Email {
         break;
     }
 
-    this.transporter.sendMail(mailOptions, function (error: Error | null, info: SMTPTransport.SentMessageInfo) {
-      if (error) {
-        // eslint-disable-next-line no-console
-        console.log(error);
-      } else {
-        // eslint-disable-next-line no-console
-        console.log('Email sent: ' + info.response);
+    this.transporter.sendMail(
+      mailOptions,
+      function (error: Error | null, info: SMTPTransport.SentMessageInfo) {
+        if (error) {
+          // eslint-disable-next-line no-console
+          console.log(error);
+        } else {
+          // eslint-disable-next-line no-console
+          console.log(`Email sent:  ${info.response}`);
+        }
       }
-    });
+    );
   };
 }
