@@ -1,3 +1,5 @@
+const COUNT_DOWN_NUMBER = 60;
+
 import React, { MouseEvent, useEffect, useLayoutEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
@@ -6,6 +8,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { FaSignInAlt } from 'react-icons/fa';
 import AuthPanel from 'components/AuthPanel';
+import CountDown from 'components/CountDown';
 
 interface EnterCodeForm {
   code: string;
@@ -58,7 +61,7 @@ function EnterCodePanel() {
       );
       if (res.status === 200) {
         sessionStorage.clear();
-        setCount(60);
+        setCount(COUNT_DOWN_NUMBER);
         setShowResendBtn(false);
       }
     } catch (error) {
@@ -100,33 +103,19 @@ function EnterCodePanel() {
   };
 
   useLayoutEffect(() => {
-    if (!email) {
-      router.push('/sign-in');
-    }
     if (!sessionStorage.count) {
-      setCount(60);
+      setCount(COUNT_DOWN_NUMBER);
     } else if (Number(sessionStorage.count) !== 0) {
       setCount(Number(sessionStorage.count));
     }
   }, []);
 
   useEffect(() => {
-    let countDown = setTimeout(() => {
-      if (count > 0) {
-        setCount(count - 1);
-        sessionStorage.setItem('count', (count - 1).toString());
-      }
-    }, 1000);
-
     if (count === 0) {
       setShowResendBtn(true);
     } else {
       setShowResendBtn(false);
     }
-
-    return () => {
-      clearTimeout(countDown);
-    };
   }, [count, showResendBtn]);
 
   return (
@@ -140,7 +129,9 @@ function EnterCodePanel() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="inputCode d-flex">
           <input {...register('code')} className="code" type="text" required />
-          <div className="countDown">{count}</div>
+          <div className="countDown">
+            <CountDown count={count} changeCount={setCount}/>
+          </div>
         </div>
         <div className="errorMessage">
           {(errors.code && <p>{errors.code.message}</p>) ||
