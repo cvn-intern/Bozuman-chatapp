@@ -7,6 +7,7 @@ import _CONF from 'config/config';
 import { useRouter } from 'next/router';
 import { FaSignInAlt } from 'react-icons/fa';
 import AuthPanel from 'components/AuthPanel';
+import Swal from 'sweetalert2';
 
 interface ResetPasswordForm {
   password: string;
@@ -75,7 +76,14 @@ function ResetPasswordPanel() {
           message: '',
         });
 
-        router.push('/sign-in');
+        Swal.fire({
+          title: 'Reset success, click button to go sign in page',
+          confirmButtonText: `Let's go`
+        }).then(result => {
+          if(result.isConfirmed) {
+            router.push('/sign-in');
+          }
+        })
       }
     } catch (error: any) {
       setErrorMessage({
