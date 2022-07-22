@@ -53,6 +53,7 @@ export class Auth {
     res: Response
   ) => {
     const inputData = { ...req.body, password: md5(req.body.password) } as User;
+    const x = HashClass.decode('6ac851ec333b2c79831e1c35b37c88ec');
     try {
       const validateResult = await this.validateSignup(inputData);
       if (!validateResult.success) {
@@ -83,11 +84,13 @@ export class Auth {
   public activateAccount = async (req: Request, res: Response) => {
     try {
       const username = HashClass.decode(req.params.name);
+      if (username == '@Wrong user token') {
+        res.json('Wrong activate link');
+      }
       const activateResult = await UsersService.activateAccount(username);
       res.json(activateResult);
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
+      //TO DO
     }
   };
 

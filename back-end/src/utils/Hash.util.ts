@@ -23,10 +23,14 @@ class Hash {
   };
 
   public decode = (data: string) => {
-    const myKey = crypto.createDecipheriv('aes-128-cbc', this.key, this.iv);
-    let myStr = myKey.update(data, 'hex', 'utf8');
-    myStr += myKey.final('utf8');
-    return myStr;
+    try {
+      const myKey = crypto.createDecipheriv('aes-128-cbc', this.key, this.iv);
+      let myStr = myKey.update(data, 'hex', 'utf8');
+      myStr += myKey.final('utf8');
+      return myStr;
+    } catch (err) {
+      return '@Wrong user token';
+    }
   };
 }
 

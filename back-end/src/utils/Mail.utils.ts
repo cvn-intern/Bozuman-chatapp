@@ -26,7 +26,7 @@ export class Email {
         mailOptions.subject = 'Activation code';
         mailOptions.html = `<p>Click <a href="${
           process.env.PROJECT_DOMAIN || ''
-        }/api/auth/activate_account/${token}">here</a> to activate your account</p>`;
+        }/activate-account?user=${token}">here</a> to activate your account</p>`;
         break;
 
       case FORGOT_PASSWORD:

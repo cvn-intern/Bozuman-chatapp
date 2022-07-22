@@ -5,39 +5,37 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-
-
 export default function SignUpSuccess() {
-
+  const [message, setMessage] = useState('This is a wrong activate link');
+  //User firstTimer to prevent rerendering too much
+  const [firstTimer, setFirstTimer] = useState(true); 
   const handleActivateAccount = async (postData: string) => {
+    console.log(postData);
     try {
       const res = await axios
-        .get(process.env.NEXT_PUBLIC_DOMAIN + '/api/auth/activate_account/' + postData)
+        .get(
+          process.env.NEXT_PUBLIC_DOMAIN +
+            '/api/auth/activate_account/' +
+            postData
+        )
         .then((res) => {
-            console.log(typeof res);
-            if (!res) {
-              setMessage('Wrong url');
-            }
+          if (res.data == 'Wrong activate link') {
+            setMessage('This is a wrong activate link');
+            setFirstTimer(false);
+          } else {
+            setMessage('Your account have been activate');
           }
-        );
+        });
     } catch (error) {
       //TODO: handle error
     }
-  }
-  const [message, setMessage] = useState('Your account have been activate');
+  };
   const router = useRouter();
   const { user } = router.query;
 
-  if (user) {
+  if (user && firstTimer) {
     handleActivateAccount(user.toString());
   }
-  
-  // useEffect(() => {
-  //   setTimeout(4);
-  //   if (!user) {
-  //     router.push('/sign-in');
-  //   }
-  // }, [user])
 
   return (
     <AuthPanel>
