@@ -27,18 +27,18 @@ function ResetPasswordPanel() {
   const schema = yup.object().shape({
     password: yup
       .string()
+      .required('New password must not be empty')
       .min(8, 'Password must have 8-16 character')
       .max(16, 'Password must have 8-16 character')
-      .required('New password must not be empty')
       .matches(
         _CONF.REGEX_USENAME_PASSWORD,
         'Password must not contain special character like @#$^...'
       ),
     confirmPassword: yup
       .string()
+      .required('Confirm password must not be empty')
       .min(8, 'Confirm password must have 8-16 character')
       .max(16, 'Confirm password must have 8-16 character')
-      .required('Confirm password must not be empty')
       .oneOf(
         [yup.ref('password'), null],
         'Confirm password does not match with new password'
