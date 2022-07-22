@@ -10,7 +10,6 @@ export default function SignUpSuccess() {
   //User firstTimer to prevent rerendering too much
   const [firstTimer, setFirstTimer] = useState(true); 
   const handleActivateAccount = async (postData: string) => {
-    console.log(postData);
     try {
       const res = await axios
         .get(
@@ -19,7 +18,7 @@ export default function SignUpSuccess() {
             postData
         )
         .then((res) => {
-          if (res.data == 'Wrong activate link') {
+          if (!res.data.success) {
             setMessage('This is a wrong activate link');
             setFirstTimer(false);
           } else {

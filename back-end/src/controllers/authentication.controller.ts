@@ -56,7 +56,7 @@ export class Auth {
     try {
       const validateResult = await this.validateSignup(inputData);
       if (!validateResult.success) {
-        res.json({
+        res.status(400).json({
           success: false,
           error: {
             code: validateResult.errorCode,
@@ -72,7 +72,7 @@ export class Auth {
             HashClass.encode(user.username),
             ACTIVATE_ACCOUNT
           );
-          res.json({ success: true });
+          res.status(200).json({ success: true });
         }
       }
     } catch (error) {
@@ -84,10 +84,10 @@ export class Auth {
     try {
       const username = HashClass.decode(req.params.name);
       if (username == '@Wrong user token') {
-        res.json('Wrong activate link');
+        res.status(400).json({success: false, message: 'Wrong activate link'});
       }
       const activateResult = await UsersService.activateAccount(username);
-      res.json(activateResult);
+      res.status(200).json(activateResult);
     } catch (error) {
       //TO DO
     }

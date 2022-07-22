@@ -54,7 +54,7 @@ export class UsersService {
         { username: userName },
         { active: true }
       ).exec();
-      return 'Activate account success';
+      return {success: true, message: 'Activate account success'};
     } catch (error) {
       // TODO: handle error
       // eslint-disable-next-line no-console
