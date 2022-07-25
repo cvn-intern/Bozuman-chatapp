@@ -6,20 +6,16 @@ import { useState } from 'react';
 
 export default function SignUpSuccess() {
   const [message, setMessage] = useState('This is a wrong activate link');
-  //User firstTimer to prevent rerendering too much
-  const [firstTimer, setFirstTimer] = useState(true);
+
   const handleActivateAccount = async (postData: string) => {
     try {
       await axios
         .get(
-          `${process.env.NEXT_PUBLIC_DOMAIN}
-            /api/auth/activate_account/
-            ${postData}`
+          `${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/activate_account/${postData}`
         )
         .then((res) => {
           if (!res.data.success) {
             setMessage('This is a wrong activate link');
-            setFirstTimer(false);
           } else {
             setMessage('Your account have been activate');
           }
@@ -31,7 +27,7 @@ export default function SignUpSuccess() {
   const router = useRouter();
   const { user } = router.query;
 
-  if (user && firstTimer) {
+  if (user) {
     handleActivateAccount(user.toString());
   }
 
