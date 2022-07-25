@@ -46,8 +46,8 @@ function EnterCodePanel() {
     resolver: yupResolver(schema),
   });
 
-  const onBackSignIn = (e: MouseEvent) => {
-    e.preventDefault();
+  const onBackSignIn = (event: MouseEvent) => {
+    event.preventDefault();
     router.push('/sign-in');
   };
 
@@ -136,13 +136,12 @@ function EnterCodePanel() {
         <div className="errorMessage">
           {(errors.code && <p>{errors.code.message}</p>) ||
             (errorMessage.trigger && <p>{errorMessage.message}</p>)}
-          {showResendBtn && (
+        </div>
+        {showResendBtn && (
             <p className="resendCode" onClick={onCreateCodeAgain}>
               Didn&apos;t receive any code? Click here to resent
             </p>
           )}
-        </div>
-
         <button type="submit" className="button__search">
           Submit
         </button>

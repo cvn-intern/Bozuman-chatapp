@@ -10,22 +10,22 @@ const CountDown = ({count, changeCount}: Count) => {
 
   const [timer, setTimer] = useState(0);
 
-  const getTimeRemaining = (e: string) => {
-    const total = Date.parse(e) - Date.parse((new Date()).toString());
+  const getTimeRemaining = (date: string) => {
+    const total = Date.parse(date) - Date.parse((new Date()).toString());
     const seconds = Math.floor((total/1000) % 60);
     return {total,seconds};
   }
 
-  const startTimer = (e: string) => {
-    let {total, seconds} = getTimeRemaining(e);
-    if(total >=0) {
+  const startTimer = (date: string) => {
+    let {total, seconds} = getTimeRemaining(date);
+    if(total >= 0) {
       setTimer(seconds);
       changeCount(seconds);
       sessionStorage.setItem('count', (timer-1).toString());
     }
   }
 
-  const clearTimer = (e: string) : void => {
+  const clearTimer = (date: string) : void => {
     setTimer(count);
 
     if (ref.current) {
@@ -33,7 +33,7 @@ const CountDown = ({count, changeCount}: Count) => {
     }
     
     const id = setInterval(() => {
-      startTimer(e);
+      startTimer(date);
     }, 1000);
     ref.current = id;
   }

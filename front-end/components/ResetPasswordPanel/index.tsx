@@ -55,8 +55,8 @@ function ResetPasswordPanel() {
     resolver: yupResolver(schema),
   });
 
-  const onBackSignIn = (e: MouseEvent) => {
-    e.preventDefault();
+  const onBackSignIn = (event: MouseEvent) => {
+    event.preventDefault();
     router.push('/sign-in');
   };
 

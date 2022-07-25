@@ -35,8 +35,8 @@ function ForgotPasswordPanel() {
     resolver: yupResolver(schema),
   });
 
-  const onBackSignIn = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const onBackSignIn = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     router.push('/sign-in');
   };
 
