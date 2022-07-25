@@ -76,7 +76,6 @@ function SignUpPanel() {
             setErr({ error: false, message: 'Create account success' });
           }
         });
-      console.log(res);
     } catch (err: any) {
       // handle error
       setErr({ error: true, message: err.response.data.error.message });
