@@ -63,7 +63,9 @@ function SignUpPanel() {
   });
 
   const onSubmit: SubmitHandler<SignUpForm> = async (data) => {
+    
     let { passwordConfirmation, ...postData } = data;
+    console.log(process.env.NEXT_PUBLIC_DOMAIN + '/api/auth/register');
     try {
       const res = await axios
         .post(process.env.NEXT_PUBLIC_DOMAIN + '/api/auth/register', postData)
@@ -75,8 +77,10 @@ function SignUpPanel() {
             setErr({ error: false, message: 'Create account success' });
           }
         });
-    } catch (error) {
+      console.log(res);
+    } catch (err: any) {
       // handle error
+      setErr({ error: true, message: err.response.data.error.message });
     }
   };
   return (
