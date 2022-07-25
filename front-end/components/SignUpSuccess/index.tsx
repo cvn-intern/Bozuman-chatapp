@@ -6,7 +6,6 @@ import { useState } from 'react';
 
 export default function SignUpSuccess() {
   const [message, setMessage] = useState('This is a wrong activate link');
-  //User firstTimer to prevent rerendering too much
 
   const handleActivateAccount = async (postData: string) => {
     try {
