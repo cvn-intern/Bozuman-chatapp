@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
@@ -10,6 +9,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 interface SignUpForm {
+  // eslint-disable-next-line camelcase
   full_name: string;
   email: string;
   username: string;
@@ -22,6 +22,7 @@ function SignUpPanel() {
   const [err, setErr] = useState({ error: false, message: '' });
 
   const schema = yup.object().shape({
+    // eslint-disable-next-line camelcase
     full_name: yup
       .string()
       .required('Full name must not be empty')
@@ -63,10 +64,10 @@ function SignUpPanel() {
   });
 
   const onSubmit: SubmitHandler<SignUpForm> = async (data) => {
-    let { passwordConfirmation, ...postData } = data;
+    const { passwordConfirmation, ...postData } = data;
     try {
-      const res = await axios
-        .post(process.env.NEXT_PUBLIC_DOMAIN + '/api/auth/register', postData)
+      await axios
+        .post(`${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/register`, postData)
         .then((res) => {
           if (!res.data.success) {
             setErr({ error: true, message: res.data.error.message });
