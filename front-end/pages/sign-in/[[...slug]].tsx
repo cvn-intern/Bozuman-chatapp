@@ -1,7 +1,5 @@
-import SignInPanel from 'components/SignInPanel';
-import Image from 'next/image';
-import React from 'react';
-
+import SignInPanel from 'components/SignInPanel'
+import Image from 'next/image'
 function SignIn() {
   return (
     <div className="container">
@@ -14,14 +12,12 @@ function SignIn() {
             height={640}
           />
         </div>
-        <div className="col-12 col-lg-6 d-flex justify-content-center align-self-center">
-          <div className="signin">
-            <SignInPanel />
-          </div>
+        <div className="signin col-12 col-lg-6 d-flex justify-content-center align-self-center">
+          <SignInPanel />
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default SignIn;
+export default SignIn
