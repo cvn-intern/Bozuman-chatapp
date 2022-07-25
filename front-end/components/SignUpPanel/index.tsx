@@ -65,7 +65,6 @@ function SignUpPanel() {
   const onSubmit: SubmitHandler<SignUpForm> = async (data) => {
     
     let { passwordConfirmation, ...postData } = data;
-    console.log(process.env.NEXT_PUBLIC_DOMAIN + '/api/auth/register');
     try {
       const res = await axios
         .post(process.env.NEXT_PUBLIC_DOMAIN + '/api/auth/register', postData)
