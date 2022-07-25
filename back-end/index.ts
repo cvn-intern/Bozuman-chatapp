@@ -6,14 +6,10 @@ import express, { Application } from 'express';
 import auth from './src/routes/authentication.route';
 import cors from 'cors';
 
-const timeout = require('connect-timeout');
-
 const db = new Database();
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 db.dbConnect();
 const app: Application = express();
-
-app.use(timeout('3600s'));
 
 // Body parsing Middleware
 app.use(express.json());
