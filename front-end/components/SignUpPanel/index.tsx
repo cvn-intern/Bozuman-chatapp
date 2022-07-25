@@ -14,7 +14,7 @@ interface SignUpForm {
   email: string;
   username: string;
   password: string;
-  passwordConfirmation: string;
+  passwordConfirmation?: string;
 }
 
 function SignUpPanel() {
@@ -64,10 +64,10 @@ function SignUpPanel() {
   });
 
   const onSubmit: SubmitHandler<SignUpForm> = async (data) => {
-    const { passwordConfirmation, ...postData } = data;
+    delete data.passwordConfirmation;
     try {
       await axios
-        .post(`${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/register`, postData)
+        .post(`${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/register`, data)
         .then((res) => {
           if (!res.data.success) {
             setErr({ error: true, message: res.data.error.message });
@@ -76,8 +76,9 @@ function SignUpPanel() {
             setErr({ error: false, message: 'Create account success' });
           }
         });
-    } catch (error) {
+    } catch (err: any) {
       // handle error
+      setErr({ error: true, message: err.response.data.error.message });
     }
   };
   return (

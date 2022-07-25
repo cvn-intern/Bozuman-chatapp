@@ -12,8 +12,8 @@ db.dbConnect();
 const app: Application = express();
 
 // Body parsing Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 app.use(
   cors({
     origin: [
@@ -24,7 +24,7 @@ app.use(
     ],
     credentials: true,
   })
-);
+)
 
 app.use('/api/auth', auth);
 app.use('/api/token', expiredAccessTokenHandler);
@@ -36,5 +36,5 @@ app.use('/', (req, res) => {
 const port = process.env.PORT || 3000;
 app.listen(port, (): void => {
   /* eslint-disable no-debugger, no-console */
-  console.log(`Connected successfully on port ${port}`);
-});
+  console.log(`Connected successfully on port ${port}`)
+})

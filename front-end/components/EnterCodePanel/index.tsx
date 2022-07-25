@@ -1,3 +1,5 @@
+const COUNT_DOWN_NUMBER = 60;
+
 import React, { MouseEvent, useEffect, useLayoutEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
@@ -6,6 +8,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { FaSignInAlt } from 'react-icons/fa';
 import AuthPanel from 'components/AuthPanel';
+import CountDown from 'components/CountDown';
 
 interface EnterCodeForm {
   code: string;
@@ -43,8 +46,8 @@ function EnterCodePanel() {
     resolver: yupResolver(schema),
   });
 
-  const onBackSignIn = (e: MouseEvent) => {
-    e.preventDefault();
+  const onBackSignIn = (event: MouseEvent) => {
+    event.preventDefault();
     router.push('/sign-in');
   };
 
@@ -56,9 +59,9 @@ function EnterCodePanel() {
           email,
         }
       );
-      if (res.status === 200) {
+      if (res.data.success) {
         sessionStorage.clear();
-        setCount(60);
+        setCount(COUNT_DOWN_NUMBER);
         setShowResendBtn(false);
       }
     } catch (error) {
@@ -78,7 +81,7 @@ function EnterCodePanel() {
         }
       );
 
-      if (res.status === 200) {
+      if (res.data.sucess) {
         setErrorMessage({
           trigger: false,
           message: '',
@@ -100,33 +103,19 @@ function EnterCodePanel() {
   };
 
   useLayoutEffect(() => {
-    if (!email) {
-      router.push('/sign-in');
-    }
     if (!sessionStorage.count) {
-      setCount(60);
+      setCount(COUNT_DOWN_NUMBER);
     } else if (Number(sessionStorage.count) !== 0) {
       setCount(Number(sessionStorage.count));
     }
   }, []);
 
   useEffect(() => {
-    let countDown = setTimeout(() => {
-      if (count > 0) {
-        setCount(count - 1);
-        sessionStorage.setItem('count', (count - 1).toString());
-      }
-    }, 1000);
-
     if (count === 0) {
       setShowResendBtn(true);
     } else {
       setShowResendBtn(false);
     }
-
-    return () => {
-      clearTimeout(countDown);
-    };
   }, [count, showResendBtn]);
 
   return (
@@ -140,18 +129,19 @@ function EnterCodePanel() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="inputCode d-flex">
           <input {...register('code')} className="code" type="text" required />
-          <div className="countDown">{count}</div>
+          <div className="countDown">
+            <CountDown count={count} changeCount={setCount}/>
+          </div>
         </div>
         <div className="errorMessage">
           {(errors.code && <p>{errors.code.message}</p>) ||
             (errorMessage.trigger && <p>{errorMessage.message}</p>)}
-          {showResendBtn && (
-            <p className="resendCode" onClick={onCreateCodeAgain}>
-              Didn&apos;t receive any code? Click here to resent
-            </p>
-          )}
         </div>
-
+        {showResendBtn && (
+          <p className="resendCode" onClick={onCreateCodeAgain}>
+            Didn&apos;t receive any code? Click here to resent
+          </p>
+        )}
         <button type="submit" className="button__search">
           Submit
         </button>

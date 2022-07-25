@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState, useEffect } from 'react';
+import React, { MouseEvent, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -55,8 +55,8 @@ function ResetPasswordPanel() {
     resolver: yupResolver(schema),
   });
 
-  const onBackSignIn = (e: MouseEvent) => {
-    e.preventDefault();
+  const onBackSignIn = (event: MouseEvent) => {
+    event.preventDefault();
     router.push('/sign-in');
   };
 
@@ -71,7 +71,7 @@ function ResetPasswordPanel() {
         }
       );
 
-      if (res.status === 200) {
+      if (res.data.success) {
         setErrorMessage({
           trigger: false,
           message: '',
@@ -97,12 +97,6 @@ function ResetPasswordPanel() {
       confirmPassword: '',
     });
   };
-
-  useEffect(() => {
-    if (!email) {
-      router.push('/sign-in');
-    }
-  }, [])
 
   return (
     <AuthPanel>
