@@ -11,8 +11,7 @@ export class Database {
   public dbConnect = async () => {
     await mongoose
       .connect(
-        `mongodb+srv://${this.username || ''}:${this.password || ''}@${this.cluster || ''}.mongodb.net/?retryWrites=true&w=majority`
-        // `mongodb+srv://${this.username || ''}:${this.password || ''}@${this.cluster || ''}.mongodb.net/${this.dbname || ''}?retryWrites=true&w=majority`
+        `mongodb+srv://${this.username || ''}:${this.password || ''}@${this.cluster || ''}.mongodb.net/${this.dbname || ''}?retryWrites=true&w=majority`
       )
       .then(() => {
         //TODO
