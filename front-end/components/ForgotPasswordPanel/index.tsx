@@ -35,8 +35,8 @@ function ForgotPasswordPanel() {
     resolver: yupResolver(schema),
   });
 
-  const onBackSignIn = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const onBackSignIn = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     router.push('/sign-in');
   };
 
@@ -46,7 +46,7 @@ function ForgotPasswordPanel() {
         `${process.env.NEXT_PUBLIC_DOMAIN}/api/auth/forgot-password`,
         data
       );
-      if (res.status === 200) {
+      if (res.data.success) {
         setErrorMessage({
           trigger: false,
           message: '',
