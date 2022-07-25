@@ -29,14 +29,14 @@ app.use(
     credentials: true,
   })
 );
-
+app.use('/', (req, res) => {
+  res.json({ success: 'ok' });
+});
 app.use('/api/auth', auth);
 app.use('/api/token', expiredAccessTokenHandler);
 app.use(checkAccessToken);
 // secure route goes here
-app.use('/', (req, res) => {
-  res.json({ success: 'ok' });
-});
+
 const port = process.env.PORT || 3000;
 app.listen(port, (): void => {
   /* eslint-disable no-debugger, no-console */
