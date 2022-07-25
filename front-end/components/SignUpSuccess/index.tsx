@@ -1,21 +1,20 @@
-/* eslint-disable */
 import AuthPanel from 'components/AuthPanel';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function SignUpSuccess() {
   const [message, setMessage] = useState('This is a wrong activate link');
   //User firstTimer to prevent rerendering too much
-  const [firstTimer, setFirstTimer] = useState(true); 
+  const [firstTimer, setFirstTimer] = useState(true);
   const handleActivateAccount = async (postData: string) => {
     try {
-      const res = await axios
+      await axios
         .get(
-          process.env.NEXT_PUBLIC_DOMAIN +
-            '/api/auth/activate_account/' +
-            postData
+          `${process.env.NEXT_PUBLIC_DOMAIN}
+            /api/auth/activate_account/
+            ${postData}`
         )
         .then((res) => {
           if (!res.data.success) {
