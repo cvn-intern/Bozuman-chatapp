@@ -6,7 +6,7 @@
   "typings": "dist/index",
   "scripts": {
     "dev": "ts-node-dev ./index.ts",
-    "start": "tsc && node dist/index.js",
+    "start": "tsc && node dist/index",
     "build": "tsc",
     "lint": "eslint ."
   },
