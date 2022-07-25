@@ -63,6 +63,7 @@ function SignUpPanel() {
   });
 
   const onSubmit: SubmitHandler<SignUpForm> = async (data) => {
+    
     let { passwordConfirmation, ...postData } = data;
     try {
       const res = await axios
@@ -75,8 +76,9 @@ function SignUpPanel() {
             setErr({ error: false, message: 'Create account success' });
           }
         });
-    } catch (error) {
+    } catch (err: any) {
       // handle error
+      setErr({ error: true, message: err.response.data.error.message });
     }
   };
   return (
