@@ -1,4 +1,4 @@
-import {Response} from 'express';
+import { Response } from 'express';
 import { Email } from './Mail.utils';
 
 export const FORGOT_PASSWORD = 'FORGOT_PASSWORD';
