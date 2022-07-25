@@ -138,10 +138,10 @@ function EnterCodePanel() {
             (errorMessage.trigger && <p>{errorMessage.message}</p>)}
         </div>
         {showResendBtn && (
-            <p className="resendCode" onClick={onCreateCodeAgain}>
-              Didn&apos;t receive any code? Click here to resent
-            </p>
-          )}
+          <p className="resendCode" onClick={onCreateCodeAgain}>
+            Didn&apos;t receive any code? Click here to resent
+          </p>
+        )}
         <button type="submit" className="button__search">
           Submit
         </button>

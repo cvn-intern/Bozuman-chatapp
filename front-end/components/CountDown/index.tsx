@@ -13,7 +13,7 @@ const CountDown = ({count, changeCount}: Count) => {
   const getTimeRemaining = (date: string) => {
     const total = Date.parse(date) - Date.parse((new Date()).toString());
     const seconds = Math.floor((total/1000) % 60);
-    return {total,seconds};
+    return {total, seconds};
   }
 
   const startTimer = (date: string) => {
